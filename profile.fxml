@@ -49,9 +49,8 @@
 <?import javafx.scene.text.Text?>
 
 <VBox prefHeight="400.0" prefWidth="640.0"
-      xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.inventory.inventory.ProfileController">
+      xmlns="http://javafx.com/javafx/18"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.ProfileController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -92,10 +91,20 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" onMouseMoved="#onOpen" fx:id = "profilePane">
             <children>
                 <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
+                <Text fontSmoothingType="LCD" layoutX="35.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profile">
+                    <font>
+                        <Font name="Consolas" size="32.0" />
+                    </font>
+                </Text>
                 <Text fontSmoothingType="LCD" layoutX="35.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+                    <font>
+                        <Font name="Consolas" size="17.0" />
+                    </font>
+                </Text>
+                <Text fontSmoothingType="LCD" layoutX="128.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="179.1201171875" fx:id="usernameInfo">
                     <font>
                         <Font name="Consolas" size="17.0" />
                     </font>
@@ -105,28 +114,18 @@
                         <Font name="Consolas" size="17.0" />
                     </font>
                 </Text>
-                <Text fontSmoothingType="LCD" layoutX="35.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profile">
+                <Text fontSmoothingType="LCD" layoutX="128.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="179.1201171875" fx:id="passwordInfo">
                     <font>
-                        <Font name="Consolas" size="32.0" />
+                        <Font name="Consolas" size="17.0" />
                     </font>
                 </Text>
                 <Line endX="100.0" layoutX="218.0" layoutY="130.0" startX="-100.0" />
                 <Line endX="100.0" layoutX="218.0" layoutY="166.0" startX="-100.0" />
-                <Text fontSmoothingType="LCD" layoutX="128.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="179.1201171875">
-                    <font>
-                        <Font name="Consolas" size="17.0" />
-                    </font>
-                </Text>
-                <Text fontSmoothingType="LCD" layoutX="128.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="179.1201171875">
-                    <font>
-                        <Font name="Consolas" size="17.0" />
-                    </font>
-                </Text>
             </children>
         </AnchorPane>
         <ToolBar prefHeight="40.0" prefWidth="200.0">
             <items>
-                <Button mnemonicParsing="false" text="Logout" textAlignment="CENTER" onAction="#onLogoutClick">
+                <Button mnemonicParsing="false" text="Logout" textAlignment="CENTER" onAction = "#onLogoutClick">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>

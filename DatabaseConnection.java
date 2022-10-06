@@ -10,7 +10,7 @@ public class DatabaseConnection {
         String databaseName = "test";
         String databaseUser = "root";
         String databasePassword = "Dolphin1!";
-        String url = "mmowl:mysql://localhost/" + databaseName;
+        String url = "jdbc:mysql://localhost:3306/" + databaseName;
         try{
             Class.forName("com.inventory.inventory.LoginRegisterController");
             databaseLink = DriverManager.getConnection(url, databaseUser, databasePassword);
