@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Beauty-in-You-Inventory-App.iml" filepath="$PROJECT_DIR$/.idea/Beauty-in-You-Inventory-App.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Inventory Application/Inventory.iml" filepath="$PROJECT_DIR$/Inventory Application/Inventory.iml" />
+    </modules>
+  </component>
+</project>
