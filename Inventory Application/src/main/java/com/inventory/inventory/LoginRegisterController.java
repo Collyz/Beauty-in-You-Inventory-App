@@ -88,7 +88,7 @@ public class LoginRegisterController {
         if(registerUsername.getText().length() >= 8 ){
             registerWrong.setText("");
             if(registerPassword.getText().equals(registerPasswordRe.getText())) {
-                query = "INSERT INTO Admin_Accounts VALUES( 0 , " +
+                query = "INSERT INTO Admin_Accounts VALUES(" +
                         "\'" + registerUsername.getText() + "\', " +
                         "\'" + registerPassword.getText() + "\'," +
                         "\'" + registerEmail.getText() + "\')";
