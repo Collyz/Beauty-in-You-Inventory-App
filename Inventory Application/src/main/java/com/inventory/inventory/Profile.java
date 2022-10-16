@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
 
-public class ProfileController {
+public class Profile {
 
     @FXML
     private Text usernameInfo = new Text();

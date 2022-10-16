@@ -20,7 +20,7 @@
 <VBox prefHeight="400.0" prefWidth="640.0"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.inventory.inventory.LoginRegisterController">
+      fx:controller="com.inventory.inventory.LoginRegister">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
