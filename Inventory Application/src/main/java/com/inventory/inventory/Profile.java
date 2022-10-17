@@ -20,6 +20,11 @@ public class Profile {
     @FXML TextField searchBar = new TextField();
     @FXML CheckMenuItem brushesFilter = new CheckMenuItem();
     @FXML TextArea searchResults = new TextArea();
+    @FXML TextField addProductName = new TextField();
+    @FXML TextField addProductCat = new TextField();
+    @FXML TextField addProductPrice = new TextField();
+    @FXML TextField addProductQuan = new TextField();
+    @FXML TextField addProductLife = new TextField();
 
     @FXML
     protected void onLogoutClick(javafx.event.ActionEvent event) throws IOException {
@@ -50,7 +55,6 @@ public class Profile {
         searchResults.clear();
         try{
             Statement statement = connection.databaseLink.createStatement();
-            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
             ResultSet result = statement.executeQuery(selectBrushes);
             String setText = "";
             while(result.next()){
@@ -67,7 +71,6 @@ public class Profile {
         searchResults.clear();
         try{
             Statement statement = connection.databaseLink.createStatement();
-            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
             ResultSet result = statement.executeQuery(selectBrushes);
             String setText = "";
             while(result.next()){
@@ -84,7 +87,6 @@ public class Profile {
         searchResults.clear();
         try{
             Statement statement = connection.databaseLink.createStatement();
-            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
             ResultSet result = statement.executeQuery(selectBrushes);
             String setText = "";
             while(result.next()){
@@ -101,7 +103,6 @@ public class Profile {
         searchResults.clear();
         try{
             Statement statement = connection.databaseLink.createStatement();
-            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
             ResultSet result = statement.executeQuery(selectBrushes);
             String setText = "";
             while(result.next()){
@@ -118,7 +119,6 @@ public class Profile {
         searchResults.clear();
         try{
             Statement statement = connection.databaseLink.createStatement();
-            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
             ResultSet result = statement.executeQuery(selectBrushes);
             String setText = "";
             while(result.next()){
@@ -135,7 +135,6 @@ public class Profile {
         searchResults.clear();
         try{
             Statement statement = connection.databaseLink.createStatement();
-            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
             ResultSet result = statement.executeQuery(selectBrushes);
             String setText = "";
             while(result.next()){
@@ -147,6 +146,35 @@ public class Profile {
         }
     }
 
+    @FXML
+    protected  void onAdd(){
+        DatabaseConnection connection = setConnection();
+        String getIDS = "select PRODUCT_ID from Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
+        String insertQuery = "INSERT INTO Product VALUES (";
+        try {
+            Statement statement = connection.databaseLink.createStatement();
+            ResultSet result = statement.executeQuery(getIDS);
+            while (result.next()) {
+                insertQuery = insertQuery + (result.getString(1) + 1) + ",\'"+ addProductName.getText() + "\',\'"
+                        + addProductCat.getText() + "\',"
+                        + addProductPrice.getText() + ","
+                        + addProductQuan.getText() + ","
+                        + addProductLife.getText() + ")";
+                System.out.println(insertQuery);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        try{
+            Statement statement = connection.databaseLink.createStatement();
+            statement.executeUpdate(insertQuery);
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+
+
+    }
 
     @FXML
     protected void onOpen(javafx.event.Event event)throws IOException, SQLException {

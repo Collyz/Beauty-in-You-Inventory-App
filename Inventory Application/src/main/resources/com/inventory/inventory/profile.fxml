@@ -143,12 +143,12 @@
                               <Font name="Verdana" size="32.0" />
                            </font>
                         </Text>
-                        <TextField layoutX="30.0" layoutY="100.0" promptText="Product Name" />
-                        <TextField layoutX="30.0" layoutY="130.0" promptText="Category" />
-                        <TextField layoutX="30.0" layoutY="160.0" promptText="Price" />
-                        <TextField layoutX="30.0" layoutY="190.0" promptText="Quantity" />
-                        <TextField layoutX="30.0" layoutY="220.0" promptText="Shelf Life (If Applicable)" />
-                        <Button layoutX="199.0" layoutY="220.0" mnemonicParsing="false" text="Button" />
+                        <TextField fx:id="addProductName" layoutX="30.0" layoutY="100.0" promptText="Product Name" />
+                        <TextField fx:id="addProductCat" layoutX="30.0" layoutY="130.0" promptText="Category" />
+                        <TextField fx:id="addProductPrice" layoutX="30.0" layoutY="160.0" promptText="Price" />
+                        <TextField fx:id="addProductQuan" layoutX="30.0" layoutY="190.0" promptText="Quantity" />
+                        <TextField fx:id="addProductLife" layoutX="30.0" layoutY="220.0" promptText="Shelf Life (If Applicable)" />
+                        <Button layoutX="199.0" layoutY="220.0" mnemonicParsing="false" onAction="#onAdd" text="Add" />
                         <Text layoutX="370.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modify Product">
                            <font>
                               <Font name="Verdana" size="32.0" />
@@ -160,8 +160,8 @@
                               <Font name="Verdana" size="15.0" />
                            </font>
                         </Text>
-                        <Button layoutX="379.0" layoutY="203.0" mnemonicParsing="false" text="Edit" />
-                        <Button layoutX="379.0" layoutY="245.0" mnemonicParsing="false" text="Delete" />
+                        <Button layoutX="378.0" layoutY="152.0" mnemonicParsing="false" text="Edit" />
+                        <Button layoutX="378.0" layoutY="194.0" mnemonicParsing="false" text="Delete" />
                         <Text fx:id="popProduct" layoutX="337.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="66.0" />
                         <Text fx:id="findResponse" layoutX="419.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="182.0" />
                             </children>
