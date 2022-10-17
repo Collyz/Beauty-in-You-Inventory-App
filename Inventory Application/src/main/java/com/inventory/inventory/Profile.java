@@ -5,8 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -16,10 +15,11 @@ import java.sql.*;
 
 public class Profile {
 
-    @FXML
-    private Text usernameInfo = new Text();
-    @FXML
-    private Text passwordInfo = new Text();
+    @FXML private Text usernameInfo = new Text();
+    @FXML private Text passwordInfo = new Text();
+    @FXML TextField searchBar = new TextField();
+    @FXML CheckMenuItem brushesFilter = new CheckMenuItem();
+    @FXML TextArea searchResults = new TextArea();
 
     @FXML
     protected void onLogoutClick(javafx.event.ActionEvent event) throws IOException {
@@ -29,6 +29,124 @@ public class Profile {
         appStage.setScene(s);
         appStage.show();
     }
+/*    @FXML
+    protected void onSearch(javafx.event.ActionEvent event) throws IOException{
+        DatabaseConnection connection = setConnection();
+        String search = searchBar.getText();
+        String searchQuery =
+        try{
+            Statement statement = connection.databaseLink.createStatement();
+            ResultSet connect = statement.executeQuery()
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }*/
+
+    //Filters
+    @FXML protected void onBrushesClick(){
+        DatabaseConnection connection = setConnection();
+        String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'BRUSHES\'";
+        searchResults.clear();
+        try{
+            Statement statement = connection.databaseLink.createStatement();
+            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
+            ResultSet result = statement.executeQuery(selectBrushes);
+            String setText = "";
+            while(result.next()){
+                setText = setText + result.getString(1) + "\n";
+            }
+            searchResults.setText(setText);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML protected void onMakeupRemoverClick(){
+        DatabaseConnection connection = setConnection();
+        String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'MAKEUP REMOVERS\'";
+        searchResults.clear();
+        try{
+            Statement statement = connection.databaseLink.createStatement();
+            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
+            ResultSet result = statement.executeQuery(selectBrushes);
+            String setText = "";
+            while(result.next()){
+                setText = setText + result.getString(1) + "\n";
+            }
+            searchResults.setText(setText);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML protected void onSkincareClick(){
+        DatabaseConnection connection = setConnection();
+        String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'SKINCARE\'";
+        searchResults.clear();
+        try{
+            Statement statement = connection.databaseLink.createStatement();
+            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
+            ResultSet result = statement.executeQuery(selectBrushes);
+            String setText = "";
+            while(result.next()){
+                setText = setText + result.getString(1) + "\n";
+            }
+            searchResults.setText(setText);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML protected void onFaceClip(){
+        DatabaseConnection connection = setConnection();
+        String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'FACE\'";
+        searchResults.clear();
+        try{
+            Statement statement = connection.databaseLink.createStatement();
+            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
+            ResultSet result = statement.executeQuery(selectBrushes);
+            String setText = "";
+            while(result.next()){
+                setText = setText + result.getString(1) + "\n";
+            }
+            searchResults.setText(setText);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML protected void onLipsClick(){
+        DatabaseConnection connection = setConnection();
+        String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'LIPS\'";
+        searchResults.clear();
+        try{
+            Statement statement = connection.databaseLink.createStatement();
+            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
+            ResultSet result = statement.executeQuery(selectBrushes);
+            String setText = "";
+            while(result.next()){
+                setText = setText + result.getString(1) + "\n";
+            }
+            searchResults.setText(setText);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML protected void onEyesCLick() {
+        DatabaseConnection connection = setConnection();
+        String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'EYES\'";
+        searchResults.clear();
+        try{
+            Statement statement = connection.databaseLink.createStatement();
+            PreparedStatement userStatement=connection.databaseLink.prepareStatement(selectBrushes);
+            ResultSet result = statement.executeQuery(selectBrushes);
+            String setText = "";
+            while(result.next()){
+                setText = setText + result.getString(1) + "\n";
+            }
+            searchResults.setText(setText);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @FXML
     protected void onOpen(javafx.event.Event event)throws IOException, SQLException {
