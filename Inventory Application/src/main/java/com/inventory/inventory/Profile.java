@@ -155,25 +155,17 @@ public class Profile {
             Statement statement = connection.databaseLink.createStatement();
             ResultSet result = statement.executeQuery(getIDS);
             while (result.next()) {
-                insertQuery = insertQuery + (result.getString(1) + 1) + ",\'"+ addProductName.getText() + "\',\'"
+                insertQuery = insertQuery + (result.getInt(1) + 1) + ",\'"+ addProductName.getText() + "\',\'"
                         + addProductCat.getText() + "\',"
                         + addProductPrice.getText() + ","
                         + addProductQuan.getText() + ","
                         + addProductLife.getText() + ")";
-                System.out.println(insertQuery);
+                statement.executeQuery(insertQuery);
             }
         }
         catch(SQLException e){
             throw new RuntimeException(e);
         }
-        try{
-            Statement statement = connection.databaseLink.createStatement();
-            statement.executeUpdate(insertQuery);
-        }catch(SQLException e){
-            throw new RuntimeException(e);
-        }
-
-
     }
 
     @FXML
