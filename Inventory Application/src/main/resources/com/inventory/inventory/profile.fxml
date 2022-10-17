@@ -1,46 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
-  All rights reserved. Use is subject to license terms.
-
-  This file is available and licensed under the following license:
-
-  Redistribution and use in source and binary forms, with or without
-  modification, are permitted provided that the following conditions
-  are met:
-
-  - Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
-  - Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in
-    the documentation and/or other materials provided with the distribution.
-  - Neither the name of Oracle Corporation nor the names of its
-    contributors may be used to endorse or promote products derived
-    from this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
--->
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
@@ -48,9 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="400.0" prefWidth="640.0"
-      xmlns="http://javafx.com/javafx/18"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.Profile">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.Profile">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -91,58 +60,88 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" onMouseMoved="#onOpen" fx:id = "profilePane">
-            <children>
-                <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
-                <Text fontSmoothingType="LCD" layoutX="35.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profile">
-                    <font>
-                        <Font name="Consolas" size="32.0" />
-                    </font>
-                </Text>
-                <Text fontSmoothingType="LCD" layoutX="35.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
-                    <font>
-                        <Font name="Consolas" size="17.0" />
-                    </font>
-                </Text>
-                <Text fontSmoothingType="LCD" layoutX="128.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="179.1201171875" fx:id="usernameInfo">
-                    <font>
-                        <Font name="Consolas" size="17.0" />
-                    </font>
-                </Text>
-                <Text fontSmoothingType="LCD" layoutX="35.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
-                    <font>
-                        <Font name="Consolas" size="17.0" />
-                    </font>
-                </Text>
-                <Text fontSmoothingType="LCD" layoutX="128.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="179.1201171875" fx:id="passwordInfo">
-                    <font>
-                        <Font name="Consolas" size="17.0" />
-                    </font>
-                </Text>
-                <Line endX="100.0" layoutX="218.0" layoutY="130.0" startX="-100.0" />
-                <Line endX="100.0" layoutX="218.0" layoutY="166.0" startX="-100.0" />
-            </children>
-        </AnchorPane>
-        <ToolBar prefHeight="40.0" prefWidth="200.0">
-            <items>
-                <Button mnemonicParsing="false" text="Logout" textAlignment="CENTER" onAction = "#onLogoutClick">
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
-                    <font>
-                        <Font name="Consolas" size="12.0" />
-                    </font>
-                </Button>
-            </items>
-            <opaqueInsets>
-                <Insets />
-            </opaqueInsets>
-            <effect>
-                <Blend />
-            </effect>
-            <cursor>
-                <Cursor fx:constant="DEFAULT" />
-            </cursor>
-        </ToolBar>
+        <TabPane prefHeight="376.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Profile">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" onMouseEntered="#onOpen" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
+                                <Text fontSmoothingType="LCD" layoutX="34.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profile">
+                                    <font>
+                                        <Font name="Consolas" size="32.0" />
+                                    </font>
+                                </Text>
+                                <Text fontSmoothingType="LCD" layoutX="34.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+                                    <font>
+                                        <Font name="Verdana" size="17.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="usernameInfo" fontSmoothingType="LCD" layoutX="133.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="179.1201171875">
+                                    <font>
+                                        <Font name="Consolas" size="17.0" />
+                                    </font>
+                                </Text>
+                                <Line endX="78.1201171875" endY="0.37451171875" layoutX="234.0" layoutY="113.0" startX="-100.0" stroke="#9a0098" strokeWidth="3.0" />
+                                <Text fontSmoothingType="LCD" layoutX="34.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+                                    <font>
+                                        <Font name="Verdana" size="17.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="passwordInfo" fontSmoothingType="LCD" layoutX="133.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="179.1201171875">
+                                    <font>
+                                        <Font name="Consolas" size="17.0" />
+                                    </font>
+                                </Text>
+                                <Line endX="78.1201171875" endY="0.37451171875" layoutX="233.0" layoutY="147.0" startX="-100.0" stroke="#9a0098" strokeWidth="3.0" />
+                        <ToolBar blendMode="EXCLUSION" layoutY="307.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="640.0">
+                          <items>
+                            <Button mnemonicParsing="false" onAction="#onLogoutClick" text="Log Out" />
+                          </items>
+                        </ToolBar>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Search">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
+                                <TextField layoutX="73.0" layoutY="31.0" prefHeight="25.0" prefWidth="547.0" />
+                                <Text layoutX="14.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
+                                    <font>
+                                        <Font name="Verdana" size="14.0" />
+                                    </font>
+                                </Text>
+                                <SplitMenuButton layoutX="14.0" layoutY="63.0" mnemonicParsing="false" text="Filter">
+                                    <items>
+                                        <CheckMenuItem mnemonicParsing="false" text="Brushes" />
+                                        <CheckMenuItem mnemonicParsing="false" text="Makeup Remover" />
+                                        <CheckMenuItem mnemonicParsing="false" text="Skincare" />
+                                        <CheckMenuItem mnemonicParsing="false" text="Face" />
+                                        <CheckMenuItem mnemonicParsing="false" text="Lips" />
+                                        <CheckMenuItem mnemonicParsing="false" text="Eyes" />
+                                    </items>
+                                    <font>
+                                        <Font name="Verdana" size="12.0" />
+                                    </font>
+                                </SplitMenuButton>
+                                <TextArea layoutX="14.0" layoutY="95.0" prefHeight="229.0" prefWidth="610.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Add/Modify">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
     </children>
 </VBox>

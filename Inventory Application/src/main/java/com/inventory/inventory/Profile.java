@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -18,8 +20,6 @@ public class Profile {
     private Text usernameInfo = new Text();
     @FXML
     private Text passwordInfo = new Text();
-    @FXML
-    private AnchorPane profilePane = new AnchorPane();
 
     @FXML
     protected void onLogoutClick(javafx.event.ActionEvent event) throws IOException {
