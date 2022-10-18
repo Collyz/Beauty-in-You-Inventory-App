@@ -148,7 +148,7 @@
                         <TextField fx:id="addProductPrice" layoutX="30.0" layoutY="160.0" promptText="Price" />
                         <TextField fx:id="addProductQuan" layoutX="30.0" layoutY="190.0" promptText="Quantity" />
                         <TextField fx:id="addProductLife" layoutX="30.0" layoutY="220.0" promptText="Shelf Life (If Applicable)" />
-                        <Button layoutX="199.0" layoutY="220.0" mnemonicParsing="false" onAction="#onAdd" text="Add" />
+                        <Button fx:id="addProductButton" layoutX="199.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#onAdd" text="Add" />
                         <Text layoutX="370.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modify Product">
                            <font>
                               <Font name="Verdana" size="32.0" />
@@ -160,10 +160,19 @@
                               <Font name="Verdana" size="15.0" />
                            </font>
                         </Text>
-                        <Button layoutX="378.0" layoutY="152.0" mnemonicParsing="false" text="Edit" />
-                        <Button layoutX="378.0" layoutY="194.0" mnemonicParsing="false" text="Delete" />
+                        <Button layoutX="378.0" layoutY="160.0" mnemonicParsing="false" text="Edit" />
+                        <Button layoutX="378.0" layoutY="202.0" mnemonicParsing="false" text="Delete" />
                         <Text fx:id="popProduct" layoutX="337.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="66.0" />
-                        <Text fx:id="findResponse" layoutX="419.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="182.0" />
+                        <Text fx:id="findResponse" layoutX="415.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="182.0" />
+                        <Text fx:id="addProductResponse" layoutX="30.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="149.33673095703125">
+                           <font>
+                              <Font name="Verdana" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="asterisk1" fill="RED" layoutX="20.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                        <Text fx:id="asterisk2" fill="RED" layoutX="20.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                        <Text fx:id="asterisk3" fill="RED" layoutX="20.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                        <Text fx:id="asterisk4" fill="RED" layoutX="20.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
                             </children>
                         </AnchorPane>
                     </content>

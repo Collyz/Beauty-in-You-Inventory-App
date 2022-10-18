@@ -1,11 +1,13 @@
 package com.inventory.inventory;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -15,16 +17,26 @@ import java.sql.*;
 
 public class Profile {
 
+    //For Profile Tab
     @FXML private Text usernameInfo = new Text();
     @FXML private Text passwordInfo = new Text();
+    //For Search Tab
     @FXML TextField searchBar = new TextField();
     @FXML CheckMenuItem brushesFilter = new CheckMenuItem();
     @FXML TextArea searchResults = new TextArea();
+    //For Add/Modify Tab
     @FXML TextField addProductName = new TextField();
     @FXML TextField addProductCat = new TextField();
     @FXML TextField addProductPrice = new TextField();
     @FXML TextField addProductQuan = new TextField();
     @FXML TextField addProductLife = new TextField();
+    @FXML Text addProductResponse = new Text();
+    @FXML Text asterisk1 = new Text();
+    @FXML Text asterisk2 = new Text();
+    @FXML Text asterisk3 = new Text();
+    @FXML Text asterisk4 = new Text();
+    @FXML Button addProductButton = new Button();
+
 
     @FXML
     protected void onLogoutClick(javafx.event.ActionEvent event) throws IOException {
@@ -148,24 +160,111 @@ public class Profile {
 
     @FXML
     protected  void onAdd(){
-        DatabaseConnection connection = setConnection();
+        /*DatabaseConnection connection = setConnection();
         String getIDS = "select PRODUCT_ID from Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
-        String insertQuery = "INSERT INTO Product VALUES (";
-        try {
+        String insertQuery = "";
+        Boolean addLife = null;
+        if(!addProductLife.getText().equals("")) {
+            insertQuery = "INSERT INTO Product VALUES (";
+            addLife = true;
+        }
+        else{
+            insertQuery = "Insert INTO Product(Product_ID, CATEGORY, PRODUCT_NAME, QUANTITY, PRICE) VALUES (";
+            addLife = false;
+        }
+        Boolean sendQueryOrNot = addProductName.getText().equals("") && addProductCat.getText().equals("") && addProductPrice.getText().equals("") && addProductQuan.getText().equals("");*/
+        addProductButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                DatabaseConnection connection = setConnection();
+                String getIDS = "select PRODUCT_ID from Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
+                String insertQuery = "";
+                Boolean addLife = null;
+                if(!addProductLife.getText().equals("")) {
+                    insertQuery = "INSERT INTO Product VALUES (";
+                    addLife = true;
+                }
+                else{
+                    insertQuery = "Insert INTO Product(Product_ID, CATEGORY, PRODUCT_NAME, QUANTITY, PRICE) VALUES (";
+                    addLife = false;
+                }
+                Boolean sendQueryOrNot = !addProductName.getText().equals("") && !addProductCat.getText().equals("") && !addProductPrice.getText().equals("") && !addProductQuan.getText().equals("");
+                try {
+                    Statement statement = connection.databaseLink.createStatement();
+                    ResultSet result = statement.executeQuery(getIDS);
+                    while (result.next()) {
+                        if (addLife) {
+                            int prodID = result.getInt(1);
+                            insertQuery = insertQuery + (prodID + 1)
+                                    + ",\'" + addProductName.getText() + "\'," +
+                                    "\'" + addProductCat.getText() + "\',"
+                                    + addProductPrice.getText() + ","
+                                    + addProductQuan.getText() + ","
+                                    + addProductLife.getText() + ")";
+                            addProductResponse.setText("");
+                            addProductResponse.setText("Added Successfully ID: " + prodID);
+                        } else {
+                            insertQuery = insertQuery + (result.getInt(1) + 1)
+                                    + ",\'" + addProductName.getText() + "\'," +
+                                    "\'" + addProductCat.getText() + "\',"
+                                    + addProductPrice.getText() + ","
+                                    + addProductQuan.getText() + ")";
+                            //System.out.println(insertQuery);
+                        }
+                    }
+                    addProductName.clear();
+                    addProductCat.clear();
+                    addProductPrice.clear();
+                    addProductQuan.clear();
+                    addProductLife.clear();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    Statement statement = connection.databaseLink.createStatement();
+                    statement.executeUpdate(insertQuery);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        /*try {
             Statement statement = connection.databaseLink.createStatement();
             ResultSet result = statement.executeQuery(getIDS);
             while (result.next()) {
-                insertQuery = insertQuery + (result.getInt(1) + 1) + ",\'"+ addProductName.getText() + "\',\'"
-                        + addProductCat.getText() + "\',"
-                        + addProductPrice.getText() + ","
-                        + addProductQuan.getText() + ","
-                        + addProductLife.getText() + ")";
-                statement.executeQuery(insertQuery);
+                if (addLife) {
+                    int prodID = result.getInt(1);
+                    insertQuery = insertQuery + (prodID + 1)
+                            + ",\'" + addProductName.getText() + "\'," +
+                            "\'" + addProductCat.getText() + "\',"
+                            + addProductPrice.getText() + ","
+                            + addProductQuan.getText() + ","
+                            + addProductLife.getText() + ")";
+                    addProductResponse.setText("");
+                    addProductResponse.setText("Added Successfully ID: " + prodID);
+                } else {
+                    insertQuery = insertQuery + (result.getInt(1) + 1)
+                            + ",\'" + addProductName.getText() + "\'," +
+                            "\'" + addProductCat.getText() + "\',"
+                            + addProductPrice.getText() + ","
+                            + addProductQuan.getText() + ")";
+                    //System.out.println(insertQuery);
+                }
             }
-        }
-        catch(SQLException e){
+            addProductName.clear();
+            addProductCat.clear();
+            addProductPrice.clear();
+            addProductQuan.clear();
+            addProductLife.clear();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        try {
+            Statement statement = connection.databaseLink.createStatement();
+            statement.executeUpdate(insertQuery);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }*/
     }
 
     @FXML
