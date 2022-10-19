@@ -1,14 +1,10 @@
 package com.inventory.inventory;
 
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -68,7 +64,7 @@ public class Profile {
         try{
             Statement statement = connection.databaseLink.createStatement();
             ResultSet result = statement.executeQuery(selectBrushes);
-            String setText = "";
+            String setText = "BRUSHES: \n";
             while(result.next()){
                 setText = setText + result.getString(1) + "\n";
             }
@@ -84,7 +80,7 @@ public class Profile {
         try{
             Statement statement = connection.databaseLink.createStatement();
             ResultSet result = statement.executeQuery(selectBrushes);
-            String setText = "";
+            String setText = "MAKEUP REMOVER: \n";
             while(result.next()){
                 setText = setText + result.getString(1) + "\n";
             }
@@ -100,7 +96,7 @@ public class Profile {
         try{
             Statement statement = connection.databaseLink.createStatement();
             ResultSet result = statement.executeQuery(selectBrushes);
-            String setText = "";
+            String setText = "SKIN: \n";
             while(result.next()){
                 setText = setText + result.getString(1) + "\n";
             }
@@ -116,7 +112,7 @@ public class Profile {
         try{
             Statement statement = connection.databaseLink.createStatement();
             ResultSet result = statement.executeQuery(selectBrushes);
-            String setText = "";
+            String setText = "FACE: \n";
             while(result.next()){
                 setText = setText + result.getString(1) + "\n";
             }
@@ -132,7 +128,7 @@ public class Profile {
         try{
             Statement statement = connection.databaseLink.createStatement();
             ResultSet result = statement.executeQuery(selectBrushes);
-            String setText = "";
+            String setText = "LIPS: \n";
             while(result.next()){
                 setText = setText + result.getString(1) + "\n";
             }
@@ -148,7 +144,7 @@ public class Profile {
         try{
             Statement statement = connection.databaseLink.createStatement();
             ResultSet result = statement.executeQuery(selectBrushes);
-            String setText = "";
+            String setText = "EYES: \n";
             while(result.next()){
                 setText = setText + result.getString(1) + "\n";
             }
@@ -160,19 +156,6 @@ public class Profile {
 
     @FXML
     protected  void onAdd(){
-        /*DatabaseConnection connection = setConnection();
-        String getIDS = "select PRODUCT_ID from Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
-        String insertQuery = "";
-        Boolean addLife = null;
-        if(!addProductLife.getText().equals("")) {
-            insertQuery = "INSERT INTO Product VALUES (";
-            addLife = true;
-        }
-        else{
-            insertQuery = "Insert INTO Product(Product_ID, CATEGORY, PRODUCT_NAME, QUANTITY, PRICE) VALUES (";
-            addLife = false;
-        }
-        Boolean sendQueryOrNot = addProductName.getText().equals("") && addProductCat.getText().equals("") && addProductPrice.getText().equals("") && addProductQuan.getText().equals("");*/
         addProductButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -19,10 +20,8 @@ import java.sql.Statement;
 
 public class LoginRegister {
 
-    @FXML private TabPane loginPane = new TabPane();
-    @FXML private TabPane registerPane = new TabPane();
     @FXML private TextField loginUsername = new TextField();
-    @FXML private TextField loginPassword = new TextField();
+    @FXML private PasswordField loginPassword = new PasswordField();
     @FXML private TextField registerUsername = new TextField();
     @FXML private TextField registerPassword = new TextField();
     @FXML private TextField registerPasswordRe = new TextField();
@@ -70,7 +69,7 @@ public class LoginRegister {
     }
 
     @FXML
-    protected void onRegisterClick(javafx.event.ActionEvent events) throws IOException{
+    protected void onRegisterClick(){
         DatabaseConnection connection = setConnection();
         String query = "";
         if(registerUsername.getText().length() >= 8 ){
@@ -109,13 +108,6 @@ public class LoginRegister {
     }
     private void setPassword(String password){
         this.password = password;
-    }
-    public String getUsername(){
-        return username;
-    }
-
-    public String getPassword(){
-        return password;
     }
 
 }

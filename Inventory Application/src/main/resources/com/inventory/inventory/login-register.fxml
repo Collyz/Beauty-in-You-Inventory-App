@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -17,10 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="400.0" prefWidth="640.0"
-      xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.inventory.inventory.LoginRegister">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.LoginRegister">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -82,20 +80,19 @@
                                                 <Font name="Consolas" size="17.0" />
                                             </font>
                                         </Text>
-                                        <TextField layoutX="24.0" layoutY="132.0" fx:id="loginUsername" />
+                                        <TextField fx:id="loginUsername" layoutX="24.0" layoutY="132.0" />
                                         <Text layoutX="24.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
                                             <font>
                                                 <Font name="Consolas" size="17.0" />
                                             </font>
                                         </Text>
-                                        <TextField layoutX="24.0" layoutY="181.0" fx:id = "loginPassword"/>
+                              <PasswordField fx:id="loginPassword" layoutX="24.0" layoutY="180.0" />
                                         <Button layoutX="24.0" layoutY="232.0" mnemonicParsing="false" onAction="#onLoginClick" text="Login">
                                             <font>
                                                 <Font name="Consolas" size="12.0" />
                                             </font>
                                         </Button>
-                                        <Text fill="RED" layoutX="24.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="200.0"
-                                              fx:id = "loginWrong">
+                                        <Text fx:id="loginWrong" fill="RED" layoutX="24.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="200.0">
                                             <font>
                                                 <Font name="Consolas" size="15.0" />
                                             </font>
@@ -121,32 +118,31 @@
                                                 <Font name="Consolas" size="17.0" />
                                             </font>
                                         </Text>
-                                        <TextField layoutX="25.0" layoutY="89.0" fx:id="registerUsername"/>
+                                        <TextField fx:id="registerUsername" layoutX="25.0" layoutY="89.0" />
                                         <Text layoutX="25.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
                                             <font>
                                                 <Font name="Consolas" size="17.0" />
                                             </font>
                                         </Text>
-                                        <TextField layoutX="25.0" layoutY="136.0" fx:id="registerPassword"/>
+                                        <TextField fx:id="registerPassword" layoutX="25.0" layoutY="136.0" />
                                         <Text layoutX="25.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Re-Type Password">
                                             <font>
                                                 <Font name="Consolas" size="17.0" />
                                             </font>
                                         </Text>
-                                        <TextField layoutX="25.0" layoutY="180.0" fx:id="registerPasswordRe"/>
+                                        <TextField fx:id="registerPasswordRe" layoutX="25.0" layoutY="180.0" />
                                         <Text layoutX="23.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
                                             <font>
                                                 <Font name="Consolas" size="17.0" />
                                             </font>
                                         </Text>
-                                        <TextField layoutX="25.0" layoutY="230.0" fx:id="registerEmail"/>
-                                        <Text fill="RED" layoutX="25.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER"
-                                              wrappingWidth="166.4000244140625" fx:id="registerWrong">
+                                        <TextField fx:id="registerEmail" layoutX="25.0" layoutY="230.0" />
+                                        <Text fx:id="registerWrong" fill="RED" layoutX="25.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="166.4000244140625">
                                             <font>
                                                 <Font name="Consolas" size="15.0" />
                                             </font>
                                         </Text>
-                                        <Button layoutX="28.0" layoutY="292.0" mnemonicParsing="false" onAction = "#onRegisterClick" text="Register">
+                                        <Button layoutX="28.0" layoutY="292.0" mnemonicParsing="false" onAction="#onRegisterClick" text="Register">
                                             <font>
                                                 <Font name="Consolas" size="12.0" />
                                             </font>
