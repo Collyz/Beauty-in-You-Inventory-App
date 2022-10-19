@@ -156,29 +156,44 @@ public class Profile {
 
     @FXML
     protected  void onAdd(){
-        addProductButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                DatabaseConnection connection = setConnection();
-                String getIDS = "select PRODUCT_ID from Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
-                String insertQuery = "";
-                Boolean addLife = null;
-                if(!addProductLife.getText().equals("")) {
-                    insertQuery = "INSERT INTO Product VALUES (";
-                    addLife = true;
-                }
-                else{
-                    insertQuery = "Insert INTO Product(Product_ID, CATEGORY, PRODUCT_NAME, QUANTITY, PRICE) VALUES (";
-                    addLife = false;
-                }
-                Boolean sendQueryOrNot = !addProductName.getText().equals("") && !addProductCat.getText().equals("") && !addProductPrice.getText().equals("") && !addProductQuan.getText().equals("");
+        addProductButton.setOnMouseClicked(mouseEvent -> {
+            //Creates the database connection for queries
+            DatabaseConnection connection = setConnection();
+            //Gets the ID of the last item to increment the ID number when adding a new number
+            String getIDS = "select PRODUCT_ID from Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
+            //The empty query
+            String insertQuery = "";
+            //Use to determine if a shelf life is input to determine what type of query is used.
+            Boolean addLife = null;
+            //The check that determines which type of query is used
+            if (!addProductLife.getText().equals("")) {
+                insertQuery = "INSERT INTO Product VALUES (";
+                addLife = true;
+            } else {
+                insertQuery = "Insert INTO Product(Product_ID, CATEGORY, PRODUCT_NAME, QUANTITY, PRICE) VALUES (";
+                addLife = false;
+            }
+            //Determines if the required fields 'Product Name, Category, Price, and Quantity' are filled
+            Boolean sendQueryOrNot = !addProductName.getText().equals("") &&
+                    !addProductCat.getText().equals("") &&
+                    !addProductPrice.getText().equals("") &&
+                    !addProductQuan.getText().equals("");
+
+            //If the required fields are filled
+            if (sendQueryOrNot) {
+                //Makes sure that the filled in text fields are the proper type input i.e. String vs int vs double
+                /**
+                 * to be added
+                 */
                 try {
                     Statement statement = connection.databaseLink.createStatement();
                     ResultSet result = statement.executeQuery(getIDS);
                     while (result.next()) {
+                        //Creates a query that INCLUDES the shelf life of a product
                         if (addLife) {
-                            int prodID = result.getInt(1);
-                            insertQuery = insertQuery + (prodID + 1)
+                            //Gets the last item in product table id
+                            int prodID = result.getInt(1) + 1;
+                            insertQuery = insertQuery + (prodID)
                                     + ",\'" + addProductName.getText() + "\'," +
                                     "\'" + addProductCat.getText() + "\',"
                                     + addProductPrice.getText() + ","
@@ -187,14 +202,15 @@ public class Profile {
                             addProductResponse.setText("");
                             addProductResponse.setText("Added Successfully ID: " + prodID);
                         } else {
+                            //Creates a query that DOES NOT INCLUDE the shelf life of a product
                             insertQuery = insertQuery + (result.getInt(1) + 1)
                                     + ",\'" + addProductName.getText() + "\'," +
                                     "\'" + addProductCat.getText() + "\',"
                                     + addProductPrice.getText() + ","
                                     + addProductQuan.getText() + ")";
-                            //System.out.println(insertQuery);
                         }
                     }
+                    //Clears the text fields after the query is sent
                     addProductName.clear();
                     addProductCat.clear();
                     addProductPrice.clear();
@@ -203,12 +219,21 @@ public class Profile {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+                //Inserts the item into the database;
                 try {
                     Statement statement = connection.databaseLink.createStatement();
                     statement.executeUpdate(insertQuery);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+            }
+            else{
+                //Response given in the addProductResponse text field if all the required text fields are not filled
+                addProductResponse.setText("Fill in Required Fields");
+                asterisk1.setText("*");
+                asterisk2.setText("*");
+                asterisk3.setText("*");
+                asterisk4.setText("*");
             }
         });
         /*try {
