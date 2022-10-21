@@ -87,7 +87,7 @@
                                             </font>
                                         </Text>
                               <PasswordField fx:id="loginPassword" layoutX="24.0" layoutY="180.0" />
-                                        <Button layoutX="24.0" layoutY="232.0" mnemonicParsing="false" onAction="#onLoginClick" text="Login">
+                                        <Button defaultButton="true" layoutX="24.0" layoutY="232.0" mnemonicParsing="false" onAction="#onLoginClick" text="Login">
                                             <font>
                                                 <Font name="Consolas" size="12.0" />
                                             </font>

@@ -117,17 +117,17 @@
                                 <SplitMenuButton layoutX="14.0" layoutY="63.0" mnemonicParsing="false" text="Filter">
                                     <items>
                                         <CheckMenuItem fx:id="brushesFilter" mnemonicParsing="false" onAction="#onBrushesClick" text="Brushes" />
-                                        <CheckMenuItem mnemonicParsing="false" onAction="#onMakeupRemoverClick" text="Makeup Remover" />
-                                        <CheckMenuItem mnemonicParsing="false" onAction="#onSkincareClick" text="Skincare" />
-                                        <CheckMenuItem mnemonicParsing="false" onAction="#onFaceClip" text="Face" />
-                                        <CheckMenuItem mnemonicParsing="false" onAction="#onLipsClick" text="Lips" />
-                                        <CheckMenuItem mnemonicParsing="false" onAction="#onEyesCLick" text="Eyes" />
+                                        <CheckMenuItem fx:id="makeupFilter" mnemonicParsing="false" onAction="#onMakeupRemoverClick" text="Makeup Remover" />
+                                        <CheckMenuItem fx:id="skinFilter" mnemonicParsing="false" onAction="#onSkincareClick" text="Skincare" />
+                                        <CheckMenuItem fx:id="faceFilter" mnemonicParsing="false" onAction="#onFaceClip" text="Face" />
+                                        <CheckMenuItem fx:id="lipFilter" mnemonicParsing="false" onAction="#onLipsClick" text="Lips" />
+                                        <CheckMenuItem fx:id="eyeFilter" mnemonicParsing="false" onAction="#onEyesCLick" text="Eyes" />
                                     </items>
                                     <font>
                                         <Font name="Verdana" size="12.0" />
                                     </font>
                                 </SplitMenuButton>
-                                <TextArea fx:id="searchResults" layoutX="14.0" layoutY="95.0" prefHeight="229.0" prefWidth="610.0" />
+                                <TextArea fx:id="searchResults" editable="false" layoutX="14.0" layoutY="95.0" prefHeight="229.0" prefWidth="610.0" />
                             </children>
                         </AnchorPane>
                     </content>
