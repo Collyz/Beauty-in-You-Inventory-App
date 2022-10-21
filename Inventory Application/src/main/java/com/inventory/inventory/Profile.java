@@ -78,7 +78,6 @@ public class Profile {
                     setText = setText + result.getString(1) + "\n";
                 }
                 searchResults.setText(searchResults.getText() + setText + delimiter);
-                System.out.println(searchResults.getText());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
