@@ -28,6 +28,12 @@ public class Profile {
     @FXML CheckMenuItem faceFilter = new CheckMenuItem();
     @FXML CheckMenuItem lipFilter = new CheckMenuItem();
     @FXML CheckMenuItem eyeFilter = new CheckMenuItem();
+    @FXML CheckMenuItem quantLeast = new CheckMenuItem();
+    @FXML CheckMenuItem quantMiddle = new CheckMenuItem();
+    @FXML CheckMenuItem quantGreatest = new CheckMenuItem();
+    @FXML CheckMenuItem shelfNA = new CheckMenuItem();
+    @FXML CheckMenuItem shelfSixM = new CheckMenuItem();
+    @FXML CheckMenuItem shelfTwelveM = new CheckMenuItem();
     @FXML TextArea searchRes = new TextArea();
 
     //For Add/Modify Tab
@@ -84,7 +90,7 @@ public class Profile {
                         String formattedString = String.format(formatting, name, quantity, shelf + "\n");
                         setText = category + formattedString;
                     }
-                    unselectFilter();
+                    deselectFilters();
                     searchRes.setText(setText);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -94,7 +100,7 @@ public class Profile {
     }
 
     //Helper Method to onSearch. It clears menu check items and empties the result text areas.
-    private void unselectFilter(){
+    private void deselectFilters(){
         brushesFilter.setSelected(false);
         makeupFilter.setSelected(false);
         skinFilter.setSelected(false);
@@ -104,8 +110,16 @@ public class Profile {
     }
 
     //Filters
+
+    /**
+     * Filters the products by categories.
+     * When displayed it shows the category name followed immediately bellow it by the name,
+     * on the right of the name is the quantity and shel life if applicable
+     * @return String[] - used by helper method removeCatFilters to remove
+     * category filters that are not selected.
+     */
     @FXML
-    protected String[] catFilters() throws SQLException {
+    protected String[] catFilters(){
         searchRes.clear();
         DatabaseConnection connection = setConnection();
         String query = "SELECT PRODUCT_NAME, QUANTITY, SHELF_LIFE from Product WHERE CATEGORY = ";
@@ -136,26 +150,26 @@ public class Profile {
         }
         if(brushesFilter.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[0]);
-        } else{removeFilterText("\'BRUSHES\'");}
+        } else{removeCatText("\'BRUSHES\'");}
         if(makeupFilter.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[1]);
-        } else{removeFilterText("\'MAKEUP REMOVER\'");}
+        } else{removeCatText("\'MAKEUP REMOVER\'");}
         if(skinFilter.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[2]);
-        } else{removeFilterText("\'SKINCARE\'");}
+        } else{removeCatText("\'SKINCARE\'");}
         if(faceFilter.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[3]);
-        } else{removeFilterText("\'FACE\'");}
+        } else{removeCatText("\'FACE\'");}
         if(lipFilter.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[4]);
-        } else{removeFilterText("\'LIPS\'");}
+        } else{removeCatText("\'LIPS\'");}
         if(eyeFilter.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[5]);
-        } else{removeFilterText("\'EYES\'");}
+        } else{removeCatText("\'EYES\'");}
         return queryResults;
     }
-    //Helper method for filter. Removes the text of the filter that is unselected
-    private void removeFilterText(String filter) throws SQLException {
+    //Helper method for catFilters. Removes the text of the filter that is unselected
+    private void removeCatText(String filter){
         StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
         ArrayList<String> words = new ArrayList<>();
         while(st.hasMoreTokens()){
@@ -176,6 +190,135 @@ public class Profile {
         searchRes.setText(temp);
     }
 
+    /**
+     *
+     */
+    @FXML protected void quantFilters(){
+        searchRes.clear();
+        DatabaseConnection connection = setConnection();
+        String query = "SELECT CATEGORY, PRODUCT_NAME, QUANTITY, SHELF_LIFE FROM Product WHERE QUANTITY ";
+        String[] quantities = {"<= 3", "> 3 AND QUANTITY < 10", "> 10"};
+        String[] queryResults = new String[quantities.length];
+        for(int i = 0; i < quantities.length; i++){
+            try{
+                Statement statement = connection.databaseLink.createStatement();
+                ResultSet result = statement.executeQuery(query + quantities[i]);
+                String delimiter = "----------------------------\n";
+                String setText = "";
+                while(result.next()){
+                    String category = "\'" + result.getString(1) + "\'\n";
+                    String name = result.getString(2);
+                    String quantity = result.getString(3);
+                    String shelf = result.getString(4);
+                    if(shelf == null){
+                        shelf = "N/A";
+                    }
+                    int padding= 37 - name.length();
+                    String formatting = "%s%" + padding + "s%25s";
+                    String formattedString = String.format(formatting, name, quantity, shelf + "\n");
+                    setText = setText + category + formattedString;
+                }
+                queryResults[i] = setText + delimiter;
+            }catch(SQLException e){
+                throw new RuntimeException(e);
+            }
+        }
+        if(quantLeast.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[0]);
+        } else{removeQuantText(quantities[0]);}
+        if(quantMiddle.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[1]);
+        } else{removeCatText(quantities[1]);}
+        if(quantGreatest.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[2]);
+        }else{removeQuantText(quantities[2]);}
+    }
+    //Helper method to quantFilters. Removes the text of the filter that is unselected
+    private void removeQuantText(String filter){
+        StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
+        ArrayList<String> words = new ArrayList<>();
+        while(st.hasMoreTokens()){
+            words.add(st.nextToken());
+        }
+        for(int i = 0; i < words.size(); i++){
+            if(words.get(i).equals(filter)){
+                while(!words.get(i).equals("-------------------------")){
+                    words.remove(i);
+                }
+                words.remove(i);
+            }
+        }
+        String temp = "";
+        while(!words.isEmpty()){
+            temp = temp + words.remove(0) + "\n";
+        }
+        searchRes.setText(temp);
+    }
+
+    /**
+     *
+     */
+    @FXML protected void shelfFilters(){
+        searchRes.clear();
+        DatabaseConnection connection = setConnection();
+        String query = "SELECT CATEGORY, PRODUCT_NAME, QUANTITY, SHELF_LIFE FROM Product WHERE SHELF_LIFE ";
+        String[] shelfLife = {"IS NULL", " = 6", " = 12"};
+        String[] queryResults = new String[shelfLife.length];
+        for(int i = 0; i < shelfLife.length; i++){
+            try{
+                Statement statement = connection.databaseLink.createStatement();
+                ResultSet result = statement.executeQuery(query + shelfLife[i]);
+                String delimiter = "----------------------------\n";
+                String setText = "";
+                while(result.next()){
+                    String category = "\'" + result.getString(1) + "\'\n";
+                    String name = result.getString(2);
+                    String quantity = result.getString(3);
+                    String shelf = result.getString(4);
+                    if(shelf == null){
+                        shelf = "N/A";
+                    }
+                    int padding= 37 - name.length();
+                    String formatting = "%s%" + padding + "s%25s";
+                    String formattedString = String.format(formatting, name, quantity, shelf + "\n");
+                    setText = setText + category + formattedString;
+                }
+                queryResults[i] = setText + delimiter;
+            }catch(SQLException e){
+                throw new RuntimeException(e);
+            }
+        }
+        if(shelfNA.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[0]);
+        }else{removeShelfText("N/A");}
+        if(shelfSixM.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[1]);
+        } else{removeShelfText(shelfLife[1]);}
+        if(shelfTwelveM.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[2]);
+        } else{removeShelfText(shelfLife[2]);}
+    }
+    //Helper method to quantFilters
+    private void removeShelfText(String filter){
+        StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
+        ArrayList<String> words = new ArrayList<>();
+        while(st.hasMoreTokens()){
+            words.add(st.nextToken());
+        }
+        for(int i = 0; i < words.size(); i++){
+            if(words.get(i).equals(filter)){
+                while(!words.get(i).equals("-------------------------")){
+                    words.remove(i);
+                }
+                words.remove(i);
+            }
+        }
+        String temp = "";
+        while(!words.isEmpty()){
+            temp = temp + words.remove(0) + "\n";
+        }
+        searchRes.setText(temp);
+    }
     //Adds a product to the database in the product table
     @FXML
     protected  void onAdd(){

@@ -128,15 +128,16 @@
                               </Menu>
                               <Menu mnemonicParsing="false" text="Quantity">
                                 <items>
-                                    <CheckMenuItem mnemonicParsing="false" text="LOW ( &lt;= 3)" />
-                                    <CheckMenuItem mnemonicParsing="false" text="&lt; 10 and &gt; 3" />
-                                    <CheckMenuItem mnemonicParsing="false" text="&gt; 10" />
+                                    <CheckMenuItem fx:id="quantLeast" mnemonicParsing="false" onAction="#quantFilters" text="LOW ( &lt;= 3)" />
+                                    <CheckMenuItem fx:id="quantMiddle" mnemonicParsing="false" onAction="#quantFilters" text="&lt; 10 and &gt; 3" />
+                                    <CheckMenuItem fx:id="quantGreatest" mnemonicParsing="false" onAction="#quantFilters" text="&gt; 10" />
                                 </items>
                               </Menu>
                               <Menu mnemonicParsing="false" text="Shelf Life">
                                  <items>
-                                    <CheckMenuItem mnemonicParsing="false" text="6 Months" />
-                                    <CheckMenuItem mnemonicParsing="false" text="12 Months" />
+                                    <CheckMenuItem fx:id="shelfNA" mnemonicParsing="false" onAction="#shelfFilters" text="No Expiration" />
+                                    <CheckMenuItem fx:id="shelfSixM" mnemonicParsing="false" onAction="#shelfFilters" text="6 Months" />
+                                    <CheckMenuItem fx:id="shelfTwelveM" mnemonicParsing="false" onAction="#shelfFilters" text="12 Months" />
                                  </items>
                               </Menu>
                                     </items>
