@@ -1,8 +1,11 @@
 package com.inventory.inventory;
 
+import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -25,7 +28,7 @@ public class Profile {
     @FXML CheckMenuItem faceFilter = new CheckMenuItem();
     @FXML CheckMenuItem lipFilter = new CheckMenuItem();
     @FXML CheckMenuItem eyeFilter = new CheckMenuItem();
-    @FXML TextArea searchResults = new TextArea();
+    @FXML TextArea searchRes = new TextArea();
 
     //For Add/Modify Tab
     @FXML TextField addProductName = new TextField();
@@ -41,6 +44,7 @@ public class Profile {
     @FXML Button addProductButton = new Button();
 
 
+    //Opens the previous login/register page essentially logging out
     @FXML
     protected void onLogoutClick(javafx.event.ActionEvent event) throws IOException {
         Parent p = FXMLLoader.load(getClass().getResource("login-register.fxml"));
@@ -50,249 +54,129 @@ public class Profile {
         appStage.show();
     }
 
-/*    @FXML
-    protected void onSearch(javafx.event.ActionEvent event) throws IOException{
-        DatabaseConnection connection = setConnection();
-        String search = searchBar.getText();
-        String searchQuery =
-        try{
-            Statement statement = connection.databaseLink.createStatement();
-            ResultSet connect = statement.executeQuery()
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+    /**
+     * The search bar method. After typing in the name of a product and pressing enter,
+     * a query is sent and the results of it are displayed. It closes all filters and clears
+     * the result text areas.
+     */
+    @FXML
+    protected void onSearch(){
+        searchBar.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                searchRes.clear();
+                DatabaseConnection connection = setConnection();
+                String search = searchBar.getText();
+                String searchQuery = "SELECT CATEGORY, PRODUCT_NAME, QUANTITY, SHELF_LIFE from Product WHERE PRODUCT_NAME = \'" + search + "\'";
+                try {
+                    Statement statement = connection.databaseLink.createStatement();
+                    ResultSet result = statement.executeQuery(searchQuery);
+                    String setText = "";
+                    while (result.next()) {
+                        String category = "\'" + result.getString(1) + "\'\n";
+                        String name = result.getString(2);
+                        String quantity = result.getString(3);
+                        String shelf = result.getString(4);
+                        if(shelf == null){
+                            shelf = "N/A";
+                        }
+                        int padding= 37 - name.length();
+                        String formatting = "%s%" + padding + "s%25s";
+                        String formattedString = String.format(formatting, name, quantity, shelf + "\n");
+                        setText = category + formattedString;
+                    }
+                    unselectFilter();
+                    searchRes.setText(setText);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
 
-    }*/
+    //Helper Method to onSearch. It clears menu check items and empties the result text areas.
+    private void unselectFilter(){
+        brushesFilter.setSelected(false);
+        makeupFilter.setSelected(false);
+        skinFilter.setSelected(false);
+        faceFilter.setSelected(false);
+        lipFilter.setSelected(false);
+        eyeFilter.setSelected(false);
+    }
 
     //Filters
-    @FXML protected void onBrushesClick(){
-        if(brushesFilter.isSelected()) {
-            DatabaseConnection connection = setConnection();
-            String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'BRUSHES\'";
-            try {
+    @FXML
+    protected String[] catFilters() throws SQLException {
+        searchRes.clear();
+        DatabaseConnection connection = setConnection();
+        String query = "SELECT PRODUCT_NAME, QUANTITY, SHELF_LIFE from Product WHERE CATEGORY = ";
+        String[] categories = {"\'BRUSHES\'", "\'MAKEUP REMOVERS\'", "\'SKINCARE\'", "\'FACE\'", "\'LIPS\'", "\'EYES\'"};
+        String[] queryResults = new String[6];
+        for(int i = 0; i < categories.length; i++){
+            try{
                 Statement statement = connection.databaseLink.createStatement();
-                ResultSet result = statement.executeQuery(selectBrushes);
-                String delimiter = "-------------------------\n";
-                String setText = "BRUSHES: \n";
-                while (result.next()) {
-                    setText = setText + result.getString(1) + "\n";
+                ResultSet result = statement.executeQuery(query + categories[i]);
+                String delimiter = "----------------------------\n";
+                String setText = categories[i] + "\n";
+                while(result.next()){
+                    String name = result.getString(1);
+                    String quantity = result.getString(2);
+                    String shelf = result.getString(3);
+                    if(shelf == null){
+                        shelf = "N/A";
+                    }
+                    int padding= 37 - name.length();
+                    String formatting = "%s%" + padding + "s%25s";
+                    String formattedString = String.format(formatting, name, quantity, shelf + "\n");
+                    setText = setText + formattedString;
                 }
-                searchResults.setText(searchResults.getText() + setText + delimiter);
-            } catch (SQLException e) {
+                queryResults[i] = setText + delimiter;
+            }catch(SQLException e){
                 throw new RuntimeException(e);
             }
-        } else{
-            StringTokenizer st = new StringTokenizer(searchResults.getText(),"\n");
-            ArrayList<String> words = new ArrayList<>();
-            while(st.hasMoreTokens()){
-                words.add(st.nextToken());
-            }
-            for(int i = 0; i < words.size(); i++){
-                if(words.get(i).equals("BRUSHES: ")){
-                    while(!words.get(i).equals("-------------------------")){
-                        words.remove(i);
-                    }
-                    words.remove(i);
-                }
-            }
-            String temp = "";
-            while(!words.isEmpty()){
-                temp = temp + words.remove(0) + "\n";
-            }
-            searchResults.setText(temp);
         }
+        if(brushesFilter.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[0]);
+        } else{removeFilterText("\'BRUSHES\'");}
+        if(makeupFilter.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[1]);
+        } else{removeFilterText("\'MAKEUP REMOVER\'");}
+        if(skinFilter.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[2]);
+        } else{removeFilterText("\'SKINCARE\'");}
+        if(faceFilter.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[3]);
+        } else{removeFilterText("\'FACE\'");}
+        if(lipFilter.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[4]);
+        } else{removeFilterText("\'LIPS\'");}
+        if(eyeFilter.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[5]);
+        } else{removeFilterText("\'EYES\'");}
+        return queryResults;
     }
-    @FXML protected void onMakeupRemoverClick() {
-        String setText = null;
-        if (makeupFilter.isSelected()) {
-            DatabaseConnection connection = setConnection();
-            String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'MAKEUP REMOVERS\'";
-            try {
-                Statement statement = connection.databaseLink.createStatement();
-                ResultSet result = statement.executeQuery(selectBrushes);
-                String delimiter = "-------------------------\n";
-                setText = "MAKEUP REMOVER: \n";
-                while (result.next()) {
-                    setText = setText + result.getString(1) + "\n";
-                }
-                searchResults.setText(searchResults.getText() + setText + delimiter);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            StringTokenizer st = new StringTokenizer(searchResults.getText(),"\n");
-            ArrayList<String> words = new ArrayList<>();
-            while(st.hasMoreTokens()){
-                words.add(st.nextToken());
-            }
-            for(int i = 0; i < words.size(); i++){
-                if(words.get(i).equals("MAKEUP REMOVER: ")){
-                    while(!words.get(i).equals("-------------------------")){
-                        words.remove(i);
-                    }
+    //Helper method for filter. Removes the text of the filter that is unselected
+    private void removeFilterText(String filter) throws SQLException {
+        StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
+        ArrayList<String> words = new ArrayList<>();
+        while(st.hasMoreTokens()){
+            words.add(st.nextToken());
+        }
+        for(int i = 0; i < words.size(); i++){
+            if(words.get(i).equals(filter)){
+                while(!words.get(i).equals("-------------------------")){
                     words.remove(i);
                 }
-            }
-            String temp = "";
-            while(!words.isEmpty()){
-                temp = temp + words.remove(0) + "\n";
-            }
-            searchResults.setText(temp);
-        }
-    }
-    @FXML protected void onSkincareClick(){
-        if(skinFilter.isSelected()) {
-            DatabaseConnection connection = setConnection();
-            String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'SKINCARE\'";
-            try {
-                Statement statement = connection.databaseLink.createStatement();
-                ResultSet result = statement.executeQuery(selectBrushes);
-                String delimiter = "-------------------------\n";
-                String setText = "SKIN: \n";
-                while (result.next()) {
-                    setText = setText + result.getString(1) + "\n";
-                }
-                searchResults.setText(searchResults.getText() + setText + delimiter);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                words.remove(i);
             }
         }
-        else{
-            StringTokenizer st = new StringTokenizer(searchResults.getText(),"\n");
-            ArrayList<String> words = new ArrayList<>();
-            while(st.hasMoreTokens()){
-                words.add(st.nextToken());
-            }
-            for(int i = 0; i < words.size(); i++){
-                if(words.get(i).equals("SKIN: ")){
-                    while(!words.get(i).equals("-------------------------")){
-                        words.remove(i);
-                    }
-                    words.remove(i);
-                }
-            }
-            String temp = "";
-            while(!words.isEmpty()){
-                temp = temp + words.remove(0) + "\n";
-            }
-            searchResults.setText(temp);
+        String temp = "";
+        while(!words.isEmpty()){
+            temp = temp + words.remove(0) + "\n";
         }
-    }
-    @FXML protected void onFaceClip(){
-        if(faceFilter.isSelected()) {
-            DatabaseConnection connection = setConnection();
-            String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'FACE\'";
-            try {
-                Statement statement = connection.databaseLink.createStatement();
-                ResultSet result = statement.executeQuery(selectBrushes);
-                String delimiter = "-------------------------\n";
-                String setText = "FACE: \n";
-                while (result.next()) {
-                    setText = setText + result.getString(1) + "\n";
-                }
-                searchResults.setText(searchResults.getText() + setText + delimiter);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        else{
-            StringTokenizer st = new StringTokenizer(searchResults.getText(),"\n");
-            ArrayList<String> words = new ArrayList<>();
-            while(st.hasMoreTokens()){
-                words.add(st.nextToken());
-            }
-            for(int i = 0; i < words.size(); i++){
-                if(words.get(i).equals("FACE: ")){
-                    while(!words.get(i).equals("-------------------------")){
-                        words.remove(i);
-                    }
-                    words.remove(i);
-                }
-            }
-            String temp = "";
-            while(!words.isEmpty()){
-                temp = temp + words.remove(0) + "\n";
-            }
-            searchResults.setText(temp);
-        }
-    }
-    @FXML protected void onLipsClick(){
-        if(lipFilter.isSelected()) {
-            DatabaseConnection connection = setConnection();
-            String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'LIPS\'";
-            try {
-                Statement statement = connection.databaseLink.createStatement();
-                ResultSet result = statement.executeQuery(selectBrushes);
-                String delimiter = "-------------------------";
-                String setText = "LIPS: \n";
-                while (result.next()) {
-                    setText = setText + result.getString(1) + "\n";
-                }
-                searchResults.setText(searchResults.getText() + setText + delimiter);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        else{
-            StringTokenizer st = new StringTokenizer(searchResults.getText(),"\n");
-            ArrayList<String> words = new ArrayList<>();
-            while(st.hasMoreTokens()){
-                words.add(st.nextToken());
-            }
-            for(int i = 0; i < words.size(); i++){
-                if(words.get(i).equals("LIPS: ")){
-                    while(!words.get(i).equals("-------------------------")){
-                        words.remove(i);
-                    }
-                    words.remove(i);
-                }
-            }
-            String temp = "";
-            while(!words.isEmpty()){
-                temp = temp + words.remove(0) + "\n";
-            }
-            searchResults.setText(temp);
-        }
-    }
-    @FXML protected void onEyesCLick() {
-        if(eyeFilter.isSelected()) {
-            DatabaseConnection connection = setConnection();
-            String selectBrushes = "SELECT PRODUCT_NAME from Product WHERE CATEGORY = \'EYES\'";
-            try {
-                Statement statement = connection.databaseLink.createStatement();
-                ResultSet result = statement.executeQuery(selectBrushes);
-                String delimiter = "-------------------------\n";
-                String setText = "EYES: \n";
-                while (result.next()) {
-                    setText = setText + result.getString(1) + "\n";
-                }
-                searchResults.setText(searchResults.getText() + setText + delimiter);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        else{
-            StringTokenizer st = new StringTokenizer(searchResults.getText(),"\n");
-            ArrayList<String> words = new ArrayList<>();
-            while(st.hasMoreTokens()){
-                words.add(st.nextToken());
-            }
-            for(int i = 0; i < words.size(); i++){
-                if(words.get(i).equals("EYES: ")){
-                    while(!words.get(i).equals("-------------------------")){
-                        words.remove(i);
-                    }
-                    words.remove(i);
-                }
-            }
-            String temp = "";
-            while(!words.isEmpty()){
-                temp = temp + words.remove(0) + "\n";
-            }
-            searchResults.setText(temp);
-        }
+        searchRes.setText(temp);
     }
 
+    //Adds a product to the database in the product table
     @FXML
     protected  void onAdd(){
         //Creates the database connection for queries

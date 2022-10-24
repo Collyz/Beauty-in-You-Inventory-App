@@ -108,26 +108,61 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
-                                <TextField fx:id="searchBar" layoutX="73.0" layoutY="31.0" prefHeight="25.0" prefWidth="547.0" promptText="Ex: Liquid Foundation Brush" />
+                                <TextField fx:id="searchBar" layoutX="73.0" layoutY="31.0" onAction="#onSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: Liquid Foundation Brush" />
                                 <Text layoutX="14.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
                                     <font>
                                         <Font name="Verdana" size="14.0" />
                                     </font>
                                 </Text>
-                                <SplitMenuButton layoutX="14.0" layoutY="63.0" mnemonicParsing="false" text="Filter">
+                                <SplitMenuButton layoutX="15.0" layoutY="63.0" mnemonicParsing="false" text="Filter">
                                     <items>
-                                        <CheckMenuItem fx:id="brushesFilter" mnemonicParsing="false" onAction="#onBrushesClick" text="Brushes" />
-                                        <CheckMenuItem fx:id="makeupFilter" mnemonicParsing="false" onAction="#onMakeupRemoverClick" text="Makeup Remover" />
-                                        <CheckMenuItem fx:id="skinFilter" mnemonicParsing="false" onAction="#onSkincareClick" text="Skincare" />
-                                        <CheckMenuItem fx:id="faceFilter" mnemonicParsing="false" onAction="#onFaceClip" text="Face" />
-                                        <CheckMenuItem fx:id="lipFilter" mnemonicParsing="false" onAction="#onLipsClick" text="Lips" />
-                                        <CheckMenuItem fx:id="eyeFilter" mnemonicParsing="false" onAction="#onEyesCLick" text="Eyes" />
+                              <Menu mnemonicParsing="false" text="Categories">
+                                <items>
+                                    <CheckMenuItem fx:id="brushesFilter" mnemonicParsing="false" onAction="#catFilters" text="Brushes" />
+                                              <CheckMenuItem fx:id="makeupFilter" mnemonicParsing="false" onAction="#catFilters" text="Makeup Remover" />
+                                              <CheckMenuItem fx:id="skinFilter" mnemonicParsing="false" onAction="#catFilters" text="Skincare" />
+                                              <CheckMenuItem fx:id="faceFilter" mnemonicParsing="false" onAction="#catFilters" text="Face" />
+                                              <CheckMenuItem fx:id="lipFilter" mnemonicParsing="false" onAction="#catFilters" text="Lips" />
+                                              <CheckMenuItem fx:id="eyeFilter" mnemonicParsing="false" onAction="#catFilters" text="Eyes" />
+                                </items>
+                              </Menu>
+                              <Menu mnemonicParsing="false" text="Quantity">
+                                <items>
+                                    <CheckMenuItem mnemonicParsing="false" text="LOW ( &lt;= 3)" />
+                                    <CheckMenuItem mnemonicParsing="false" text="&lt; 10 and &gt; 3" />
+                                    <CheckMenuItem mnemonicParsing="false" text="&gt; 10" />
+                                </items>
+                              </Menu>
+                              <Menu mnemonicParsing="false" text="Shelf Life">
+                                 <items>
+                                    <CheckMenuItem mnemonicParsing="false" text="6 Months" />
+                                    <CheckMenuItem mnemonicParsing="false" text="12 Months" />
+                                 </items>
+                              </Menu>
                                     </items>
                                     <font>
                                         <Font name="Verdana" size="12.0" />
                                     </font>
                                 </SplitMenuButton>
-                                <TextArea fx:id="searchResults" editable="false" layoutX="14.0" layoutY="95.0" prefHeight="229.0" prefWidth="610.0" />
+                        <Text layoutX="14.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name and Category">
+                           <font>
+                              <Font name="Verdana" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="298.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity">
+                           <font>
+                              <Font name="Verdana" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="484.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shelf Life">
+                           <font>
+                              <Font name="Verdana" size="14.0" />
+                           </font>
+                        </Text>
+                                <TextArea fx:id="searchRes" editable="false" layoutX="15.0" layoutY="119.0" prefHeight="200.0" prefWidth="605.0">
+                           <font>
+                              <Font name="Monospaced Regular" size="14.0" />
+                           </font></TextArea>
                             </children>
                         </AnchorPane>
                     </content>
