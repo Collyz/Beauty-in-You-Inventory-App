@@ -114,16 +114,16 @@
                                         <Font name="Verdana" size="14.0" />
                                     </font>
                                 </Text>
-                                <SplitMenuButton layoutX="15.0" layoutY="63.0" mnemonicParsing="false" text="Filter">
+                                <SplitMenuButton layoutX="15.0" layoutY="63.0" mnemonicParsing="false" text="Filters">
                                     <items>
                               <Menu mnemonicParsing="false" text="Categories">
                                 <items>
-                                    <CheckMenuItem fx:id="brushesFilter" mnemonicParsing="false" onAction="#catFilters" text="Brushes" />
-                                              <CheckMenuItem fx:id="makeupFilter" mnemonicParsing="false" onAction="#catFilters" text="Makeup Remover" />
-                                              <CheckMenuItem fx:id="skinFilter" mnemonicParsing="false" onAction="#catFilters" text="Skincare" />
-                                              <CheckMenuItem fx:id="faceFilter" mnemonicParsing="false" onAction="#catFilters" text="Face" />
-                                              <CheckMenuItem fx:id="lipFilter" mnemonicParsing="false" onAction="#catFilters" text="Lips" />
-                                              <CheckMenuItem fx:id="eyeFilter" mnemonicParsing="false" onAction="#catFilters" text="Eyes" />
+                                    <CheckMenuItem fx:id="catBrushes" mnemonicParsing="false" onAction="#catFilters" text="Brushes" />
+                                              <CheckMenuItem fx:id="catMakeUp" mnemonicParsing="false" onAction="#catFilters" text="Makeup Remover" />
+                                              <CheckMenuItem fx:id="catSkin" mnemonicParsing="false" onAction="#catFilters" text="Skincare" />
+                                              <CheckMenuItem fx:id="catFace" mnemonicParsing="false" onAction="#catFilters" text="Face" />
+                                              <CheckMenuItem fx:id="catLips" mnemonicParsing="false" onAction="#catFilters" text="Lips" />
+                                              <CheckMenuItem fx:id="catEyes" mnemonicParsing="false" onAction="#catFilters" text="Eyes" />
                                 </items>
                               </Menu>
                               <Menu mnemonicParsing="false" text="Quantity">
@@ -136,8 +136,10 @@
                               <Menu mnemonicParsing="false" text="Shelf Life">
                                  <items>
                                     <CheckMenuItem fx:id="shelfNA" mnemonicParsing="false" onAction="#shelfFilters" text="No Expiration" />
-                                    <CheckMenuItem fx:id="shelfSixM" mnemonicParsing="false" onAction="#shelfFilters" text="6 Months" />
-                                    <CheckMenuItem fx:id="shelfTwelveM" mnemonicParsing="false" onAction="#shelfFilters" text="12 Months" />
+                                    <CheckMenuItem fx:id="shelf6M" mnemonicParsing="false" onAction="#shelfFilters" text="6 Months" />
+                                    <CheckMenuItem fx:id="shelf12M" mnemonicParsing="false" onAction="#shelfFilters" text="12 Months" />
+                                    <CheckMenuItem fx:id="shelf18M" mnemonicParsing="false" onAction="#shelfFilters" text="18 Months" />
+                                    <CheckMenuItem fx:id="shelf24M" mnemonicParsing="false" onAction="#shelfFilters" text="24 Months" />
                                  </items>
                               </Menu>
                                     </items>
@@ -196,8 +198,8 @@
                               <Font name="Verdana" size="15.0" />
                            </font>
                         </Text>
-                        <Button layoutX="378.0" layoutY="160.0" mnemonicParsing="false" text="Edit" />
-                        <Button layoutX="378.0" layoutY="202.0" mnemonicParsing="false" text="Delete" />
+                        <Button fx:id="edit" layoutX="378.0" layoutY="160.0" mnemonicParsing="false" onAction="#onEdit" text="Edit" />
+                        <Button layoutX="378.0" layoutY="202.0" mnemonicParsing="false" onAction="#onDelete" text="Delete" />
                         <Text fx:id="popProduct" layoutX="337.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="66.0" />
                         <Text fx:id="findResponse" layoutX="415.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="182.0" />
                         <Text fx:id="addProductResponse" layoutX="30.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="149.33673095703125">

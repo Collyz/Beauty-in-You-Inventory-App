@@ -1,15 +1,11 @@
 package com.inventory.inventory;
 
-import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,33 +17,35 @@ public class Profile {
     @FXML private Text usernameInfo = new Text();
     @FXML private Text passwordInfo = new Text();
     //For Search Tab
-    @FXML TextField searchBar = new TextField();
-    @FXML CheckMenuItem brushesFilter = new CheckMenuItem();
-    @FXML CheckMenuItem makeupFilter = new CheckMenuItem();
-    @FXML CheckMenuItem skinFilter = new CheckMenuItem();
-    @FXML CheckMenuItem faceFilter = new CheckMenuItem();
-    @FXML CheckMenuItem lipFilter = new CheckMenuItem();
-    @FXML CheckMenuItem eyeFilter = new CheckMenuItem();
-    @FXML CheckMenuItem quantLeast = new CheckMenuItem();
-    @FXML CheckMenuItem quantMiddle = new CheckMenuItem();
-    @FXML CheckMenuItem quantGreatest = new CheckMenuItem();
-    @FXML CheckMenuItem shelfNA = new CheckMenuItem();
-    @FXML CheckMenuItem shelfSixM = new CheckMenuItem();
-    @FXML CheckMenuItem shelfTwelveM = new CheckMenuItem();
-    @FXML TextArea searchRes = new TextArea();
+    @FXML private TextField searchBar = new TextField();
+    @FXML private CheckMenuItem catBrushes = new CheckMenuItem();
+    @FXML private CheckMenuItem catMakeUp = new CheckMenuItem();
+    @FXML private CheckMenuItem catSkin = new CheckMenuItem();
+    @FXML private CheckMenuItem catFace = new CheckMenuItem();
+    @FXML private CheckMenuItem catLips = new CheckMenuItem();
+    @FXML private CheckMenuItem catEyes = new CheckMenuItem();
+    @FXML private CheckMenuItem quantLeast = new CheckMenuItem();
+    @FXML private CheckMenuItem quantMiddle = new CheckMenuItem();
+    @FXML private CheckMenuItem quantGreatest = new CheckMenuItem();
+    @FXML private CheckMenuItem shelfNA = new CheckMenuItem();
+    @FXML private CheckMenuItem shelf6M = new CheckMenuItem();
+    @FXML private CheckMenuItem shelf12M = new CheckMenuItem();
+    @FXML private CheckMenuItem shelf18M = new CheckMenuItem();
+    @FXML private CheckMenuItem shelf24M = new CheckMenuItem();
+    @FXML private TextArea searchRes = new TextArea();
 
     //For Add/Modify Tab
-    @FXML TextField addProductName = new TextField();
-    @FXML TextField addProductCat = new TextField();
-    @FXML TextField addProductPrice = new TextField();
-    @FXML TextField addProductQuan = new TextField();
-    @FXML TextField addProductLife = new TextField();
-    @FXML Text addProductResponse = new Text();
-    @FXML Text asterisk1 = new Text();
-    @FXML Text asterisk2 = new Text();
-    @FXML Text asterisk3 = new Text();
-    @FXML Text asterisk4 = new Text();
-    @FXML Button addProductButton = new Button();
+    @FXML private TextField addProductName = new TextField();
+    @FXML private TextField addProductCat = new TextField();
+    @FXML private TextField addProductPrice = new TextField();
+    @FXML private TextField addProductQuan = new TextField();
+    @FXML private TextField addProductLife = new TextField();
+    @FXML private Text addProductResponse = new Text();
+    @FXML private Text asterisk1 = new Text();
+    @FXML private Text asterisk2 = new Text();
+    @FXML private Text asterisk3 = new Text();
+    @FXML private Text asterisk4 = new Text();
+    @FXML private Button addProductButton = new Button();
 
 
     //Opens the previous login/register page essentially logging out
@@ -85,7 +83,7 @@ public class Profile {
                         if(shelf == null){
                             shelf = "N/A";
                         }
-                        int padding= 37 - name.length();
+                        int padding = 37 - name.length();
                         String formatting = "%s%" + padding + "s%25s";
                         String formattedString = String.format(formatting, name, quantity, shelf + "\n");
                         setText = category + formattedString;
@@ -99,31 +97,52 @@ public class Profile {
         });
     }
 
-    //Helper Method to onSearch. It clears menu check items and empties the result text areas.
+    //Helper Method to onSearch. It clears filters and empties the results text area
     private void deselectFilters(){
-        brushesFilter.setSelected(false);
-        makeupFilter.setSelected(false);
-        skinFilter.setSelected(false);
-        faceFilter.setSelected(false);
-        lipFilter.setSelected(false);
-        eyeFilter.setSelected(false);
+        //Category filters deselection
+        catBrushes.setSelected(false);
+        catMakeUp.setSelected(false);
+        catSkin.setSelected(false);
+        catFace.setSelected(false);
+        catLips.setSelected(false);
+        catEyes.setSelected(false);
+        //Quantity filters deselection
+        quantLeast.setSelected(false);
+        quantMiddle.setSelected(false);
+        quantGreatest.setSelected(false);
+        //Shelf Life filter deselection
+        shelfNA.setSelected(false);
+        shelf6M.setSelected(false);
+        shelf12M.setSelected(false);
+        shelf18M.setSelected(false);
+        shelf24M.setSelected(false);
     }
 
-    //Filters
-
+    //Filters: Category, Quantity, Shelf Life
     /**
-     * Filters the products by categories.
-     * When displayed it shows the category name followed immediately bellow it by the name,
-     * on the right of the name is the quantity and shel life if applicable
-     * @return String[] - used by helper method removeCatFilters to remove
-     * category filters that are not selected.
+     * Category Filters -
+     * When displayed it shows the category name followed immediately below it by the name,
+     * On the right of the name is the quantity and shel life if applicable.
      */
     @FXML
-    protected String[] catFilters(){
+    protected void catFilters(){
+        //Quantity filters deselection
+        quantLeast.setSelected(false);
+        quantMiddle.setSelected(false);
+        quantGreatest.setSelected(false);
+        //Shelf Life filter deselection
+        shelfNA.setSelected(false);
+        shelf6M.setSelected(false);
+        shelf12M.setSelected(false);
+        shelf12M.setSelected(false);
+        shelf24M.setSelected(false);
+
         searchRes.clear();
         DatabaseConnection connection = setConnection();
         String query = "SELECT PRODUCT_NAME, QUANTITY, SHELF_LIFE from Product WHERE CATEGORY = ";
-        String[] categories = {"\'BRUSHES\'", "\'MAKEUP REMOVERS\'", "\'SKINCARE\'", "\'FACE\'", "\'LIPS\'", "\'EYES\'"};
+        String[] categories = {"\'BRUSHES\' ORDER BY PRODUCT_Name", "\'MAKEUP REMOVERS\'  ORDER BY PRODUCT_Name",
+                "\'SKINCARE\' ORDER BY PRODUCT_Name", "\'FACE\' ORDER BY PRODUCT_Name", "\'LIPS\' ORDER BY PRODUCT_Name",
+                "\'EYES\' ORDER BY PRODUCT_Name"};
         String[] queryResults = new String[6];
         for(int i = 0; i < categories.length; i++){
             try{
@@ -148,25 +167,25 @@ public class Profile {
                 throw new RuntimeException(e);
             }
         }
-        if(brushesFilter.isSelected()){
+        if(catBrushes.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[0]);
         } else{removeCatText("\'BRUSHES\'");}
-        if(makeupFilter.isSelected()){
+        if(catMakeUp.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[1]);
         } else{removeCatText("\'MAKEUP REMOVER\'");}
-        if(skinFilter.isSelected()){
+        if(catSkin.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[2]);
         } else{removeCatText("\'SKINCARE\'");}
-        if(faceFilter.isSelected()){
+        if(catFace.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[3]);
         } else{removeCatText("\'FACE\'");}
-        if(lipFilter.isSelected()){
+        if(catLips.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[4]);
         } else{removeCatText("\'LIPS\'");}
-        if(eyeFilter.isSelected()){
+        if(catEyes.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[5]);
         } else{removeCatText("\'EYES\'");}
-        return queryResults;
+
     }
     //Helper method for catFilters. Removes the text of the filter that is unselected
     private void removeCatText(String filter){
@@ -191,13 +210,30 @@ public class Profile {
     }
 
     /**
-     *
+     * Quantity Filters - 
+     * When displayed it shows the category name followed immediately below it by the name.
+     * On the right of the name is the quantity in ascending order from top to bottom and 
+     * shelf life if applicable.
      */
     @FXML protected void quantFilters(){
+        //Category filters deselection
+        catBrushes.setSelected(false);
+        catMakeUp.setSelected(false);
+        catSkin.setSelected(false);
+        catFace.setSelected(false);
+        catLips.setSelected(false);
+        catEyes.setSelected(false);
+        //Shelf Life filter deselection
+        shelfNA.setSelected(false);
+        shelf6M.setSelected(false);
+        shelf12M.setSelected(false);
+        shelf18M.setSelected(false);
+        shelf24M.setSelected(false);
+
         searchRes.clear();
         DatabaseConnection connection = setConnection();
         String query = "SELECT CATEGORY, PRODUCT_NAME, QUANTITY, SHELF_LIFE FROM Product WHERE QUANTITY ";
-        String[] quantities = {"<= 3", "> 3 AND QUANTITY < 10", "> 10"};
+        String[] quantities = {"<= 3 ORDER BY QUANTITY", "> 3 AND QUANTITY < 10 ORDER BY QUANTITY", "> 10 ORDER BY QUANTITY"};
         String[] queryResults = new String[quantities.length];
         for(int i = 0; i < quantities.length; i++){
             try{
@@ -256,13 +292,28 @@ public class Profile {
     }
 
     /**
-     *
+     * Shelf Life Filters - 
+     * When displayed it shows the category name followed immediately below it by the name.
+     * On the right of the name is the shelf life in ascending order from top to bottom 
+     * and shelf life if applicable.
      */
     @FXML protected void shelfFilters(){
+        //Category filters deselection
+        catBrushes.setSelected(false);
+        catMakeUp.setSelected(false);
+        catSkin.setSelected(false);
+        catFace.setSelected(false);
+        catLips.setSelected(false);
+        catEyes.setSelected(false);
+        //Quantity filters deselection
+        quantLeast.setSelected(false);
+        quantMiddle.setSelected(false);
+        quantGreatest.setSelected(false);
+
         searchRes.clear();
         DatabaseConnection connection = setConnection();
         String query = "SELECT CATEGORY, PRODUCT_NAME, QUANTITY, SHELF_LIFE FROM Product WHERE SHELF_LIFE ";
-        String[] shelfLife = {"IS NULL", " = 6", " = 12"};
+        String[] shelfLife = {"IS NULL", " = 6 ORDER BY SHELF_LIFE", " = 12 ORDER BY SHELF_LIFE", " = 18 ORDER BY SHELF_LIFE", " = 24 ORDER BY SHELF_LIFE"};
         String[] queryResults = new String[shelfLife.length];
         for(int i = 0; i < shelfLife.length; i++){
             try{
@@ -291,12 +342,18 @@ public class Profile {
         if(shelfNA.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[0]);
         }else{removeShelfText("N/A");}
-        if(shelfSixM.isSelected()){
+        if(shelf6M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[1]);
         } else{removeShelfText(shelfLife[1]);}
-        if(shelfTwelveM.isSelected()){
+        if(shelf12M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[2]);
         } else{removeShelfText(shelfLife[2]);}
+        if(shelf18M.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[3]);
+        } else{removeShelfText(shelfLife[3]);}
+        if(shelf24M.isSelected()){
+            searchRes.setText(searchRes.getText() + queryResults[4]);
+        } else{removeShelfText(shelfLife[4]);}
     }
     //Helper method to quantFilters
     private void removeShelfText(String filter){
@@ -319,6 +376,7 @@ public class Profile {
         }
         searchRes.setText(temp);
     }
+
     //Adds a product to the database in the product table
     @FXML
     protected  void onAdd(){
@@ -403,6 +461,16 @@ public class Profile {
     }
 
     @FXML
+    protected void onEdit(){
+        
+    }
+
+    @FXML
+    protected void onDelete(){
+        Button delete = new Button();
+    }
+
+    @FXML
     protected void onOpen()throws SQLException {
         DatabaseConnection connection = setConnection();
         Statement stmt  = connection.databaseLink.createStatement();
@@ -412,18 +480,11 @@ public class Profile {
         ResultSet userResultSet=userStatement.executeQuery();
         if(userResultSet.next()) {
             usernameInfo.setText(userResultSet.getString(1)); }
-        //usernameInfo.setText(String.valueOf(stmt.execute("SELECT Username FROM Admin_Accounts")));
-        //String resultUser = String.valueOf(stmt.execute("SELECT Username FROM Admin_Accounts"));
-        //usernameInfo.setText(resultUser);
-
         String passwordQuery = "SELECT Password FROM Admin_Accounts";
         PreparedStatement passStatement=connection.databaseLink.prepareStatement(passwordQuery);
         ResultSet passResultSet=passStatement.executeQuery();
         if(passResultSet.next()) {
             passwordInfo.setText(passResultSet.getString(1)); }
-        //passwordInfo.setText(String.valueOf(stmt.execute("SELECT Password FROM Admin_Accounts")));
-        //String resultPass = String.valueOf(stmt.execute("SELECT Password FROM Admin_Accounts"));
-        //passwordInfo.setText(resultPass);
 
     }
 
