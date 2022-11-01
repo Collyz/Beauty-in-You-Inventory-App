@@ -23,7 +23,6 @@ public class Profile {
     @FXML private Text passwordInfo = new Text();
     //For Search Tab
     @FXML private TextField searchBar = new TextField();
-    @FXML private AnchorPane searchTabAnchor = new AnchorPane();
     @FXML private CheckMenuItem catBrushes = new CheckMenuItem();
     @FXML private CheckMenuItem catMakeUp = new CheckMenuItem();
     @FXML private CheckMenuItem catSkin = new CheckMenuItem();
@@ -129,7 +128,6 @@ public class Profile {
                     String formattedString = String.format(formatting, ID, category, name, quantity, price, shelf + "\n");
                     setText = setText + formattedString;
                 }
-                System.out.println(setText);
                 searchRes.setText(searchBar.getText() + setText);
             }catch(SQLException e){
                 e.printStackTrace();
