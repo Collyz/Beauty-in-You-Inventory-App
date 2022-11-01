@@ -1,16 +1,12 @@
 package com.inventory.inventory;
 
-import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.w3c.dom.events.Event;
 
 import java.io.IOException;
 import java.sql.*;
@@ -50,7 +46,6 @@ public class Profile {
     @FXML private Text asterisk2 = new Text();
     @FXML private Text asterisk3 = new Text();
     @FXML private Text asterisk4 = new Text();
-    @FXML private TextField modSearch = new TextField();
     @FXML private Text findResponse = new Text();
 
 
@@ -64,6 +59,26 @@ public class Profile {
         appStage.show();
     }
 
+
+    private String format(ResultSet results) throws SQLException {
+        String toReturn = String.format("%s %s%33s  %s  %s  %s", "ID", "Category", "Name", "Quantity", "Price", "Shelf Life") + "\n";
+        while(results.next()){
+            int ID = results.getInt(1);
+            String category = results.getString(2);
+            String name = results.getString(3);
+            int quantity = results.getInt(4);
+            double price = results.getDouble(5);
+            String shelf = results.getString(6);
+            if(shelf == null){
+                shelf = "N/A";
+            }
+            int padding = 40 - category.length();
+            String formatting = "%2d %s %"+ padding + "s  %6d  %7.2f  %7s";
+            String formattedString = String.format(formatting, ID, category, name, quantity, price, shelf + "\n");
+            toReturn = toReturn + formattedString;
+        }
+        return toReturn;
+    }
     /**
      * The search bar method. After typing in the name of a product and pressing enter,
      * a query is sent and the results of it are displayed. It closes all filters and clears
@@ -74,28 +89,14 @@ public class Profile {
         searchBar.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 searchRes.clear();
-                DatabaseConnection connection = setConnection();
+                Connection connection = setConnection();
                 String search = searchBar.getText();
-                String searchQuery = "SELECT CATEGORY, PRODUCT_NAME, QUANTITY, SHELF_LIFE from Product WHERE PRODUCT_NAME = \'" + search + "\'";
+                String searchQuery = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME = '" + search + "'";
                 try {
-                    Statement statement = connection.databaseLink.createStatement();
+                    Statement statement = connection.createStatement();
                     ResultSet result = statement.executeQuery(searchQuery);
-                    String setText = "";
-                    while (result.next()) {
-                        String category = "\'" + result.getString(1) + "\'\n";
-                        String name = result.getString(2);
-                        String quantity = result.getString(3);
-                        String shelf = result.getString(4);
-                        if(shelf == null){
-                            shelf = "N/A";
-                        }
-                        int padding = 37 - name.length();
-                        String formatting = "%s%" + padding + "s%25s";
-                        String formattedString = String.format(formatting, name, quantity, shelf + "\n");
-                        setText = category + formattedString;
-                    }
                     deselectFilters();
-                    searchRes.setText(setText);
+                    searchRes.setText(format(result));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -106,29 +107,12 @@ public class Profile {
     @FXML
     public void displayAll(){
         if(searchRes.getText().equals("") && searchBar.getText().equals("")){
-            DatabaseConnection connection = setConnection();
+            Connection connection = setConnection();
             String search = "SELECT * FROM PRODUCT";
             try{
-
-                String setText = String.format("%s %s%33s %s %s %s", "ID", "Category", "Name", "Quantity", "Price", "Shelf Life") + "\n";
-                Statement stmt = connection.databaseLink.createStatement();
+                Statement stmt = connection.createStatement();
                 ResultSet results = stmt.executeQuery(search);
-                while(results.next()){
-                    int ID = results.getInt(1);
-                    String category = results.getString(2);
-                    String name = results.getString(3);
-                    int quantity = results.getInt(4);
-                    double price = results.getDouble(5);
-                    String shelf = results.getString(6);
-                    if(shelf == null){
-                        shelf = "N/A";
-                    }
-                    int padding = 40 - category.length();
-                    String formatting = "%2d %s %"+ padding + "s %6d %7.2f %7s";
-                    String formattedString = String.format(formatting, ID, category, name, quantity, price, shelf + "\n");
-                    setText = setText + formattedString;
-                }
-                searchRes.setText(searchBar.getText() + setText);
+                searchRes.setText(format(results));
             }catch(SQLException e){
                 e.printStackTrace();
             }
@@ -174,32 +158,21 @@ public class Profile {
         shelf12M.setSelected(false);
         shelf12M.setSelected(false);
         shelf24M.setSelected(false);
-
+        //Clears the searchRes TextField
         searchRes.clear();
-        DatabaseConnection connection = setConnection();
-        String query = "SELECT PRODUCT_NAME, QUANTITY, SHELF_LIFE from Product WHERE CATEGORY = ";
-        String[] categories = {"\'BRUSHES\' ORDER BY PRODUCT_Name", "\'MAKEUP REMOVERS\'  ORDER BY PRODUCT_Name",
-                "\'SKINCARE\' ORDER BY PRODUCT_Name", "\'FACE\' ORDER BY PRODUCT_Name", "\'LIPS\' ORDER BY PRODUCT_Name",
-                "\'EYES\' ORDER BY PRODUCT_Name"};
-        String[] queryResults = new String[6];
+        Connection connection = setConnection();
+        String query = "SELECT * FROM Product WHERE CATEGORY = ";
+        String[] categories = {"'BRUSHES' ORDER BY PRODUCT_Name", "'MAKEUP REMOVERS'  ORDER BY PRODUCT_NAME",
+                "'SKINCARE' ORDER BY PRODUCT_Name", "'FACE' ORDER BY PRODUCT_Name", "'LIPS' ORDER BY PRODUCT_Name",
+                "'EYES' ORDER BY PRODUCT_Name"};
+        String[] queryResults = new String[categories.length];
         for(int i = 0; i < categories.length; i++){
             try{
-                Statement statement = connection.databaseLink.createStatement();
+                Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(query + categories[i]);
                 String delimiter = "----------------------------\n";
                 String setText = categories[i] + "\n";
-                while(result.next()){
-                    String name = result.getString(1);
-                    String quantity = result.getString(2);
-                    String shelf = result.getString(3);
-                    if(shelf == null){
-                        shelf = "N/A";
-                    }
-                    int padding= 37 - name.length();
-                    String formatting = "%s%" + padding + "s%25s";
-                    String formattedString = String.format(formatting, name, quantity, shelf + "\n");
-                    setText = setText + formattedString;
-                }
+                setText = setText + format(result);
                 queryResults[i] = setText + delimiter;
             }catch(SQLException e){
                 throw new RuntimeException(e);
@@ -207,45 +180,23 @@ public class Profile {
         }
         if(catBrushes.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[0]);
-        } else{removeCatText("\'BRUSHES\'");}
+        } else{removeFilterText("'BRUSHES'");}
         if(catMakeUp.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[1]);
-        } else{removeCatText("\'MAKEUP REMOVER\'");}
+        } else{removeFilterText("'MAKEUP REMOVER'");}
         if(catSkin.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[2]);
-        } else{removeCatText("\'SKINCARE\'");}
+        } else{removeFilterText("'SKINCARE'");}
         if(catFace.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[3]);
-        } else{removeCatText("\'FACE\'");}
+        } else{removeFilterText("'FACE'");}
         if(catLips.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[4]);
-        } else{removeCatText("\'LIPS\'");}
+        } else{removeFilterText("'LIPS'");}
         if(catEyes.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[5]);
-        } else{removeCatText("\'EYES\'");}
+        } else{removeFilterText("'EYES'");}
 
-    }
-
-    //Helper method for catFilters. Removes the text of the filter that is unselected
-    private void removeCatText(String filter){
-        StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
-        ArrayList<String> words = new ArrayList<>();
-        while(st.hasMoreTokens()){
-            words.add(st.nextToken());
-        }
-        for(int i = 0; i < words.size(); i++){
-            if(words.get(i).equals(filter)){
-                while(!words.get(i).equals("-------------------------")){
-                    words.remove(i);
-                }
-                words.remove(i);
-            }
-        }
-        String temp = "";
-        while(!words.isEmpty()){
-            temp = temp + words.remove(0) + "\n";
-        }
-        searchRes.setText(temp);
     }
 
     /**
@@ -268,31 +219,19 @@ public class Profile {
         shelf12M.setSelected(false);
         shelf18M.setSelected(false);
         shelf24M.setSelected(false);
-
+        //Clears the searchRes TextField
         searchRes.clear();
-        DatabaseConnection connection = setConnection();
-        String query = "SELECT CATEGORY, PRODUCT_NAME, QUANTITY, SHELF_LIFE FROM Product WHERE QUANTITY ";
+        Connection connection = setConnection();
+        String query = "SELECT * FROM PRODUCT WHERE QUANTITY ";
         String[] quantities = {"<= 3 ORDER BY QUANTITY", "> 3 AND QUANTITY < 10 ORDER BY QUANTITY", "> 10 ORDER BY QUANTITY"};
         String[] queryResults = new String[quantities.length];
         for(int i = 0; i < quantities.length; i++){
             try{
-                Statement statement = connection.databaseLink.createStatement();
+                Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(query + quantities[i]);
                 String delimiter = "----------------------------\n";
-                String setText = "";
-                while(result.next()){
-                    String category = "\'" + result.getString(1) + "\'\n";
-                    String name = result.getString(2);
-                    String quantity = result.getString(3);
-                    String shelf = result.getString(4);
-                    if(shelf == null){
-                        shelf = "N/A";
-                    }
-                    int padding= 37 - name.length();
-                    String formatting = "%s%" + padding + "s%25s";
-                    String formattedString = String.format(formatting, name, quantity, shelf + "\n");
-                    setText = setText + category + formattedString;
-                }
+                String setText = quantities[i] + "\n";
+                setText = setText + format(result);
                 queryResults[i] = setText + delimiter;
             }catch(SQLException e){
                 throw new RuntimeException(e);
@@ -300,35 +239,13 @@ public class Profile {
         }
         if(quantLeast.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[0]);
-        } else{removeQuantText(quantities[0]);}
+        } else{removeFilterText(quantities[0]);}
         if(quantMiddle.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[1]);
-        } else{removeCatText(quantities[1]);}
+        } else{removeFilterText(quantities[1]);}
         if(quantGreatest.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[2]);
-        }else{removeQuantText(quantities[2]);}
-    }
-
-    //Helper method to quantFilters. Removes the text of the filter that is unselected
-    private void removeQuantText(String filter){
-        StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
-        ArrayList<String> words = new ArrayList<>();
-        while(st.hasMoreTokens()){
-            words.add(st.nextToken());
-        }
-        for(int i = 0; i < words.size(); i++){
-            if(words.get(i).equals(filter)){
-                while(!words.get(i).equals("-------------------------")){
-                    words.remove(i);
-                }
-                words.remove(i);
-            }
-        }
-        String temp = "";
-        while(!words.isEmpty()){
-            temp = temp + words.remove(0) + "\n";
-        }
-        searchRes.setText(temp);
+        }else{removeFilterText(quantities[2]);}
     }
 
     /**
@@ -349,31 +266,19 @@ public class Profile {
         quantLeast.setSelected(false);
         quantMiddle.setSelected(false);
         quantGreatest.setSelected(false);
-
+        //Clears the searchRes TextField
         searchRes.clear();
-        DatabaseConnection connection = setConnection();
-        String query = "SELECT CATEGORY, PRODUCT_NAME, QUANTITY, SHELF_LIFE FROM Product WHERE SHELF_LIFE ";
+        Connection connection = setConnection();
+        String query = "SELECT * FROM PRODUCT WHERE SHELF_LIFE ";
         String[] shelfLife = {"IS NULL", " = 6 ORDER BY SHELF_LIFE", " = 12 ORDER BY SHELF_LIFE", " = 18 ORDER BY SHELF_LIFE", " = 24 ORDER BY SHELF_LIFE"};
         String[] queryResults = new String[shelfLife.length];
         for(int i = 0; i < shelfLife.length; i++){
             try{
-                Statement statement = connection.databaseLink.createStatement();
+                Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(query + shelfLife[i]);
                 String delimiter = "----------------------------\n";
-                String setText = "";
-                while(result.next()){
-                    String category = "\'" + result.getString(1) + "\'\n";
-                    String name = result.getString(2);
-                    String quantity = result.getString(3);
-                    String shelf = result.getString(4);
-                    if(shelf == null){
-                        shelf = "N/A";
-                    }
-                    int padding= 37 - name.length();
-                    String formatting = "%s%" + padding + "s%25s";
-                    String formattedString = String.format(formatting, name, quantity, shelf + "\n");
-                    setText = setText + category + formattedString;
-                }
+                String setText = shelfLife[i] + "\n";
+                setText = setText + format(result);
                 queryResults[i] = setText + delimiter;
             }catch(SQLException e){
                 throw new RuntimeException(e);
@@ -381,23 +286,23 @@ public class Profile {
         }
         if(shelfNA.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[0]);
-        }else{removeShelfText("N/A");}
+        }else{removeFilterText("N/A");}
         if(shelf6M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[1]);
-        } else{removeShelfText(shelfLife[1]);}
+        } else{removeFilterText(shelfLife[1]);}
         if(shelf12M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[2]);
-        } else{removeShelfText(shelfLife[2]);}
+        } else{removeFilterText(shelfLife[2]);}
         if(shelf18M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[3]);
-        } else{removeShelfText(shelfLife[3]);}
+        } else{removeFilterText(shelfLife[3]);}
         if(shelf24M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[4]);
-        } else{removeShelfText(shelfLife[4]);}
+        } else{removeFilterText(shelfLife[4]);}
     }
 
-    //Helper method to quantFilters
-    private void removeShelfText(String filter){
+    //Helper method for the filter methods. Removes the text of the filter that is unselected
+    private void removeFilterText(String filter){
         StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
         ArrayList<String> words = new ArrayList<>();
         while(st.hasMoreTokens()){
@@ -422,13 +327,13 @@ public class Profile {
     @FXML
     protected  void onAdd(){
         //Creates the database connection for queries
-        DatabaseConnection connection = setConnection();
+        Connection connection = setConnection();
         //Gets the ID of the last item to increment the ID number when adding a new number
         String getIDS = "select PRODUCT_ID from Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
         //The empty query
-        String insertQuery = "";
+        String insertQuery;
         //Use to determine if a shelf life is input to determine what type of query is used.
-        Boolean addLife = null;
+        boolean addLife;
         //The check that determines which type of query is used
         if (!addProductLife.getText().equals("")) {
             insertQuery = "INSERT INTO Product VALUES (";
@@ -438,7 +343,7 @@ public class Profile {
             addLife = false;
         }
         //Determines if the required fields 'Product Name, Category, Price, and Quantity' are filled
-        Boolean sendQueryOrNot = !addProductName.getText().equals("") &&
+        boolean sendQueryOrNot = !addProductName.getText().equals("") &&
                 !addProductCat.getText().equals("") &&
                 !addProductPrice.getText().equals("") &&
                 !addProductQuan.getText().equals("");
@@ -450,7 +355,7 @@ public class Profile {
              * to be added
              */
             try {
-                Statement statement = connection.databaseLink.createStatement();
+                Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(getIDS);
                 while (result.next()) {
                     //Creates a query that INCLUDES the shelf life of a product
@@ -458,8 +363,8 @@ public class Profile {
                         //Gets the last item in product table id
                         int prodID = result.getInt(1) + 1;
                         insertQuery = insertQuery + (prodID)
-                                + ",\'" + addProductName.getText() + "\'," +
-                                "\'" + addProductCat.getText().toUpperCase() + "\',"
+                                + ", '" + addProductName.getText() + "'," +
+                                "'" + addProductCat.getText().toUpperCase() + "',"
                                 + addProductPrice.getText() + ","
                                 + addProductQuan.getText() + ","
                                 + addProductLife.getText() + ")";
@@ -468,8 +373,8 @@ public class Profile {
                     } else {
                         //Creates a query that DOES NOT INCLUDE the shelf life of a product
                         insertQuery = insertQuery + (result.getInt(1) + 1)
-                                + ",\'" + addProductName.getText() + "\'," +
-                                "\'" + addProductCat.getText() + "\',"
+                                + ", '" + addProductName.getText() + "' ," +
+                                " '" + addProductCat.getText() + "' ,"
                                 + addProductPrice.getText() + ","
                                 + addProductQuan.getText() + ")";
                     }
@@ -485,7 +390,7 @@ public class Profile {
             }
             //Inserts the item into the database;
             try {
-                Statement statement = connection.databaseLink.createStatement();
+                Statement statement = connection.createStatement();
                 statement.executeUpdate(insertQuery);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -503,17 +408,17 @@ public class Profile {
 
     @FXML
     protected void onEdit(){
-        if(!modSearch.getText().equals("")) {
-            DatabaseConnection connection = setConnection();
-            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + modSearch.getText() + "'";
+        if(!searchBar.getText().equals("")) {
+            Connection connection = setConnection();
+            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + searchBar.getText() + "'";
             try {
                 String compare = "";
-                Statement statement = connection.databaseLink.createStatement();
+                Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(query);
                 while (result.next()) {
                     compare = result.getString(1);
                 }
-                if (compare.equals(modSearch.getText())) {
+                if (compare.equals(searchBar.getText())) {
                     String query2 = "SELECT PRODUCT_ID, PRODUCT_NAME, CATEGORY, PRICE, QUANTITY, SHELF_LIFE from Product WHERE PRODUCT_NAME = '" + compare + "'";
                     ResultSet result2 = statement.executeQuery(query2);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-product.fxml"));
@@ -549,17 +454,17 @@ public class Profile {
 
     @FXML
     protected void onDelete(){
-        if(!modSearch.getText().equals("")) {
-            DatabaseConnection connection = setConnection();
-            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + modSearch.getText() + "'";
+        if(!searchBar.getText().equals("")) {
+            Connection connection = setConnection();
+            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + searchBar.getText() + "'";
             try {
                 String compare = "";
-                Statement statement = connection.databaseLink.createStatement();
+                Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(query);
                 while (result.next()) {
                     compare = result.getString(1);
                 }
-                if (compare.equals(modSearch.getText())) {
+                if (compare.equals(searchBar.getText())) {
                     String query2 = "SELECT PRODUCT_ID, PRODUCT_NAME, CATEGORY, PRICE, QUANTITY, SHELF_LIFE from Product WHERE PRODUCT_NAME = '" + compare + "'";
                     ResultSet result2 = statement.executeQuery(query2);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-product.fxml"));
@@ -596,20 +501,19 @@ public class Profile {
 
     @FXML
     protected void onOpen()throws SQLException {
-        DatabaseConnection connection = setConnection();
+        Connection connection = setConnection();
 
         String usernameQuery = "SELECT Username, Password FROM Admin_Accounts";
-        Statement userStatement = connection.databaseLink.createStatement();
+        Statement userStatement = connection.createStatement();
         ResultSet userResultSet = userStatement.executeQuery(usernameQuery);
         if(userResultSet.next()) {
             usernameInfo.setText(userResultSet.getString(1));
             passwordInfo.setText(userResultSet.getString(2));}
     }
 
-    protected DatabaseConnection setConnection(){
+    protected Connection setConnection(){
         DatabaseConnection connection = new DatabaseConnection();
-        Connection connectDB = connection.getConnection();
-        return connection;
+        return connection.getConnection();
     }
 
 

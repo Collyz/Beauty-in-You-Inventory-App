@@ -12,7 +12,7 @@ public class testing {
         String search = "SELECT * FROM PRODUCT";
         try{
 
-            String setText = String.format("%s %s%33s %s %s %s", "ID", "Category", "Name", "Quantity", "Price", "Shelf Life") + "\n";
+            String setText = String.format("%s %s%33s  %s  %s  %s", "ID", "Category", "Name", "Quantity", "Price", "Shelf Life") + "\n";
             Statement stmt = connection.databaseLink.createStatement();
             ResultSet results = stmt.executeQuery(search);
             while(results.next()){
@@ -26,7 +26,7 @@ public class testing {
                     shelf = "N/A";
                 }
                 int padding = 40 - category.length();
-                String formatting = "%2d %s %"+ padding + "s %6d %7.2f %7s";
+                String formatting = "%2d %s %"+ padding + "s  %6d  %7.2f  %7s";
                 String formattedString = String.format(formatting, ID, category, name, quantity, price, shelf + "\n");
                 setText = setText + formattedString;
             }
