@@ -64,7 +64,7 @@
             <tabs>
                 <Tab text="Profile">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" onMouseEntered="#onOpen" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" onMouseMoved="#onOpen" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
                                 <Text fontSmoothingType="LCD" layoutX="34.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profile">
@@ -105,7 +105,7 @@
                 </Tab>
                 <Tab text="Search">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane fx:id="searchTabAnchor" minHeight="0.0" minWidth="0.0" onMouseMoved="#displayAll" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
                                 <TextField fx:id="searchBar" layoutX="73.0" layoutY="31.0" onAction="#onSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: Liquid Foundation Brush" />
@@ -164,7 +164,7 @@
                         </Text>
                                 <TextArea fx:id="searchRes" editable="false" layoutX="15.0" layoutY="119.0" prefHeight="200.0" prefWidth="605.0">
                            <font>
-                              <Font name="Monospaced Regular" size="14.0" />
+                              <Font name="Monospaced Regular" size="13.0" />
                            </font></TextArea>
                             </children>
                         </AnchorPane>
@@ -186,22 +186,21 @@
                         <TextField fx:id="addProductPrice" layoutX="30.0" layoutY="160.0" promptText="Price" />
                         <TextField fx:id="addProductQuan" layoutX="30.0" layoutY="190.0" promptText="Quantity" />
                         <TextField fx:id="addProductLife" layoutX="30.0" layoutY="220.0" promptText="Shelf Life (If Applicable)" />
-                        <Button fx:id="addProductButton" layoutX="199.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#onAdd" text="Add" />
+                        <Button layoutX="199.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#onAdd" text="Add" />
                         <Text layoutX="370.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modify Product">
                            <font>
                               <Font name="Verdana" size="32.0" />
                            </font>
                         </Text>
-                        <TextField layoutX="379.0" layoutY="100.0" prefHeight="25.0" prefWidth="227.0" promptText="Product Name/ID" />
+                        <TextField fx:id="modSearch" layoutX="379.0" layoutY="100.0" prefHeight="25.0" prefWidth="227.0" promptText="Product Name/ID" />
                         <Text layoutX="342.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Find">
                            <font>
                               <Font name="Verdana" size="15.0" />
                            </font>
                         </Text>
-                        <Button fx:id="edit" layoutX="378.0" layoutY="160.0" mnemonicParsing="false" onAction="#onEdit" text="Edit" />
+                        <Button layoutX="378.0" layoutY="160.0" mnemonicParsing="false" onAction="#onEdit" text="Edit" />
                         <Button layoutX="378.0" layoutY="202.0" mnemonicParsing="false" onAction="#onDelete" text="Delete" />
-                        <Text fx:id="popProduct" layoutX="337.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="66.0" />
-                        <Text fx:id="findResponse" layoutX="415.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="182.0" />
+                        <Text fx:id="findResponse" fill="RED" layoutX="342.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="276.0" />
                         <Text fx:id="addProductResponse" layoutX="30.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="149.33673095703125">
                            <font>
                               <Font name="Verdana" size="12.0" />

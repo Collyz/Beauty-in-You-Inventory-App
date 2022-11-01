@@ -1,15 +1,20 @@
 package com.inventory.inventory;
 
+import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.w3c.dom.events.Event;
+
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Profile {
 
@@ -18,6 +23,7 @@ public class Profile {
     @FXML private Text passwordInfo = new Text();
     //For Search Tab
     @FXML private TextField searchBar = new TextField();
+    @FXML private AnchorPane searchTabAnchor = new AnchorPane();
     @FXML private CheckMenuItem catBrushes = new CheckMenuItem();
     @FXML private CheckMenuItem catMakeUp = new CheckMenuItem();
     @FXML private CheckMenuItem catSkin = new CheckMenuItem();
@@ -45,13 +51,14 @@ public class Profile {
     @FXML private Text asterisk2 = new Text();
     @FXML private Text asterisk3 = new Text();
     @FXML private Text asterisk4 = new Text();
-    @FXML private Button addProductButton = new Button();
+    @FXML private TextField modSearch = new TextField();
+    @FXML private Text findResponse = new Text();
 
 
     //Opens the previous login/register page essentially logging out
     @FXML
     protected void onLogoutClick(javafx.event.ActionEvent event) throws IOException {
-        Parent p = FXMLLoader.load(getClass().getResource("login-register.fxml"));
+        Parent p = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("login-register.fxml")));
         Scene s = new Scene(p);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.setScene(s);
@@ -95,6 +102,39 @@ public class Profile {
                 }
             }
         });
+    }
+
+    @FXML
+    public void displayAll(){
+        if(searchRes.getText().equals("") && searchBar.getText().equals("")){
+            DatabaseConnection connection = setConnection();
+            String search = "SELECT * FROM PRODUCT";
+            try{
+
+                String setText = String.format("%s %s%33s %s %s %s", "ID", "Category", "Name", "Quantity", "Price", "Shelf Life") + "\n";
+                Statement stmt = connection.databaseLink.createStatement();
+                ResultSet results = stmt.executeQuery(search);
+                while(results.next()){
+                    int ID = results.getInt(1);
+                    String category = results.getString(2);
+                    String name = results.getString(3);
+                    int quantity = results.getInt(4);
+                    double price = results.getDouble(5);
+                    String shelf = results.getString(6);
+                    if(shelf == null){
+                        shelf = "N/A";
+                    }
+                    int padding = 40 - category.length();
+                    String formatting = "%2d %s %"+ padding + "s %6d %7.2f %7s";
+                    String formattedString = String.format(formatting, ID, category, name, quantity, price, shelf + "\n");
+                    setText = setText + formattedString;
+                }
+                System.out.println(setText);
+                searchRes.setText(searchBar.getText() + setText);
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     //Helper Method to onSearch. It clears filters and empties the results text area
@@ -187,6 +227,7 @@ public class Profile {
         } else{removeCatText("\'EYES\'");}
 
     }
+
     //Helper method for catFilters. Removes the text of the filter that is unselected
     private void removeCatText(String filter){
         StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
@@ -269,6 +310,7 @@ public class Profile {
             searchRes.setText(searchRes.getText() + queryResults[2]);
         }else{removeQuantText(quantities[2]);}
     }
+
     //Helper method to quantFilters. Removes the text of the filter that is unselected
     private void removeQuantText(String filter){
         StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
@@ -355,6 +397,7 @@ public class Profile {
             searchRes.setText(searchRes.getText() + queryResults[4]);
         } else{removeShelfText(shelfLife[4]);}
     }
+
     //Helper method to quantFilters
     private void removeShelfText(String filter){
         StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
@@ -462,30 +505,107 @@ public class Profile {
 
     @FXML
     protected void onEdit(){
-        
+        if(!modSearch.getText().equals("")) {
+            DatabaseConnection connection = setConnection();
+            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + modSearch.getText() + "'";
+            try {
+                String compare = "";
+                Statement statement = connection.databaseLink.createStatement();
+                ResultSet result = statement.executeQuery(query);
+                while (result.next()) {
+                    compare = result.getString(1);
+                }
+                if (compare.equals(modSearch.getText())) {
+                    String query2 = "SELECT PRODUCT_ID, PRODUCT_NAME, CATEGORY, PRICE, QUANTITY, SHELF_LIFE from Product WHERE PRODUCT_NAME = '" + compare + "'";
+                    ResultSet result2 = statement.executeQuery(query2);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-product.fxml"));
+                    Parent p = loader.load();
+                    Stage editWindow = new Stage();
+                    editWindow.setTitle("Edit");
+                    editWindow.setScene(new Scene(p));
+                    editWindow.initModality(Modality.APPLICATION_MODAL);
+                    ModifyProduct controller = loader.getController();
+                    while(result2.next()){
+                        controller.setID(result2.getInt(1));
+                        controller.setName(result2.getString(2));
+                        controller.setCategory(result2.getString(3));
+                        controller.setPrice(result2.getString(4));
+                        controller.setQuantity(result2.getString(5));
+                        controller.setShelfLife(result2.getString(6));
+                    }
+                    editWindow.show();
+                    findResponse.setText("SUCCESS!");
+                }
+                else{
+                    findResponse.setText("No matches found, try again");
+                }
+
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else{
+            findResponse.setText("Input the name of the product you want to edit");
+        }
     }
 
     @FXML
     protected void onDelete(){
-        Button delete = new Button();
+        if(!modSearch.getText().equals("")) {
+            DatabaseConnection connection = setConnection();
+            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + modSearch.getText() + "'";
+            try {
+                String compare = "";
+                Statement statement = connection.databaseLink.createStatement();
+                ResultSet result = statement.executeQuery(query);
+                while (result.next()) {
+                    compare = result.getString(1);
+                }
+                if (compare.equals(modSearch.getText())) {
+                    String query2 = "SELECT PRODUCT_ID, PRODUCT_NAME, CATEGORY, PRICE, QUANTITY, SHELF_LIFE from Product WHERE PRODUCT_NAME = '" + compare + "'";
+                    ResultSet result2 = statement.executeQuery(query2);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-product.fxml"));
+                    Parent p = loader.load();
+                    Stage editWindow = new Stage();
+                    editWindow.setTitle("Edit");
+                    editWindow.setScene(new Scene(p));
+                    editWindow.initModality(Modality.APPLICATION_MODAL);
+                    DeleteProduct controller = loader.getController();
+                    while(result2.next()){
+                        controller.setID(result2.getInt(1));
+                        controller.setName(result2.getString(2));
+                        controller.setCategory(result2.getString(3));
+                        controller.setPrice(result2.getString(4));
+                        controller.setQuantity(result2.getString(5));
+                        controller.setShelfLife(result2.getString(6));
+                    }
+                    editWindow.show();
+                    findResponse.setText("SUCCESS!");
+                }
+                else{
+                    findResponse.setText("No matches found, try again");
+                }
+
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else{
+            findResponse.setText("Input the name of the product you want to edit");
+        }
+
     }
 
     @FXML
     protected void onOpen()throws SQLException {
         DatabaseConnection connection = setConnection();
-        Statement stmt  = connection.databaseLink.createStatement();
 
-        String usernameQuery = "SELECT Username FROM Admin_Accounts";
-        PreparedStatement userStatement=connection.databaseLink.prepareStatement(usernameQuery);
-        ResultSet userResultSet=userStatement.executeQuery();
+        String usernameQuery = "SELECT Username, Password FROM Admin_Accounts";
+        Statement userStatement = connection.databaseLink.createStatement();
+        ResultSet userResultSet = userStatement.executeQuery(usernameQuery);
         if(userResultSet.next()) {
-            usernameInfo.setText(userResultSet.getString(1)); }
-        String passwordQuery = "SELECT Password FROM Admin_Accounts";
-        PreparedStatement passStatement=connection.databaseLink.prepareStatement(passwordQuery);
-        ResultSet passResultSet=passStatement.executeQuery();
-        if(passResultSet.next()) {
-            passwordInfo.setText(passResultSet.getString(1)); }
-
+            usernameInfo.setText(userResultSet.getString(1));
+            passwordInfo.setText(userResultSet.getString(2));}
     }
 
     protected DatabaseConnection setConnection(){
