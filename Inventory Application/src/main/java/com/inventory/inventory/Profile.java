@@ -48,8 +48,11 @@ public class Profile {
     @FXML private Text asterisk4 = new Text();
     @FXML private Text findResponse = new Text();
 
-
-    //Opens the previous login/register page essentially logging out
+    /**
+     * Opens the previous login/register page essentially logging out
+     * @param event  - Listens for an event on the logout button
+     * @throws IOException
+     */
     @FXML
     protected void onLogoutClick(javafx.event.ActionEvent event) throws IOException {
         Parent p = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("login-register.fxml")));
@@ -59,23 +62,33 @@ public class Profile {
         appStage.show();
     }
 
-
+    /**
+     * Formats the
+     * @param results - The result set to use to get information from the database
+     * @return String that is displayed as a search result
+     * @throws SQLException If the result set or database do not exist
+     */
     private String format(ResultSet results) throws SQLException {
         String toReturn = String.format("%s %s%33s  %s  %s  %s", "ID", "Category", "Name", "Quantity", "Price", "Shelf Life") + "\n";
-        while(results.next()){
-            int ID = results.getInt(1);
-            String category = results.getString(2);
-            String name = results.getString(3);
-            int quantity = results.getInt(4);
-            double price = results.getDouble(5);
-            String shelf = results.getString(6);
-            if(shelf == null){
-                shelf = "N/A";
-            }
-            int padding = 40 - category.length();
-            String formatting = "%2d %s %"+ padding + "s  %6d  %7.2f  %7s";
-            String formattedString = String.format(formatting, ID, category, name, quantity, price, shelf + "\n");
-            toReturn = toReturn + formattedString;
+        if(results.next()) {
+            do{
+                int ID = results.getInt(1);
+                String category = results.getString(2);
+                String name = results.getString(3);
+                int quantity = results.getInt(4);
+                double price = results.getDouble(5);
+                String shelf = results.getString(6);
+                if (shelf == null) {
+                    shelf = "N/A";
+                }
+                int padding = 40 - category.length();
+                String formatting = "%2d %s %" + padding + "s  %6d  %7.2f  %7s";
+                String formattedString = String.format(formatting, ID, category, name, quantity, price, shelf + "\n");
+                toReturn = toReturn + formattedString;
+            } while(results.next());
+        }else{
+            findResponse.setText("No such product exits, try again");
+            return "";
         }
         return toReturn;
     }
@@ -113,6 +126,7 @@ public class Profile {
                 Statement stmt = connection.createStatement();
                 ResultSet results = stmt.executeQuery(search);
                 searchRes.setText(format(results));
+                findResponse.setText("");
             }catch(SQLException e){
                 e.printStackTrace();
             }
@@ -326,10 +340,13 @@ public class Profile {
     //Adds a product to the database in the product table
     @FXML
     protected  void onAdd(){
+        //Makes sure that the filled in text fields are the proper type input i.e. String vs int vs double
+        /* will eventually implement */
+
         //Creates the database connection for queries
         Connection connection = setConnection();
         //Gets the ID of the last item to increment the ID number when adding a new number
-        String getIDS = "select PRODUCT_ID from Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
+        String getIDS = "SELECT PRODUCT_ID FROM Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
         //The empty query
         String insertQuery;
         //Use to determine if a shelf life is input to determine what type of query is used.
@@ -339,21 +356,17 @@ public class Profile {
             insertQuery = "INSERT INTO Product VALUES (";
             addLife = true;
         } else {
-            insertQuery = "Insert INTO Product(Product_ID, CATEGORY, PRODUCT_NAME, QUANTITY, PRICE) VALUES (";
+            insertQuery = "Insert INTO Product(Product_ID, PRODUCT_NAME, CATEGORY, QUANTITY, PRICE) VALUES (";
             addLife = false;
         }
         //Determines if the required fields 'Product Name, Category, Price, and Quantity' are filled
-        boolean sendQueryOrNot = !addProductName.getText().equals("") &&
-                !addProductCat.getText().equals("") &&
-                !addProductPrice.getText().equals("") &&
-                !addProductQuan.getText().equals("");
+        boolean sendQueryOrNot = !addProductName.getText().isEmpty() &&
+                !addProductCat.getText().isBlank() &&
+                !addProductPrice.getText().isBlank() &&
+                !addProductQuan.getText().isBlank();
 
         //If the required fields are filled
         if (sendQueryOrNot) {
-            //Makes sure that the filled in text fields are the proper type input i.e. String vs int vs double
-            /**
-             * to be added
-             */
             try {
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(getIDS);
@@ -368,7 +381,6 @@ public class Profile {
                                 + addProductPrice.getText() + ","
                                 + addProductQuan.getText() + ","
                                 + addProductLife.getText() + ")";
-                        addProductResponse.setText("");
                         addProductResponse.setText("Added Successfully ID: " + prodID);
                     } else {
                         //Creates a query that DOES NOT INCLUDE the shelf life of a product
@@ -454,7 +466,7 @@ public class Profile {
 
     @FXML
     protected void onDelete(){
-        if(!searchBar.getText().equals("")) {
+        if(!searchBar.getText().isBlank()) {
             Connection connection = setConnection();
             String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + searchBar.getText() + "'";
             try {
@@ -470,7 +482,7 @@ public class Profile {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-product.fxml"));
                     Parent p = loader.load();
                     Stage editWindow = new Stage();
-                    editWindow.setTitle("Edit");
+                    editWindow.setTitle("Delete");
                     editWindow.setScene(new Scene(p));
                     editWindow.initModality(Modality.APPLICATION_MODAL);
                     DeleteProduct controller = loader.getController();

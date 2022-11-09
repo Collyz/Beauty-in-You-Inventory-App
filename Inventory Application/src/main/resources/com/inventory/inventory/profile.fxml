@@ -153,6 +153,7 @@
                            </font></TextArea>
                         <Button layoutX="108.0" layoutY="62.0" mnemonicParsing="false" onAction="#onEdit" text="Edit" />
                         <Button layoutX="154.0" layoutY="62.0" mnemonicParsing="false" onAction="#onDelete" text="Delete" />
+                        <Text fx:id="findResponse" fill="RED" layoutX="222.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="378.0" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -173,7 +174,6 @@
                         <TextField fx:id="addProductQuan" layoutX="30.0" layoutY="190.0" promptText="Quantity" />
                         <TextField fx:id="addProductLife" layoutX="30.0" layoutY="220.0" promptText="Shelf Life (If Applicable)" />
                         <Button layoutX="199.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#onAdd" text="Add" />
-                        <Text fx:id="findResponse" fill="RED" layoutX="342.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="276.0" />
                         <Text fx:id="addProductResponse" layoutX="30.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="149.33673095703125">
                            <font>
                               <Font name="Verdana" size="12.0" />
