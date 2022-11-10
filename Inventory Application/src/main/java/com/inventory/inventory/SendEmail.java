@@ -6,7 +6,7 @@ import javax.mail.internet.*;
 
 public class SendEmail {
 
-    public static void sendMail(String recepient, String subjectMsg, String subjectText) throws Exception {
+    public void sendMail(String recipient, String subjectMsg, String subjectText) throws Exception {
         System.out.println("Attempting to send email...");
         Properties properties = new Properties();
 
@@ -24,18 +24,18 @@ public class SendEmail {
                 return new PasswordAuthentication(myAccountEmail, password);
             }
         });
-        Message message = prepareMessage(session, myAccountEmail, recepient, subjectMsg, subjectText);
+        Message message = prepareMessage(session, myAccountEmail, recipient, subjectMsg, subjectText);
 
         Transport.send(message);
         System.out.println("Success! Probably.");
     }
 
-    private static Message prepareMessage(Session session, String myAccountEmail, String recepient, String subjectMsg, String subjectText){
+    private Message prepareMessage(Session session, String myAccountEmail, String recipient, String subjectMsg, String subjectText){
         try{
 
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(myAccountEmail));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject(subjectMsg);
             message.setText(subjectText);
             return message;

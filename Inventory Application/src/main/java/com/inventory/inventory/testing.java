@@ -7,7 +7,15 @@ import java.sql.Statement;
 
 public class testing {
     public static void main(String[] args) {
-        DatabaseConnection connection = new DatabaseConnection();
+        SendEmail test = new SendEmail();
+        try{
+            test.sendMail("m.mowla03151@gmail.com", "Hello", "Testing the email system\nAin't it lovely");
+            System.out.println("It sent");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+        /*DatabaseConnection connection = new DatabaseConnection();
         Connection connectDB = connection.getConnection();
         String search2 = "eheh";
         String searchQuery = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME = '" + search2 + "'";
@@ -39,6 +47,6 @@ public class testing {
             //searchRes.setText(searchBar.getText() + setText);
         }catch(SQLException e){
             e.printStackTrace();
-        }
+        }*/
     }
 }
