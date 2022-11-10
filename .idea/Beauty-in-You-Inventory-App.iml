@@ -31,7 +31,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="mysql-connector-java-8.0.30" level="project" />
-    <orderEntry type="library" name="javax.mail1" level="project" />
-    <orderEntry type="library" name="javax.activation-1.2.01" level="project" />
+    <orderEntry type="library" exported="" name="javax.mail1" level="project" />
+    <orderEntry type="library" exported="" name="javax.activation-1.2.01" level="project" />
   </component>
 </module>

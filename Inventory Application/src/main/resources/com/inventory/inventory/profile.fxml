@@ -103,9 +103,9 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Search/Modify">
+                <Tab text="Product Search">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" onMouseMoved="#displayAll" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" onMouseMoved="#displayAllProducts" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
                                 <TextField fx:id="searchBar" layoutX="73.0" layoutY="31.0" onAction="#onSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: Liquid Foundation Brush" />
@@ -147,13 +147,19 @@
                                         <Font name="Verdana" size="12.0" />
                                     </font>
                                 </SplitMenuButton>
-                                <TextArea fx:id="searchRes" editable="false" layoutX="15.0" layoutY="98.0" prefHeight="240.0" prefWidth="606.0">
+                                <TextArea fx:id="searchRes" editable="false" layoutX="15.0" layoutY="118.0" prefHeight="221.0" prefWidth="605.0">
                            <font>
                               <Font name="Monospaced Regular" size="13.0" />
                            </font></TextArea>
-                        <Button layoutX="108.0" layoutY="62.0" mnemonicParsing="false" onAction="#onEdit" text="Edit" />
-                        <Button layoutX="154.0" layoutY="62.0" mnemonicParsing="false" onAction="#onDelete" text="Delete" />
-                        <Text fx:id="findResponse" fill="RED" layoutX="222.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="378.0" />
+                        <Button layoutX="100.0" layoutY="63.0" mnemonicParsing="false" onAction="#editProduct" text="Edit" />
+                        <Button layoutX="145.0" layoutY="63.0" mnemonicParsing="false" onAction="#deleteProduct" text="Delete" />
+                        <Text fx:id="findResponse" fill="RED" layoutX="331.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="289.0" />
+                        <Text id="nameIDLabel" layoutX="15.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID &amp; Category">
+                           <font>
+                              <Font name="Verdana" size="14.0" />
+                           </font>
+                        </Text>
+                        <Button layoutX="205.0" layoutY="63.0" mnemonicParsing="false" text="Add a Product" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -173,7 +179,7 @@
                         <TextField fx:id="addProductPrice" layoutX="30.0" layoutY="160.0" promptText="Price" />
                         <TextField fx:id="addProductQuan" layoutX="30.0" layoutY="190.0" promptText="Quantity" />
                         <TextField fx:id="addProductLife" layoutX="30.0" layoutY="220.0" promptText="Shelf Life (If Applicable)" />
-                        <Button layoutX="199.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#onAdd" text="Add" />
+                        <Button layoutX="199.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#addProduct" text="Add" />
                         <Text fx:id="addProductResponse" layoutX="30.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="149.33673095703125">
                            <font>
                               <Font name="Verdana" size="12.0" />
@@ -187,6 +193,88 @@
                         </AnchorPane>
                     </content>
                 </Tab>
+            <Tab text="Customer Search">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
+                        <TextField fx:id="customerSearchBar" layoutX="73.0" layoutY="31.0" onAction="#onCustomerSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: John Smith" />
+                        <Text id="searchCustomerLabel" layoutX="14.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
+                           <font>
+                              <Font name="Verdana" size="14.0" />
+                           </font>
+                        </Text>
+                        <SplitMenuButton id="customerFilter" layoutX="15.0" layoutY="63.0" mnemonicParsing="false" text="Filters">
+                           <font>
+                              <Font name="Verdana" size="12.0" />
+                           </font>
+                           <items>
+                              <Menu mnemonicParsing="false" text="Names">
+                                 <items>
+                                    <CheckMenuItem fx:id="catBrushes1" mnemonicParsing="false" onAction="#catFilters" text="Brushes" />
+                                    <CheckMenuItem fx:id="catMakeUp1" mnemonicParsing="false" onAction="#catFilters" text="Makeup Remover" />
+                                    <CheckMenuItem fx:id="catSkin1" mnemonicParsing="false" onAction="#catFilters" text="Skincare" />
+                                    <CheckMenuItem fx:id="catFace1" mnemonicParsing="false" onAction="#catFilters" text="Face" />
+                                    <CheckMenuItem fx:id="catLips1" mnemonicParsing="false" onAction="#catFilters" text="Lips" />
+                                    <CheckMenuItem fx:id="catEyes1" mnemonicParsing="false" onAction="#catFilters" text="Eyes" />
+                                 </items>
+                              </Menu>
+                              <Menu mnemonicParsing="false" text="Addresses">
+                                 <items>
+                                    <CheckMenuItem fx:id="shelfNA1" mnemonicParsing="false" onAction="#shelfFilters" text="No Expiration" />
+                                    <CheckMenuItem fx:id="shelf6M1" mnemonicParsing="false" onAction="#shelfFilters" text="6 Months" />
+                                    <CheckMenuItem fx:id="shelf12M1" mnemonicParsing="false" onAction="#shelfFilters" text="12 Months" />
+                                    <CheckMenuItem fx:id="shelf18M1" mnemonicParsing="false" onAction="#shelfFilters" text="18 Months" />
+                                    <CheckMenuItem fx:id="shelf24M1" mnemonicParsing="false" onAction="#shelfFilters" text="24 Months" />
+                                 </items>
+                              </Menu>
+                           </items>
+                        </SplitMenuButton>
+                        <Text id="nameIDLabel" layoutX="14.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name and ID">
+                           <font>
+                              <Font name="Verdana" size="14.0" />
+                           </font>
+                        </Text>
+                        <TextArea id="customerOutputField" fx:id="searchResv2" editable="false" layoutX="15.0" layoutY="118.0" prefHeight="221.0" prefWidth="605.0">
+                           <font>
+                              <Font name="Monospaced Regular" size="14.0" />
+                           </font>
+                        </TextArea>
+                        <Button id="editCustomerButton" fx:id="editCustomer" layoutX="100.0" layoutY="63.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />
+                        <Button id="deleteCustomerButton" fx:id="deleteCustomer" layoutX="145.0" layoutY="63.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
+                        <Button layoutX="205.0" layoutY="63.0" mnemonicParsing="false" text="Add a Customer" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Add Customer">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
+                        <Text id="addCustomerLabel" layoutX="30.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Customer">
+                           <font>
+                              <Font name="Verdana" size="32.0" />
+                           </font>
+                        </Text>
+                        <TextField id="customerNameTextField" fx:id="addCustomerName" layoutX="30.0" layoutY="100.0" promptText="Customer Name" />
+                        <TextField id="customerPhoneTextField" fx:id="addCustomerPhone" layoutX="30.0" layoutY="130.0" promptText="Phone Number" />
+                        <TextField id="customerAddressTextField" fx:id="addCustomerAddress" layoutX="30.0" layoutY="160.0" promptText="Address" />
+                        <TextField id="customerEmailTextField" fx:id="addCustomerEmail" layoutX="30.0" layoutY="190.0" promptText="Email" />
+                        <Button id="addCustomerButton" fx:id="addCustomerButton" layoutX="199.0" layoutY="190.0" mnemonicParsing="false" onMouseClicked="#onAddCustomer" text="Add Customer" />
+                        <Text fx:id="addCustomerResponse" layoutX="30.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="149.33673095703125">
+                           <font>
+                              <Font name="Verdana" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="asterisk5" fill="RED" layoutX="20.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                        <Text fx:id="asterisk6" fill="RED" layoutX="20.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                        <Text fx:id="asterisk7" fill="RED" layoutX="20.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                        <Text fx:id="asterisk8" fill="RED" layoutX="20.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
             </tabs>
         </TabPane>
     </children>

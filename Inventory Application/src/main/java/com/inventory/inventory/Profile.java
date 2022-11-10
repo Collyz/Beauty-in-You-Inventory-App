@@ -1,9 +1,11 @@
 package com.inventory.inventory;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -51,7 +53,7 @@ public class Profile {
     /**
      * Opens the previous login/register page essentially logging out
      * @param event  - Listens for an event on the logout button
-     * @throws IOException
+     * @throws IOException thrown if there is an issue with the button
      */
     @FXML
     protected void onLogoutClick(javafx.event.ActionEvent event) throws IOException {
@@ -108,7 +110,9 @@ public class Profile {
                 try {
                     Statement statement = connection.createStatement();
                     ResultSet result = statement.executeQuery(searchQuery);
-                    deselectFilters();
+                    deselect("categories");
+                    deselect("quantities");
+                    deselect("shelf life");
                     searchRes.setText(format(result));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -118,7 +122,7 @@ public class Profile {
     }
 
     @FXML
-    public void displayAll(){
+    public void displayAllProducts(){
         if(searchRes.getText().equals("") && searchBar.getText().equals("")){
             Connection connection = setConnection();
             String search = "SELECT * FROM PRODUCT";
@@ -133,25 +137,25 @@ public class Profile {
         }
     }
 
-    //Helper Method to onSearch. It clears filters and empties the results text area
-    private void deselectFilters(){
-        //Category filters deselection
-        catBrushes.setSelected(false);
-        catMakeUp.setSelected(false);
-        catSkin.setSelected(false);
-        catFace.setSelected(false);
-        catLips.setSelected(false);
-        catEyes.setSelected(false);
-        //Quantity filters deselection
-        quantLeast.setSelected(false);
-        quantMiddle.setSelected(false);
-        quantGreatest.setSelected(false);
-        //Shelf Life filter deselection
-        shelfNA.setSelected(false);
-        shelf6M.setSelected(false);
-        shelf12M.setSelected(false);
-        shelf18M.setSelected(false);
-        shelf24M.setSelected(false);
+    //Helper Method to multiple methods that need to deselect filters (Both product and customer)
+    private void deselect(String filter){
+        CheckMenuItem[] deselect = {catBrushes,catMakeUp,catSkin,catFace,catLips,catEyes,quantLeast,quantMiddle,
+                quantGreatest,shelfNA,shelf6M,shelf12M,shelf18M,shelf24M};
+        if(filter.equals("categories")){
+            for(int i = 0; i < 6; i++){
+                deselect[i].setSelected(false);
+            }
+        }
+        if(filter.equals("quantities")){
+            for(int i = 6; i < 9; i++){
+                deselect[i].setSelected(false);
+            }
+        }
+        if(filter.equals("shelf life")){
+            for(int i = 9; i < deselect.length; i++){
+                deselect[i].setSelected(false);
+            }
+        }
     }
 
     //Filters: Category, Quantity, Shelf Life
@@ -163,15 +167,9 @@ public class Profile {
     @FXML
     protected void catFilters(){
         //Quantity filters deselection
-        quantLeast.setSelected(false);
-        quantMiddle.setSelected(false);
-        quantGreatest.setSelected(false);
+        deselect("quantities");
         //Shelf Life filter deselection
-        shelfNA.setSelected(false);
-        shelf6M.setSelected(false);
-        shelf12M.setSelected(false);
-        shelf12M.setSelected(false);
-        shelf24M.setSelected(false);
+        deselect("shelf life");
         //Clears the searchRes TextField
         searchRes.clear();
         Connection connection = setConnection();
@@ -221,18 +219,9 @@ public class Profile {
      */
     @FXML protected void quantFilters(){
         //Category filters deselection
-        catBrushes.setSelected(false);
-        catMakeUp.setSelected(false);
-        catSkin.setSelected(false);
-        catFace.setSelected(false);
-        catLips.setSelected(false);
-        catEyes.setSelected(false);
+        deselect("categories");
         //Shelf Life filter deselection
-        shelfNA.setSelected(false);
-        shelf6M.setSelected(false);
-        shelf12M.setSelected(false);
-        shelf18M.setSelected(false);
-        shelf24M.setSelected(false);
+        deselect("shelf life");
         //Clears the searchRes TextField
         searchRes.clear();
         Connection connection = setConnection();
@@ -270,16 +259,9 @@ public class Profile {
      */
     @FXML protected void shelfFilters(){
         //Category filters deselection
-        catBrushes.setSelected(false);
-        catMakeUp.setSelected(false);
-        catSkin.setSelected(false);
-        catFace.setSelected(false);
-        catLips.setSelected(false);
-        catEyes.setSelected(false);
+        deselect("categories");
         //Quantity filters deselection
-        quantLeast.setSelected(false);
-        quantMiddle.setSelected(false);
-        quantGreatest.setSelected(false);
+        deselect("quantities");
         //Clears the searchRes TextField
         searchRes.clear();
         Connection connection = setConnection();
@@ -339,7 +321,7 @@ public class Profile {
 
     //Adds a product to the database in the product table
     @FXML
-    protected  void onAdd(){
+    protected  void addProduct(){
         //Makes sure that the filled in text fields are the proper type input i.e. String vs int vs double
         /* will eventually implement */
 
@@ -419,7 +401,7 @@ public class Profile {
     }
 
     @FXML
-    protected void onEdit(){
+    protected void editProduct(){
         if(!searchBar.getText().equals("")) {
             Connection connection = setConnection();
             String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + searchBar.getText() + "'";
@@ -465,7 +447,7 @@ public class Profile {
     }
 
     @FXML
-    protected void onDelete(){
+    protected void deleteProduct(){
         if(!searchBar.getText().isBlank()) {
             Connection connection = setConnection();
             String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + searchBar.getText() + "'";
@@ -529,4 +511,15 @@ public class Profile {
     }
 
 
+    public void editCustomer() {
+    }
+
+    public void deleteCustomer() {
+    }
+
+    public void onAddCustomer() {
+    }
+
+    public void onCustomerSearch() {
+    }
 }
