@@ -8,22 +8,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DeleteProduct {
+public class DeleteCustomer {
 
     private int id;
-    @FXML
-    private Text name = new Text();
-    @FXML private Text category = new Text();
-    @FXML private Text price = new Text();
-    @FXML private Text quantity = new Text();
-    @FXML private Text shelfLife = new Text();
+    @FXML private Text name = new Text();
+    @FXML private Text phone = new Text();
+    @FXML private Text email = new Text();
+    @FXML private Text address = new Text();
 
-    @FXML
-    protected void initialize(){}
-
-    @FXML
-    protected void setID(int ID){
-        this.id = ID;
+    public void setID(int id){
+        this.id = id;
     }
 
     @FXML
@@ -32,28 +26,23 @@ public class DeleteProduct {
     }
 
     @FXML
-    protected void setCategory(String c){
-        category.setText(c);
+    protected  void setPhone(String p) {
+        phone.setText(p);
     }
 
     @FXML
-    protected void setPrice(String p){
-        price.setText(p);
+    protected  void setEmail(String e) {
+        email.setText(e);
     }
 
     @FXML
-    protected void setQuantity(String q){
-        quantity.setText(q);
+    protected  void setAddress(String a) {
+        address.setText(a);
     }
 
     @FXML
-    protected void setShelfLife(String s){
-        shelfLife.setText(s);
-    }
-
-    @FXML
-    protected void onDelete(){
-        String execute = "DELETE FROM PRODUCT WHERE PRODUCT_ID = " + id;
+    public void onDelete() {
+        String execute = "DELETE FROM Customer WHERE Customer_ID = " + id;
         DatabaseConnection connection = setConnection();
         try{
             Statement statement = connection.databaseLink.createStatement();
@@ -66,7 +55,7 @@ public class DeleteProduct {
     }
 
     @FXML
-    protected void onCancel(){
+    public void onCancel(){
         Stage stage = (Stage) name.getScene().getWindow();
         stage.close();
     }
@@ -76,7 +65,4 @@ public class DeleteProduct {
         Connection connectDB = connection.getConnection();
         return connection;
     }
-
-
-
 }

@@ -3,24 +3,22 @@ package com.inventory.inventory;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ModifyProduct {
+public class ModifyCustomer {
 
     private int id;
     @FXML private TextField name = new TextField();
-    @FXML private TextField category = new TextField();
-    @FXML private TextField price = new TextField();
-    @FXML private TextField quantity = new TextField();
-    @FXML private TextField shelfLife = new TextField();
+    @FXML private TextField phone = new TextField();
+    @FXML private TextField address = new TextField();
+    @FXML private TextField email = new TextField();
 
     public void initialize(){}
 
-    public void setID(int ID){
-        this.id = ID;
+    public void setID(int id){
+        this.id = id;
     }
 
     @FXML
@@ -29,34 +27,28 @@ public class ModifyProduct {
     }
 
     @FXML
-    protected void setCategory(String c){
-        category.setText(c);
+    protected  void setPhone(String p) {
+        phone.setText(p);
     }
 
     @FXML
-    protected void setPrice(String p){
-        price.setText(p);
+    protected  void setEmail(String e) {
+        email.setText(e);
     }
 
     @FXML
-    protected void setQuantity(String q){
-        quantity.setText(q);
+    protected  void setAddress(String a) {
+        address.setText(a);
     }
 
     @FXML
-    protected void setShelfLife(String s){
-        shelfLife.setText(s);
-    }
-
-    @FXML
-    protected void onEdit(){
-        String execute = "UPDATE PRODUCT " +
-                "SET PRODUCT_NAME = '"  + name.getText() + "' ," +
-                "CATEGORY = '"  + category.getText() + "' ," +
-                "PRICE = "  + price.getText() + " ," +
-                "QUANTITY = "  + quantity.getText() + " ," +
-                "SHELF_LIFE = "  + shelfLife.getText() +
-                " WHERE PRODUCT_ID = " + id;
+    public void onEdit() {
+        String execute = "UPDATE Customer " +
+                "SET Customer_Name = '"  + name.getText() + "' ," +
+                "Customer_Phone = '"  + phone.getText() + "' ," +
+                "Customer_Email = '" + email.getText() + "' ," +
+                "Customer_Address = '"  + address.getText() + "'" +
+                " WHERE Customer_ID = " + id;
         Connection connection = setConnection();
         try{
             Statement statement = connection.createStatement();
@@ -69,7 +61,7 @@ public class ModifyProduct {
     }
 
     @FXML
-    protected void onCancel(){
+    public void onCancel() {
         Stage stage = (Stage) name.getScene().getWindow();
         stage.close();
     }

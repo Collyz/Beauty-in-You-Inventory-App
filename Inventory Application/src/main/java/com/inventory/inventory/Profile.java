@@ -1,11 +1,9 @@
 package com.inventory.inventory;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,8 +17,9 @@ public class Profile {
     //For Profile Tab
     @FXML private Text usernameInfo = new Text();
     @FXML private Text passwordInfo = new Text();
+
     //For Search Tab
-    @FXML private TextField searchBar = new TextField();
+    @FXML private TextField productSearchBar = new TextField();
     @FXML private CheckMenuItem catBrushes = new CheckMenuItem();
     @FXML private CheckMenuItem catMakeUp = new CheckMenuItem();
     @FXML private CheckMenuItem catSkin = new CheckMenuItem();
@@ -36,19 +35,20 @@ public class Profile {
     @FXML private CheckMenuItem shelf18M = new CheckMenuItem();
     @FXML private CheckMenuItem shelf24M = new CheckMenuItem();
     @FXML private TextArea searchRes = new TextArea();
+    @FXML private Text productQueryResponse = new Text();
 
-    //For Add/Modify Tab
-    @FXML private TextField addProductName = new TextField();
-    @FXML private TextField addProductCat = new TextField();
-    @FXML private TextField addProductPrice = new TextField();
-    @FXML private TextField addProductQuan = new TextField();
-    @FXML private TextField addProductLife = new TextField();
-    @FXML private Text addProductResponse = new Text();
-    @FXML private Text asterisk1 = new Text();
-    @FXML private Text asterisk2 = new Text();
-    @FXML private Text asterisk3 = new Text();
-    @FXML private Text asterisk4 = new Text();
-    @FXML private Text findResponse = new Text();
+    //For Customer Search
+    @FXML private TextField customerSearchBar = new TextField();
+    @FXML private TextArea custSearchRes = new TextArea();
+    @FXML private Text customerQueryResponse = new Text();
+
+    @FXML private Button addCustomerButton = new Button();
+    @FXML private Text addCustomerResponse = new Text();
+    @FXML private Text asterisk5 = new Text();
+    @FXML private Text asterisk6 = new Text();
+    @FXML private Text asterisk7 = new Text();
+    @FXML private Text asterisk8 = new Text();
+
 
     /**
      * Opens the previous login/register page essentially logging out
@@ -70,27 +70,31 @@ public class Profile {
      * @return String that is displayed as a search result
      * @throws SQLException If the result set or database do not exist
      */
-    private String format(ResultSet results) throws SQLException {
+    private String productFormat(ResultSet results){
         String toReturn = String.format("%s %s%33s  %s  %s  %s", "ID", "Category", "Name", "Quantity", "Price", "Shelf Life") + "\n";
-        if(results.next()) {
-            do{
-                int ID = results.getInt(1);
-                String category = results.getString(2);
-                String name = results.getString(3);
-                int quantity = results.getInt(4);
-                double price = results.getDouble(5);
-                String shelf = results.getString(6);
-                if (shelf == null) {
-                    shelf = "N/A";
-                }
-                int padding = 40 - category.length();
-                String formatting = "%2d %s %" + padding + "s  %6d  %7.2f  %7s";
-                String formattedString = String.format(formatting, ID, category, name, quantity, price, shelf + "\n");
-                toReturn = toReturn + formattedString;
-            } while(results.next());
-        }else{
-            findResponse.setText("No such product exits, try again");
-            return "";
+        try{
+            if(results.next()) {
+                do{
+                    int ID = results.getInt(1);
+                    String category = results.getString(2);
+                    String name = results.getString(3);
+                    int quantity = results.getInt(4);
+                    double price = results.getDouble(5);
+                    String shelf = results.getString(6);
+                    if (shelf == null) {
+                        shelf = "N/A";
+                    }
+                    int padding = 40 - category.length();
+                    String formatting = "%2d %s %" + padding + "s  %6d  %7.2f  %7s";
+                    String formattedString = String.format(formatting, ID, category, name, quantity, price, shelf + "\n");
+                    toReturn = toReturn + formattedString;
+                } while(results.next());
+            }else{
+                productQueryResponse.setText("No such product exits, try again");
+                return "";
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
         }
         return toReturn;
     }
@@ -100,12 +104,12 @@ public class Profile {
      * the result text areas.
      */
     @FXML
-    protected void onSearch(){
-        searchBar.setOnKeyPressed(keyEvent -> {
+    protected void onProductSearch(){
+        productSearchBar.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 searchRes.clear();
                 Connection connection = setConnection();
-                String search = searchBar.getText();
+                String search = productSearchBar.getText();
                 String searchQuery = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME = '" + search + "'";
                 try {
                     Statement statement = connection.createStatement();
@@ -113,7 +117,7 @@ public class Profile {
                     deselect("categories");
                     deselect("quantities");
                     deselect("shelf life");
-                    searchRes.setText(format(result));
+                    searchRes.setText(productFormat(result));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -123,18 +127,24 @@ public class Profile {
 
     @FXML
     public void displayAllProducts(){
-        if(searchRes.getText().equals("") && searchBar.getText().equals("")){
+        if(searchRes.getText().isBlank() && productSearchBar.getText().isBlank()){
             Connection connection = setConnection();
             String search = "SELECT * FROM PRODUCT";
             try{
                 Statement stmt = connection.createStatement();
                 ResultSet results = stmt.executeQuery(search);
-                searchRes.setText(format(results));
-                findResponse.setText("");
+                searchRes.setText(productFormat(results));
             }catch(SQLException e){
                 e.printStackTrace();
             }
         }
+    }
+
+    public void refreshProducts(){
+        productSearchBar.clear();
+        searchRes.clear();
+        productQueryResponse.setText("");
+        displayAllProducts();
     }
 
     //Helper Method to multiple methods that need to deselect filters (Both product and customer)
@@ -184,7 +194,7 @@ public class Profile {
                 ResultSet result = statement.executeQuery(query + categories[i]);
                 String delimiter = "----------------------------\n";
                 String setText = categories[i] + "\n";
-                setText = setText + format(result);
+                setText = setText + productFormat(result);
                 queryResults[i] = setText + delimiter;
             }catch(SQLException e){
                 throw new RuntimeException(e);
@@ -192,22 +202,22 @@ public class Profile {
         }
         if(catBrushes.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[0]);
-        } else{removeFilterText("'BRUSHES'");}
+        } else{removeProductFilterText("'BRUSHES'");}
         if(catMakeUp.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[1]);
-        } else{removeFilterText("'MAKEUP REMOVER'");}
+        } else{removeProductFilterText("'MAKEUP REMOVER'");}
         if(catSkin.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[2]);
-        } else{removeFilterText("'SKINCARE'");}
+        } else{removeProductFilterText("'SKINCARE'");}
         if(catFace.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[3]);
-        } else{removeFilterText("'FACE'");}
+        } else{removeProductFilterText("'FACE'");}
         if(catLips.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[4]);
-        } else{removeFilterText("'LIPS'");}
+        } else{removeProductFilterText("'LIPS'");}
         if(catEyes.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[5]);
-        } else{removeFilterText("'EYES'");}
+        } else{removeProductFilterText("'EYES'");}
 
     }
 
@@ -234,7 +244,7 @@ public class Profile {
                 ResultSet result = statement.executeQuery(query + quantities[i]);
                 String delimiter = "----------------------------\n";
                 String setText = quantities[i] + "\n";
-                setText = setText + format(result);
+                setText = setText + productFormat(result);
                 queryResults[i] = setText + delimiter;
             }catch(SQLException e){
                 throw new RuntimeException(e);
@@ -242,13 +252,13 @@ public class Profile {
         }
         if(quantLeast.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[0]);
-        } else{removeFilterText(quantities[0]);}
+        } else{removeProductFilterText(quantities[0]);}
         if(quantMiddle.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[1]);
-        } else{removeFilterText(quantities[1]);}
+        } else{removeProductFilterText(quantities[1]);}
         if(quantGreatest.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[2]);
-        }else{removeFilterText(quantities[2]);}
+        }else{removeProductFilterText(quantities[2]);}
     }
 
     /**
@@ -274,7 +284,7 @@ public class Profile {
                 ResultSet result = statement.executeQuery(query + shelfLife[i]);
                 String delimiter = "----------------------------\n";
                 String setText = shelfLife[i] + "\n";
-                setText = setText + format(result);
+                setText = setText + productFormat(result);
                 queryResults[i] = setText + delimiter;
             }catch(SQLException e){
                 throw new RuntimeException(e);
@@ -282,23 +292,23 @@ public class Profile {
         }
         if(shelfNA.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[0]);
-        }else{removeFilterText("N/A");}
+        }else{removeProductFilterText("N/A");}
         if(shelf6M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[1]);
-        } else{removeFilterText(shelfLife[1]);}
+        } else{removeProductFilterText(shelfLife[1]);}
         if(shelf12M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[2]);
-        } else{removeFilterText(shelfLife[2]);}
+        } else{removeProductFilterText(shelfLife[2]);}
         if(shelf18M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[3]);
-        } else{removeFilterText(shelfLife[3]);}
+        } else{removeProductFilterText(shelfLife[3]);}
         if(shelf24M.isSelected()){
             searchRes.setText(searchRes.getText() + queryResults[4]);
-        } else{removeFilterText(shelfLife[4]);}
+        } else{removeProductFilterText(shelfLife[4]);}
     }
 
     //Helper method for the filter methods. Removes the text of the filter that is unselected
-    private void removeFilterText(String filter){
+    private void removeProductFilterText(String filter){
         StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
         ArrayList<String> words = new ArrayList<>();
         while(st.hasMoreTokens()){
@@ -319,92 +329,28 @@ public class Profile {
         searchRes.setText(temp);
     }
 
-    //Adds a product to the database in the product table
+    //Opens a separate window that handles adding a product to the inventory
     @FXML
     protected  void addProduct(){
-        //Makes sure that the filled in text fields are the proper type input i.e. String vs int vs double
-        /* will eventually implement */
-
-        //Creates the database connection for queries
-        Connection connection = setConnection();
-        //Gets the ID of the last item to increment the ID number when adding a new number
-        String getIDS = "SELECT PRODUCT_ID FROM Product ORDER BY PRODUCT_ID DESC LIMIT 1;";
-        //The empty query
-        String insertQuery;
-        //Use to determine if a shelf life is input to determine what type of query is used.
-        boolean addLife;
-        //The check that determines which type of query is used
-        if (!addProductLife.getText().equals("")) {
-            insertQuery = "INSERT INTO Product VALUES (";
-            addLife = true;
-        } else {
-            insertQuery = "Insert INTO Product(Product_ID, PRODUCT_NAME, CATEGORY, QUANTITY, PRICE) VALUES (";
-            addLife = false;
-        }
-        //Determines if the required fields 'Product Name, Category, Price, and Quantity' are filled
-        boolean sendQueryOrNot = !addProductName.getText().isEmpty() &&
-                !addProductCat.getText().isBlank() &&
-                !addProductPrice.getText().isBlank() &&
-                !addProductQuan.getText().isBlank();
-
-        //If the required fields are filled
-        if (sendQueryOrNot) {
-            try {
-                Statement statement = connection.createStatement();
-                ResultSet result = statement.executeQuery(getIDS);
-                while (result.next()) {
-                    //Creates a query that INCLUDES the shelf life of a product
-                    if (addLife) {
-                        //Gets the last item in product table id
-                        int prodID = result.getInt(1) + 1;
-                        insertQuery = insertQuery + (prodID)
-                                + ", '" + addProductName.getText() + "'," +
-                                "'" + addProductCat.getText().toUpperCase() + "',"
-                                + addProductPrice.getText() + ","
-                                + addProductQuan.getText() + ","
-                                + addProductLife.getText() + ")";
-                        addProductResponse.setText("Added Successfully ID: " + prodID);
-                    } else {
-                        //Creates a query that DOES NOT INCLUDE the shelf life of a product
-                        insertQuery = insertQuery + (result.getInt(1) + 1)
-                                + ", '" + addProductName.getText() + "' ," +
-                                " '" + addProductCat.getText() + "' ,"
-                                + addProductPrice.getText() + ","
-                                + addProductQuan.getText() + ")";
-                    }
-                }
-                //Clears the text fields after the query is sent
-                addProductName.clear();
-                addProductCat.clear();
-                addProductPrice.clear();
-                addProductQuan.clear();
-                addProductLife.clear();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            //Inserts the item into the database;
-            try {
-                Statement statement = connection.createStatement();
-                statement.executeUpdate(insertQuery);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        else{
-            //Response given in the addProductResponse text field if all the required text fields are not filled
-            addProductResponse.setText("Fill in Required Fields");
-            asterisk1.setText("*");
-            asterisk2.setText("*");
-            asterisk3.setText("*");
-            asterisk4.setText("*");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("add-product.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Add Product");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            AddProduct controller = loader.getController();
+            editWindow.show();
+        }catch(IOException e){
+            throw new RuntimeException(e);
         }
     }
 
     @FXML
     protected void editProduct(){
-        if(!searchBar.getText().equals("")) {
+        if(!productSearchBar.getText().equals("")) {
             Connection connection = setConnection();
-            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + searchBar.getText() + "'";
+            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + productSearchBar.getText() + "'";
             try {
                 String compare = "";
                 Statement statement = connection.createStatement();
@@ -412,7 +358,7 @@ public class Profile {
                 while (result.next()) {
                     compare = result.getString(1);
                 }
-                if (compare.equals(searchBar.getText())) {
+                if (compare.equals(productSearchBar.getText())) {
                     String query2 = "SELECT PRODUCT_ID, PRODUCT_NAME, CATEGORY, PRICE, QUANTITY, SHELF_LIFE from Product WHERE PRODUCT_NAME = '" + compare + "'";
                     ResultSet result2 = statement.executeQuery(query2);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-product.fxml"));
@@ -431,10 +377,10 @@ public class Profile {
                         controller.setShelfLife(result2.getString(6));
                     }
                     editWindow.show();
-                    findResponse.setText("SUCCESS!");
+                    productQueryResponse.setText("SUCCESS!");
                 }
                 else{
-                    findResponse.setText("No matches found, try again");
+                    productQueryResponse.setText("No matches found, try again");
                 }
 
             } catch (SQLException | IOException e) {
@@ -442,15 +388,15 @@ public class Profile {
             }
         }
         else{
-            findResponse.setText("Input the name of the product you want to edit");
+            productQueryResponse.setText("Input the name of the product you want to edit");
         }
     }
 
     @FXML
     protected void deleteProduct(){
-        if(!searchBar.getText().isBlank()) {
+        if(!productSearchBar.getText().isBlank()) {
             Connection connection = setConnection();
-            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + searchBar.getText() + "'";
+            String query = "SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_NAME = '" + productSearchBar.getText() + "'";
             try {
                 String compare = "";
                 Statement statement = connection.createStatement();
@@ -458,7 +404,7 @@ public class Profile {
                 while (result.next()) {
                     compare = result.getString(1);
                 }
-                if (compare.equals(searchBar.getText())) {
+                if (compare.equals(productSearchBar.getText())) {
                     String query2 = "SELECT PRODUCT_ID, PRODUCT_NAME, CATEGORY, PRICE, QUANTITY, SHELF_LIFE from Product WHERE PRODUCT_NAME = '" + compare + "'";
                     ResultSet result2 = statement.executeQuery(query2);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-product.fxml"));
@@ -477,10 +423,10 @@ public class Profile {
                         controller.setShelfLife(result2.getString(6));
                     }
                     editWindow.show();
-                    findResponse.setText("SUCCESS!");
+                    productQueryResponse.setText("SUCCESS!");
                 }
                 else{
-                    findResponse.setText("No matches found, try again");
+                    productQueryResponse.setText("No matches found, try again");
                 }
 
             } catch (SQLException | IOException e) {
@@ -488,9 +434,210 @@ public class Profile {
             }
         }
         else{
-            findResponse.setText("Input the name of the product you want to edit");
+            productQueryResponse.setText("Input the name of the product you want to edit");
         }
 
+    }
+/**********************************************************************************************************************/
+    private String customerFormat(ResultSet results){
+        String toReturn = String.format("%s  %s %20s  %18s  %22s", "ID", "Name", "Phone #", "Email", "Address") + "\n";
+        try{
+
+            if(results.next()){
+                do{
+                    int ID = results.getInt(1);
+                    String name = results.getString(2);
+                    String phone = results.getString(3);
+                    String address = results.getString(4);
+                    String email = results.getString(5);
+                    if(phone == null){
+                        phone = "N/A";
+                    }
+                    if(email == null){
+                        email = "N/A";
+                    }
+                    int phonePad = 32 - name.length();
+                    int emailPad = 37 - phone.length();
+                    int addressPad = 39 - phone.length();
+                    String formatting = "%s   %s%" + phonePad + "s%"+ emailPad +"s%"+ addressPad +"s";
+                    String formattedString = String.format(formatting, ID, name, phone , email, address + "\n");
+                    toReturn = toReturn + formattedString;
+                } while(results.next());
+            }else{
+                customerQueryResponse.setText("No matches found, try again");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    //WIP
+    private void removeCustomerFilterText(String filter){
+        StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
+        ArrayList<String> words = new ArrayList<>();
+        while(st.hasMoreTokens()){
+            words.add(st.nextToken());
+        }
+        for(int i = 0; i < words.size(); i++){
+            if(words.get(i).equals(filter)){
+                while(!words.get(i).equals("-------------------------")){
+                    words.remove(i);
+                }
+                words.remove(i);
+            }
+        }
+        String temp = "";
+        while(!words.isEmpty()){
+            temp = temp + words.remove(0) + "\n";
+        }
+        searchRes.setText(temp);
+    }
+
+    @FXML protected void refreshCustomers(){
+        customerSearchBar.clear();
+        custSearchRes.clear();
+        customerQueryResponse.setText("");
+        displayAllCustomers();
+    }
+    @FXML
+    protected void onCustomerSearch(){
+        customerSearchBar.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                custSearchRes.clear();
+                Connection connection = setConnection();
+                String search = customerSearchBar.getText();
+                String searchQuery = "SELECT * FROM CUSTOMER WHERE CUSTOMER_NAME = \'" + search + "\'";
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet result = statement.executeQuery(searchQuery);
+                    String setText = customerFormat(result);
+                    deselect("");
+                    custSearchRes.setText(setText);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
+    @FXML protected void displayAllCustomers(){
+        if(custSearchRes.getText().isBlank() && customerSearchBar.getText().isBlank()){
+            Connection connection = setConnection();
+            String search = "SELECT * FROM CUSTOMER";
+            try{
+                Statement stmt = connection.createStatement();
+                ResultSet results = stmt.executeQuery(search);
+                custSearchRes.setText(customerFormat(results));
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    public void editCustomer() {
+        if(!customerSearchBar.getText().isBlank()) {
+            Connection connection = setConnection();
+            String query = "SELECT CUSTOMER_NAME FROM CUSTOMER WHERE CUSTOMER_NAME = '" + customerSearchBar.getText() + "'";
+            try {
+                String compare = "";
+                Statement statement = connection.createStatement();
+                ResultSet result = statement.executeQuery(query);
+                while (result.next()) {
+                    compare = result.getString(1);
+                }
+                if (compare.equals(customerSearchBar.getText())) {
+                    String query2 = "SELECT CUSTOMER_ID, CUSTOMER_NAME, CUSTOMER_PHONE, CUSTOMER_EMAIL, CUSTOMER_ADDRESS FROM Customer WHERE CUSTOMER_NAME = '" + compare + "'";
+                    ResultSet result2 = statement.executeQuery(query2);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-customer.fxml"));
+                    Parent p = loader.load();
+                    Stage editWindow = new Stage();
+                    editWindow.setTitle("Edit");
+                    editWindow.setScene(new Scene(p));
+                    editWindow.initModality(Modality.APPLICATION_MODAL);
+                    ModifyCustomer controller = loader.getController();
+                    while(result2.next()){
+                        controller.setID(result2.getInt(1));
+                        controller.setName(result2.getString(2));
+                        controller.setPhone(result2.getString(3));
+                        controller.setEmail(result2.getString(4));
+                        controller.setAddress(result2.getString(5));
+                    }
+                    editWindow.show();
+                    customerQueryResponse.setText("SUCCESS!");
+                }
+                else{
+                    customerQueryResponse.setText("No matches found, try again");
+                }
+
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else{
+            customerQueryResponse.setText("Input the name of the product you want to edit");
+        }
+    }
+
+    public void deleteCustomer() {
+        if(!customerSearchBar.getText().isBlank()) {
+            Connection connection = setConnection();
+            String query = "SELECT CUSTOMER_NAME FROM CUSTOMER WHERE CUSTOMER_NAME = '" + customerSearchBar.getText() + "'";
+            try {
+                String compare = "";
+                Statement statement = connection.createStatement();
+                ResultSet result = statement.executeQuery(query);
+                while (result.next()) {
+                    compare = result.getString(1);
+                }
+                if (compare.equals(customerSearchBar.getText())) {
+                    String query2 = "SELECT CUSTOMER_ID, CUSTOMER_NAME, CUSTOMER_PHONE, CUSTOMER_EMAIL, CUSTOMER_ADDRESS FROM Customer WHERE CUSTOMER_NAME = '" + compare + "'";
+                    ResultSet result2 = statement.executeQuery(query2);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-customer.fxml"));
+                    Parent p = loader.load();
+                    Stage editWindow = new Stage();
+                    editWindow.setTitle("Delete");
+                    editWindow.setScene(new Scene(p));
+                    editWindow.initModality(Modality.APPLICATION_MODAL);
+                    DeleteCustomer controller = loader.getController();
+                    while(result2.next()){
+                        controller.setID(result2.getInt(1));
+                        controller.setName(result2.getString(2));
+                        controller.setPhone(result2.getString(3));
+                        controller.setEmail(result2.getString(4));
+                        controller.setAddress(result2.getString(5));
+                    }
+                    editWindow.show();
+                    customerQueryResponse.setText("SUCCESS!");
+                }
+                else{
+                    customerQueryResponse.setText("No matches found, try again");
+                }
+
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else{
+            customerQueryResponse.setText("No matches found, try again");
+        }
+    }
+
+    //WIP
+    public void addCustomer() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("add-customer.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Add Customer");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            AddCustomer controller = loader.getController();
+            editWindow.show();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -504,22 +651,9 @@ public class Profile {
             usernameInfo.setText(userResultSet.getString(1));
             passwordInfo.setText(userResultSet.getString(2));}
     }
-
+    
     protected Connection setConnection(){
         DatabaseConnection connection = new DatabaseConnection();
         return connection.getConnection();
-    }
-
-
-    public void editCustomer() {
-    }
-
-    public void deleteCustomer() {
-    }
-
-    public void onAddCustomer() {
-    }
-
-    public void onCustomerSearch() {
     }
 }
