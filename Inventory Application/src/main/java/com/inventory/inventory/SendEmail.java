@@ -27,7 +27,7 @@ public class SendEmail {
         Message message = prepareMessage(session, myAccountEmail, recipient, subjectMsg, subjectText);
 
         Transport.send(message);
-        System.out.println("Success! Probably.");
+        System.out.println("Success!");
     }
 
     private Message prepareMessage(Session session, String myAccountEmail, String recipient, String subjectMsg, String subjectText){
