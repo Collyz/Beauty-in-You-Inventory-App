@@ -44,6 +44,11 @@ public class Profile {
     @FXML private CheckMenuItem nameBackward = new CheckMenuItem();
     @FXML private CheckMenuItem addressForward = new CheckMenuItem();
     @FXML private CheckMenuItem addressBackward = new CheckMenuItem();
+    //Email tab
+    @FXML private TextField email = new TextField();
+    @FXML private TextField subject = new TextField();
+    @FXML private TextArea message = new TextArea();
+    @FXML private Text emailResponse = new Text();
 
     @FXML
     protected void initialize(){
@@ -715,6 +720,28 @@ public class Profile {
             throw new RuntimeException(e);
         }
     }
+
+    /**********************************************************************************************************************/
+    @FXML
+    protected void sendEmail(){
+        SendEmail emailer = new SendEmail();
+        try{
+            emailer.sendMail(email.getText(), subject.getText(), message.getText());
+            emailResponse.setText("Sent Successfully");
+        } catch(Exception e){
+            emailResponse.setText("Error!");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void clearEmail(){
+        email.clear();
+        subject.clear();
+        message.clear();
+        emailResponse.setText("");
+    }
+
 
     @FXML
     protected void onOpen()throws SQLException {
