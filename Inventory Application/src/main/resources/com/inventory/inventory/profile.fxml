@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Menu?>
@@ -103,9 +104,9 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Product Search">
+                <Tab text="Product">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" onMouseMoved="#displayAllProducts" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="180.0" minWidth="200.0" onMouseMoved="#displayAllProducts" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
                                 <TextField fx:id="productSearchBar" layoutX="73.0" layoutY="31.0" onAction="#onProductSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: Liquid Foundation Brush" />
@@ -147,25 +148,29 @@
                                         <Font name="Verdana" size="12.0" />
                                     </font>
                                 </SplitMenuButton>
-                                <TextArea fx:id="searchRes" editable="false" layoutX="15.0" layoutY="118.0" prefHeight="210.0" prefWidth="605.0">
+                                <TextArea fx:id="prodSearchRes" editable="false" focusTraversable="false" layoutX="15.0" layoutY="118.0" maxHeight="1060.0" maxWidth="1900.0" minHeight="210.0" minWidth="605.0" prefHeight="210.0" prefWidth="605.0">
                            <font>
-                              <Font name="Monospaced Regular" size="13.0" />
-                           </font></TextArea>
+                              <Font name="Monospaced Regular" size="12.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                        </TextArea>
                         <Button layoutX="100.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#editProduct" text="Edit" />
                         <Button layoutX="145.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#deleteProduct" text="Delete" />
+                        <Button layoutX="205.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#addProduct" text="Add a Product" />
+                        <Button layoutX="561.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#refreshProducts" text="Refresh " />
                         <Text fx:id="productQueryResponse" fill="RED" layoutX="297.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="289.0" />
                         <Text id="nameIDLabel" layoutX="15.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID &amp; Category">
                            <font>
                               <Font name="Verdana" size="14.0" />
                            </font>
                         </Text>
-                        <Button layoutX="205.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#addProduct" text="Add a Product" />
-                        <Button layoutX="561.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#refreshProducts" text="Refresh " />
                             </children>
                         </AnchorPane>
                     </content>
                 </Tab>
-            <Tab text="Customer Search">
+            <Tab text="Customer">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" onMouseMoved="#displayAllCustomers" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -181,24 +186,17 @@
                               <Font name="Verdana" size="12.0" />
                            </font>
                            <items>
-                              <Menu mnemonicParsing="false" text="Names">
-                                 <items>
-                                    <CheckMenuItem fx:id="catBrushes1" mnemonicParsing="false" onAction="#catFilters" text="Brushes" />
-                                    <CheckMenuItem fx:id="catMakeUp1" mnemonicParsing="false" onAction="#catFilters" text="Makeup Remover" />
-                                    <CheckMenuItem fx:id="catSkin1" mnemonicParsing="false" onAction="#catFilters" text="Skincare" />
-                                    <CheckMenuItem fx:id="catFace1" mnemonicParsing="false" onAction="#catFilters" text="Face" />
-                                    <CheckMenuItem fx:id="catLips1" mnemonicParsing="false" onAction="#catFilters" text="Lips" />
-                                    <CheckMenuItem fx:id="catEyes1" mnemonicParsing="false" onAction="#catFilters" text="Eyes" />
-                                 </items>
+                              <Menu mnemonicParsing="false" text="Name">
+                                <items>
+                                    <CheckMenuItem fx:id="nameForward" mnemonicParsing="false" onAction="#customerNameFilter" text="Name: A to Z" />
+                                    <CheckMenuItem fx:id="nameBackward" mnemonicParsing="false" onAction="#customerNameFilter" text="Name: Z to A" />
+                                </items>
                               </Menu>
-                              <Menu mnemonicParsing="false" text="Addresses">
-                                 <items>
-                                    <CheckMenuItem fx:id="shelfNA1" mnemonicParsing="false" onAction="#shelfFilters" text="No Expiration" />
-                                    <CheckMenuItem fx:id="shelf6M1" mnemonicParsing="false" onAction="#shelfFilters" text="6 Months" />
-                                    <CheckMenuItem fx:id="shelf12M1" mnemonicParsing="false" onAction="#shelfFilters" text="12 Months" />
-                                    <CheckMenuItem fx:id="shelf18M1" mnemonicParsing="false" onAction="#shelfFilters" text="18 Months" />
-                                    <CheckMenuItem fx:id="shelf24M1" mnemonicParsing="false" onAction="#shelfFilters" text="24 Months" />
-                                 </items>
+                              <Menu mnemonicParsing="false" text="Address">
+                                <items>
+                                    <CheckMenuItem fx:id="addressForward" mnemonicParsing="false" onAction="#customerAddressFilter" text="Address: A to Z" />
+                                    <CheckMenuItem fx:id="addressBackward" mnemonicParsing="false" onAction="#customerAddressFilter" text="Address: Z to A" />
+                                </items>
                               </Menu>
                            </items>
                         </SplitMenuButton>
@@ -209,7 +207,7 @@
                         </Text>
                         <TextArea id="customerOutputField" fx:id="custSearchRes" editable="false" layoutX="15.0" layoutY="118.0" prefHeight="210.0" prefWidth="605.0">
                            <font>
-                              <Font name="Monospaced Regular" size="14.0" />
+                              <Font name="Monospaced Regular" size="12.0" />
                            </font>
                         </TextArea>
                         <Button id="editCustomerButton" layoutX="100.0" layoutY="63.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />

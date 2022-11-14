@@ -2,6 +2,7 @@ package com.inventory.inventory;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -15,9 +16,12 @@ public class AddCustomer {
     @FXML private TextField phone = new TextField();
     @FXML private TextField address = new TextField();
     @FXML private TextField email = new TextField();
+    @FXML private Text response = new Text();
 
     @FXML
     protected void initialize(){}
+
+    @FXML
     public void onAdd() {
         //Creates the database connection for queries
         Connection connection = setConnection();
@@ -29,7 +33,7 @@ public class AddCustomer {
             Statement statement = connection.createStatement();
             ResultSet idResult = statement.executeQuery(getIDS);
             while(idResult.next()){
-                id = idResult.getInt(1);
+                id = idResult.getInt(1) + 1;
             }
         }catch(SQLException e){
             e.printStackTrace();
@@ -43,11 +47,11 @@ public class AddCustomer {
         if(tempEmail.equals("")){
             tempEmail = "null";
         }
-        String insertQuery = "INSERT INTO CUSTOMER VALUES("+ id + ", '" + name.getText() + "', " +
-                tempPhone + " ,'" + address.getText() +  "', " + tempEmail + ")";
+        String insertQuery = "INSERT INTO CUSTOMER VALUES("+ id + ", '" + name.getText() + "', " + tempPhone + " ,'" + address.getText() +  "', " + tempEmail + ")";
         try{
             Statement statement = connection.createStatement();
-            statement.executeQuery(insertQuery);
+            statement.executeUpdate(insertQuery);
+            response.setText("Success!");
         }catch(SQLException e){
             e.printStackTrace();
         }

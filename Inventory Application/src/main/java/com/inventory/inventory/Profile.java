@@ -17,8 +17,7 @@ public class Profile {
     //For Profile Tab
     @FXML private Text usernameInfo = new Text();
     @FXML private Text passwordInfo = new Text();
-
-    //For Search Tab
+    //For Product Tab
     @FXML private TextField productSearchBar = new TextField();
     @FXML private CheckMenuItem catBrushes = new CheckMenuItem();
     @FXML private CheckMenuItem catMakeUp = new CheckMenuItem();
@@ -34,20 +33,22 @@ public class Profile {
     @FXML private CheckMenuItem shelf12M = new CheckMenuItem();
     @FXML private CheckMenuItem shelf18M = new CheckMenuItem();
     @FXML private CheckMenuItem shelf24M = new CheckMenuItem();
-    @FXML private TextArea searchRes = new TextArea();
+    @FXML private TextArea prodSearchRes= new TextArea();
     @FXML private Text productQueryResponse = new Text();
 
-    //For Customer Search
+    //For Customer Tab
     @FXML private TextField customerSearchBar = new TextField();
     @FXML private TextArea custSearchRes = new TextArea();
     @FXML private Text customerQueryResponse = new Text();
+    @FXML private CheckMenuItem nameForward = new CheckMenuItem();
+    @FXML private CheckMenuItem nameBackward = new CheckMenuItem();
+    @FXML private CheckMenuItem addressForward = new CheckMenuItem();
+    @FXML private CheckMenuItem addressBackward = new CheckMenuItem();
 
-    @FXML private Button addCustomerButton = new Button();
-    @FXML private Text addCustomerResponse = new Text();
-    @FXML private Text asterisk5 = new Text();
-    @FXML private Text asterisk6 = new Text();
-    @FXML private Text asterisk7 = new Text();
-    @FXML private Text asterisk8 = new Text();
+    @FXML
+    protected void initialize(){
+
+    }
 
 
     /**
@@ -68,7 +69,6 @@ public class Profile {
      * Formats the
      * @param results - The result set to use to get information from the database
      * @return String that is displayed as a search result
-     * @throws SQLException If the result set or database do not exist
      */
     private String productFormat(ResultSet results){
         String toReturn = String.format("%s %s%33s  %s  %s  %s", "ID", "Category", "Name", "Quantity", "Price", "Shelf Life") + "\n";
@@ -107,7 +107,7 @@ public class Profile {
     protected void onProductSearch(){
         productSearchBar.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-                searchRes.clear();
+                prodSearchRes.clear();
                 Connection connection = setConnection();
                 String search = productSearchBar.getText();
                 String searchQuery = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME = '" + search + "'";
@@ -117,7 +117,7 @@ public class Profile {
                     deselect("categories");
                     deselect("quantities");
                     deselect("shelf life");
-                    searchRes.setText(productFormat(result));
+                    prodSearchRes.setText(productFormat(result));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -127,13 +127,13 @@ public class Profile {
 
     @FXML
     public void displayAllProducts(){
-        if(searchRes.getText().isBlank() && productSearchBar.getText().isBlank()){
+        if(prodSearchRes.getText().isBlank() && productSearchBar.getText().isBlank()){
             Connection connection = setConnection();
             String search = "SELECT * FROM PRODUCT";
             try{
                 Statement stmt = connection.createStatement();
                 ResultSet results = stmt.executeQuery(search);
-                searchRes.setText(productFormat(results));
+                prodSearchRes.setText(productFormat(results));
             }catch(SQLException e){
                 e.printStackTrace();
             }
@@ -142,7 +142,7 @@ public class Profile {
 
     public void refreshProducts(){
         productSearchBar.clear();
-        searchRes.clear();
+        prodSearchRes.clear();
         productQueryResponse.setText("");
         displayAllProducts();
     }
@@ -150,7 +150,7 @@ public class Profile {
     //Helper Method to multiple methods that need to deselect filters (Both product and customer)
     private void deselect(String filter){
         CheckMenuItem[] deselect = {catBrushes,catMakeUp,catSkin,catFace,catLips,catEyes,quantLeast,quantMiddle,
-                quantGreatest,shelfNA,shelf6M,shelf12M,shelf18M,shelf24M};
+                quantGreatest,shelfNA,shelf6M,shelf12M,shelf18M,shelf24M,nameForward,nameBackward,addressForward,addressBackward};
         if(filter.equals("categories")){
             for(int i = 0; i < 6; i++){
                 deselect[i].setSelected(false);
@@ -162,7 +162,17 @@ public class Profile {
             }
         }
         if(filter.equals("shelf life")){
-            for(int i = 9; i < deselect.length; i++){
+            for(int i = 9; i < 14; i++){
+                deselect[i].setSelected(false);
+            }
+        }
+        if(filter.equals("name")){
+            for(int i = 14; i <16; i++){
+                deselect[i].setSelected(false);
+            }
+        }
+        if(filter.equals("address")){
+            for(int i = 16; i <18; i++){
                 deselect[i].setSelected(false);
             }
         }
@@ -180,8 +190,8 @@ public class Profile {
         deselect("quantities");
         //Shelf Life filter deselection
         deselect("shelf life");
-        //Clears the searchRes TextField
-        searchRes.clear();
+        //Clears the prodSearchResTextField
+        prodSearchRes.clear();
         Connection connection = setConnection();
         String query = "SELECT * FROM Product WHERE CATEGORY = ";
         String[] categories = {"'BRUSHES' ORDER BY PRODUCT_Name", "'MAKEUP REMOVERS'  ORDER BY PRODUCT_NAME",
@@ -193,30 +203,34 @@ public class Profile {
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(query + categories[i]);
                 String delimiter = "----------------------------\n";
-                String setText = categories[i] + "\n";
-                setText = setText + productFormat(result);
-                queryResults[i] = setText + delimiter;
+                queryResults[i] = productFormat(result) + delimiter;
             }catch(SQLException e){
                 throw new RuntimeException(e);
             }
         }
+        queryResults[0] = "Category: Brushes\n" + queryResults[0];
+        queryResults[1] = "Category: Makeup Removers\n" + queryResults[1];
+        queryResults[2] = "Category: Skincare\n" + queryResults[2];
+        queryResults[3] = "Category: Face\n" + queryResults[3];
+        queryResults[4] = "Category: Lips\n" + queryResults[4];
+        queryResults[5] = "Category: Eyes\n" + queryResults[5];
         if(catBrushes.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[0]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[0]);
         } else{removeProductFilterText("'BRUSHES'");}
         if(catMakeUp.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[1]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[1]);
         } else{removeProductFilterText("'MAKEUP REMOVER'");}
         if(catSkin.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[2]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[2]);
         } else{removeProductFilterText("'SKINCARE'");}
         if(catFace.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[3]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[3]);
         } else{removeProductFilterText("'FACE'");}
         if(catLips.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[4]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[4]);
         } else{removeProductFilterText("'LIPS'");}
         if(catEyes.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[5]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[5]);
         } else{removeProductFilterText("'EYES'");}
 
     }
@@ -232,8 +246,8 @@ public class Profile {
         deselect("categories");
         //Shelf Life filter deselection
         deselect("shelf life");
-        //Clears the searchRes TextField
-        searchRes.clear();
+        //Clears the prodSearchResTextField
+        prodSearchRes.clear();
         Connection connection = setConnection();
         String query = "SELECT * FROM PRODUCT WHERE QUANTITY ";
         String[] quantities = {"<= 3 ORDER BY QUANTITY", "> 3 AND QUANTITY < 10 ORDER BY QUANTITY", "> 10 ORDER BY QUANTITY"};
@@ -243,21 +257,22 @@ public class Profile {
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(query + quantities[i]);
                 String delimiter = "----------------------------\n";
-                String setText = quantities[i] + "\n";
-                setText = setText + productFormat(result);
-                queryResults[i] = setText + delimiter;
+                queryResults[i] = productFormat(result) + delimiter;
             }catch(SQLException e){
                 throw new RuntimeException(e);
             }
         }
+        queryResults[0] = "Quantity Less than or Equal to Three\n" + queryResults[0];
+        queryResults[1] = "Quantity Less than Ten\n" + queryResults[1];
+        queryResults[2] = "Quantity Greater Than 10\n" + queryResults[2];
         if(quantLeast.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[0]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[0]);
         } else{removeProductFilterText(quantities[0]);}
         if(quantMiddle.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[1]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[1]);
         } else{removeProductFilterText(quantities[1]);}
         if(quantGreatest.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[2]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[2]);
         }else{removeProductFilterText(quantities[2]);}
     }
 
@@ -272,8 +287,8 @@ public class Profile {
         deselect("categories");
         //Quantity filters deselection
         deselect("quantities");
-        //Clears the searchRes TextField
-        searchRes.clear();
+        //Clears the prodSearchRes TextField
+        prodSearchRes.clear();
         Connection connection = setConnection();
         String query = "SELECT * FROM PRODUCT WHERE SHELF_LIFE ";
         String[] shelfLife = {"IS NULL", " = 6 ORDER BY SHELF_LIFE", " = 12 ORDER BY SHELF_LIFE", " = 18 ORDER BY SHELF_LIFE", " = 24 ORDER BY SHELF_LIFE"};
@@ -283,33 +298,36 @@ public class Profile {
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(query + shelfLife[i]);
                 String delimiter = "----------------------------\n";
-                String setText = shelfLife[i] + "\n";
-                setText = setText + productFormat(result);
-                queryResults[i] = setText + delimiter;
+                queryResults[i] = productFormat(result) + delimiter;
             }catch(SQLException e){
                 throw new RuntimeException(e);
             }
         }
+        queryResults[0] = "Shelf Life: No Expiration\n" + queryResults[0];
+        queryResults[1] = "Shelf Life: 6 Months\n" + queryResults[1];
+        queryResults[2] = "Shelf Life: 12 Months\n" + queryResults[2];
+        queryResults[3] = "Shelf Life: 18 Months\n" + queryResults[3];
+        queryResults[4] = "Shelf Life: 24 Months\n" + queryResults[4];
         if(shelfNA.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[0]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[0]);
         }else{removeProductFilterText("N/A");}
         if(shelf6M.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[1]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[1]);
         } else{removeProductFilterText(shelfLife[1]);}
         if(shelf12M.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[2]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[2]);
         } else{removeProductFilterText(shelfLife[2]);}
         if(shelf18M.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[3]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[3]);
         } else{removeProductFilterText(shelfLife[3]);}
         if(shelf24M.isSelected()){
-            searchRes.setText(searchRes.getText() + queryResults[4]);
+            prodSearchRes.setText(prodSearchRes.getText() + queryResults[4]);
         } else{removeProductFilterText(shelfLife[4]);}
     }
 
     //Helper method for the filter methods. Removes the text of the filter that is unselected
     private void removeProductFilterText(String filter){
-        StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
+        StringTokenizer st = new StringTokenizer(prodSearchRes.getText(),"\n");
         ArrayList<String> words = new ArrayList<>();
         while(st.hasMoreTokens()){
             words.add(st.nextToken());
@@ -326,10 +344,11 @@ public class Profile {
         while(!words.isEmpty()){
             temp = temp + words.remove(0) + "\n";
         }
-        searchRes.setText(temp);
+        prodSearchRes.setText(temp);
     }
 
     //Opens a separate window that handles adding a product to the inventory
+
     @FXML
     protected  void addProduct(){
         try {
@@ -339,7 +358,6 @@ public class Profile {
             editWindow.setTitle("Add Product");
             editWindow.setScene(new Scene(p));
             editWindow.initModality(Modality.APPLICATION_MODAL);
-            AddProduct controller = loader.getController();
             editWindow.show();
         }catch(IOException e){
             throw new RuntimeException(e);
@@ -442,7 +460,6 @@ public class Profile {
     private String customerFormat(ResultSet results){
         String toReturn = String.format("%s  %s %20s  %18s  %22s", "ID", "Name", "Phone #", "Email", "Address") + "\n";
         try{
-
             if(results.next()){
                 do{
                     int ID = results.getInt(1);
@@ -474,7 +491,7 @@ public class Profile {
 
     //WIP
     private void removeCustomerFilterText(String filter){
-        StringTokenizer st = new StringTokenizer(searchRes.getText(),"\n");
+        StringTokenizer st = new StringTokenizer(prodSearchRes.getText(),"\n");
         ArrayList<String> words = new ArrayList<>();
         while(st.hasMoreTokens()){
             words.add(st.nextToken());
@@ -491,10 +508,69 @@ public class Profile {
         while(!words.isEmpty()){
             temp = temp + words.remove(0) + "\n";
         }
-        searchRes.setText(temp);
+        prodSearchRes.setText(temp);
     }
 
-    @FXML protected void refreshCustomers(){
+    @FXML protected void customerNameFilter(){
+        custSearchRes.clear();
+        deselect("address");
+        String query = "SELECT * FROM Customer ORDER BY Customer_Name";
+        Connection connection = setConnection();
+        String[] names = {"", " DESC"};
+        String[] queryResults = new String[names.length];
+        for(int i = 0; i < names.length; i++){
+            try{
+                Statement statement = connection.createStatement();
+                ResultSet result = statement.executeQuery(query + names[i]);
+                String delimiter = "----------------------------\n";
+                String setText = customerFormat(result);
+                queryResults[i] = setText + delimiter;
+            }catch(SQLException e){
+                throw new RuntimeException(e);
+            }
+        }
+        queryResults[0] = "Alphanumeric Customer Names\n" + queryResults[0];
+        queryResults[1] = "Reverse Alphanumeric Customer Names\n" + queryResults[1];
+        if(nameForward.isSelected()){
+            custSearchRes.setText(custSearchRes.getText() + queryResults[0]);
+        } else{removeCustomerFilterText(names[0]);}
+        if(nameBackward.isSelected()){
+            custSearchRes.setText(custSearchRes.getText() + queryResults[1]);
+        } else{removeCustomerFilterText(names[1]);}
+    }
+
+    @FXML protected void customerAddressFilter(){
+        custSearchRes.clear();
+        deselect("name");
+        String query = "SELECT * FROM Customer ORDER BY Customer_Address";
+        Connection connection = setConnection();
+        String[] names = {"", " DESC"};
+        String[] queryResults = new String[names.length];
+        for(int i = 0; i < names.length; i++){
+            try{
+                Statement statement = connection.createStatement();
+                ResultSet result = statement.executeQuery(query + names[i]);
+                String delimiter = "----------------------------\n";
+                String setText = customerFormat(result);
+                queryResults[i] = setText + delimiter;
+            }catch(SQLException e){
+                throw new RuntimeException(e);
+            }
+        }
+        queryResults[0] = "Alphanumeric Customer Addresses\n" + queryResults[0];
+        queryResults[1] = "Reverse Alphanumeric Customer Addresses\n" + queryResults[1];
+        if(addressForward.isSelected()){
+            custSearchRes.setText(custSearchRes.getText() + queryResults[0]);
+        } else{removeCustomerFilterText(names[0]);}
+        if(addressBackward.isSelected()){
+            custSearchRes.setText(custSearchRes.getText() + queryResults[1]);
+        } else{removeCustomerFilterText(names[1]);}
+    }
+
+    @FXML
+    protected void refreshCustomers(){
+        deselect("name");
+        deselect("address");
         customerSearchBar.clear();
         custSearchRes.clear();
         customerQueryResponse.setText("");
@@ -507,12 +583,13 @@ public class Profile {
                 custSearchRes.clear();
                 Connection connection = setConnection();
                 String search = customerSearchBar.getText();
-                String searchQuery = "SELECT * FROM CUSTOMER WHERE CUSTOMER_NAME = \'" + search + "\'";
+                String searchQuery = "SELECT * FROM CUSTOMER WHERE CUSTOMER_NAME = '" + search + "'";
                 try {
                     Statement statement = connection.createStatement();
                     ResultSet result = statement.executeQuery(searchQuery);
                     String setText = customerFormat(result);
-                    deselect("");
+                    deselect("name");
+                    deselect("address");
                     custSearchRes.setText(setText);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -633,7 +710,6 @@ public class Profile {
             editWindow.setTitle("Add Customer");
             editWindow.setScene(new Scene(p));
             editWindow.initModality(Modality.APPLICATION_MODAL);
-            AddCustomer controller = loader.getController();
             editWindow.show();
         }catch(IOException e){
             throw new RuntimeException(e);
