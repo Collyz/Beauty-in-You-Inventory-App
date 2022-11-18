@@ -259,13 +259,13 @@
                   <AnchorPane minHeight="0.0" minWidth="0.0" onMouseMoved="#displayAllCustomers" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
-                        <TextField fx:id="orderSearchBar" layoutX="73.0" layoutY="31.0" onAction="#onCustomerSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: John Smith" />
-                        <Text id="searchCustomerLabel" layoutX="14.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
+                        <TextField id="orderSearchBar" fx:id="orderSearchBar" layoutX="73.0" layoutY="31.0" onAction="#onCustomerSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: John Smith" />
+                        <Text id="searchOrderLabel" layoutX="14.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
                            <font>
                               <Font name="Verdana" size="14.0" />
                            </font>
                         </Text>
-                        <SplitMenuButton id="customerFilter" fx:id="orderFilter" layoutX="15.0" layoutY="63.0" mnemonicParsing="false" text="Filters">
+                        <SplitMenuButton id="orderFilter" fx:id="orderFilter" layoutX="15.0" layoutY="63.0" mnemonicParsing="false" text="Filters">
                            <font>
                               <Font name="Verdana" size="12.0" />
                            </font>
@@ -284,20 +284,20 @@
                               </Menu>
                            </items>
                         </SplitMenuButton>
-                        <Text id="nameIDLabel" layoutX="15.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Information">
+                        <Text id="orderLabel" layoutX="15.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Information">
                            <font>
                               <Font name="Verdana" size="14.0" />
                            </font>
                         </Text>
-                        <TextArea id="customerOutputField" fx:id="orderSearchRes" editable="false" layoutX="15.0" layoutY="118.0" prefHeight="210.0" prefWidth="605.0">
+                        <TextArea id="orderOutputField" fx:id="orderSearchRes" editable="false" layoutX="15.0" layoutY="118.0" prefHeight="210.0" prefWidth="605.0">
                            <font>
                               <Font name="Monospaced Regular" size="12.0" />
                            </font>
                         </TextArea>
-                        <Button id="editCustomerButton" fx:id="editOrderButton" layoutX="100.0" layoutY="63.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />
-                        <Button id="deleteCustomerButton" fx:id="deleteOrderButton" layoutX="145.0" layoutY="63.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
-                        <Button fx:id="addOrderButton" layoutX="205.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#addCustomer" text="Add an Order" />
-                        <Button fx:id="orderRefresh" layoutX="561.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#refreshCustomers" text="Refresh " />
+                        <Button id="editOrderButton" fx:id="editOrderButton" layoutX="100.0" layoutY="63.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />
+                        <Button id="deleteOrderButton" fx:id="deleteOrderButton" layoutX="145.0" layoutY="63.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
+                        <Button id="addOrderButton" fx:id="addOrderButton" layoutX="205.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#addCustomer" text="Add an Order" />
+                        <Button id="refreshOrders" fx:id="orderRefresh" layoutX="561.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#refreshCustomers" text="Refresh " />
                         <Text fx:id="customerQueryResponse1" fill="RED" layoutX="318.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="289.0" />
                      </children>
                   </AnchorPane>
@@ -307,4 +307,3 @@
         </TabPane>
     </children>
 </VBox>
-
