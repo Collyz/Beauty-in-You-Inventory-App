@@ -270,15 +270,12 @@
                               <Font name="Verdana" size="12.0" />
                            </font>
                            <items>
-                              <Menu mnemonicParsing="false" text="Name">
-                                 <items>
-                                    <CheckMenuItem fx:id="nameOption" mnemonicParsing="false" onAction="#customerNameFilter" text="Customer Name" />
-                                 </items>
-                              </Menu>
                               <Menu mnemonicParsing="false" text="Orders">
                                  <items>
-                                    <CheckMenuItem fx:id="recentOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Recent Orders" />
-                                    <CheckMenuItem fx:id="allOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="All Orders" />
+                                     <CheckMenuItem fx:id="recentOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Recent Orders" />
+                                     <CheckMenuItem fx:id="allOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="All Orders" />
+                                     <CheckMenuItem fx:id="completedOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Completed Orders" />
+                                     <CheckMenuItem fx:id="inProgressOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Orders In-Progress" />
                                  </items>
                               </Menu>
                            </items>
