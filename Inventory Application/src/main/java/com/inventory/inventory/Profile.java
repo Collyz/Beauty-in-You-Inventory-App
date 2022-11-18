@@ -5,6 +5,7 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -53,6 +54,7 @@ public class Profile {
 
 
     @FXML private AnchorPane productAnchor = new AnchorPane();
+
 
     @FXML
     protected void initialize(){
@@ -766,8 +768,12 @@ public class Profile {
 
     @FXML
     protected void test(){
-        //productSearchBar.setPrefWidth(productAnchor.getWidth());
-        //productSearchBar.setMinWidth(productAnchor.getWidth());
+        //productSearchBar.setPrefWidth(productAnchor.getWidth() - 100);
+        //productSearchBar.setMinWidth(productAnchor.getWidth() - 100);
+        //prodSearchRes.setPrefWidth(productAnchor.getWidth() - 20);
+        //prodSearchRes.setMinWidth(productAnchor.getWidth() - 20);
+        //Font font = Font.font("Monospaced",20);
+        //prodSearchRes.setFont(font);
     }
 
 
