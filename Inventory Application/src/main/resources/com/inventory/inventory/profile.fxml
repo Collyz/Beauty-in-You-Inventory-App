@@ -106,7 +106,7 @@
                 </Tab>
                 <Tab text="Product">
                     <content>
-                        <AnchorPane fx:id="productAnchor" maxHeight="1080.0" maxWidth="1920.0" minHeight="180.0" minWidth="200.0" onMouseClicked="#test" onMouseMoved="#displayAllProducts" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="180.0" minWidth="200.0" onMouseMoved="#displayAllProducts" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
                                 <TextField fx:id="productSearchBar" layoutX="73.0" layoutY="31.0" onAction="#onProductSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: Liquid Foundation Brush" />
@@ -272,14 +272,13 @@
                            <items>
                               <Menu mnemonicParsing="false" text="Name">
                                  <items>
-                                    <CheckMenuItem fx:id="nameForward1" mnemonicParsing="false" onAction="#customerNameFilter" text="Name: A to Z" />
-                                    <CheckMenuItem fx:id="nameBackward1" mnemonicParsing="false" onAction="#customerNameFilter" text="Name: Z to A" />
+                                    <CheckMenuItem fx:id="nameOption" mnemonicParsing="false" onAction="#customerNameFilter" text="Customer Name" />
                                  </items>
                               </Menu>
-                              <Menu mnemonicParsing="false" text="Address">
+                              <Menu mnemonicParsing="false" text="Orders">
                                  <items>
-                                    <CheckMenuItem fx:id="addressForward1" mnemonicParsing="false" onAction="#customerAddressFilter" text="Address: A to Z" />
-                                    <CheckMenuItem fx:id="addressBackward1" mnemonicParsing="false" onAction="#customerAddressFilter" text="Address: Z to A" />
+                                    <CheckMenuItem fx:id="recentOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Recent Orders" />
+                                    <CheckMenuItem fx:id="allOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="All Orders" />
                                  </items>
                               </Menu>
                            </items>
