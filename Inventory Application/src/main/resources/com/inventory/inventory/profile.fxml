@@ -298,7 +298,7 @@
                         <Button id="deleteOrderButton" fx:id="deleteOrderButton" layoutX="145.0" layoutY="63.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
                         <Button id="addOrderButton" fx:id="addOrderButton" layoutX="205.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#addCustomer" text="Add an Order" />
                         <Button id="refreshOrders" fx:id="orderRefresh" layoutX="561.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#refreshCustomers" text="Refresh " />
-                        <Text fx:id="customerQueryResponse1" fill="RED" layoutX="318.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="289.0" />
+                        <Text fx:id="orderQueryResponse" fill="RED" layoutX="318.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="289.0" />
                      </children>
                   </AnchorPane>
                </content>
