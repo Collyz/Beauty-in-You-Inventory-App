@@ -4,8 +4,6 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -51,9 +49,6 @@ public class Profile {
     @FXML private TextField subject = new TextField();
     @FXML private TextArea message = new TextArea();
     @FXML private Text emailResponse = new Text();
-
-
-    @FXML private AnchorPane productAnchor = new AnchorPane();
 
 
     @FXML
@@ -775,8 +770,5 @@ public class Profile {
         //Font font = Font.font("Monospaced",20);
         //prodSearchRes.setFont(font);
     }
-
-
-
 
 }
