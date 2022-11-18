@@ -4,6 +4,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,6 +50,9 @@ public class Profile {
     @FXML private TextField subject = new TextField();
     @FXML private TextArea message = new TextArea();
     @FXML private Text emailResponse = new Text();
+
+
+    @FXML private AnchorPane productAnchor = new AnchorPane();
 
     @FXML
     protected void initialize(){
@@ -759,4 +763,14 @@ public class Profile {
         DatabaseConnection connection = new DatabaseConnection();
         return connection.getConnection();
     }
+
+    @FXML
+    protected void test(){
+        //productSearchBar.setPrefWidth(productAnchor.getWidth());
+        //productSearchBar.setMinWidth(productAnchor.getWidth());
+    }
+
+
+
+
 }
