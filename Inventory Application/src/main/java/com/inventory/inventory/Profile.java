@@ -369,6 +369,21 @@ public class Profile {
             throw new RuntimeException(e);
         }
     }
+    
+    @FXML
+    protected void help(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("help-screen.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Help");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            editWindow.show();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
 
     @FXML
     protected void editProduct(){
