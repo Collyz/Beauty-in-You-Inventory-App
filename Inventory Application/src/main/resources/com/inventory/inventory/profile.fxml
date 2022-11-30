@@ -272,7 +272,6 @@
                            <items>
                               <Menu mnemonicParsing="false" text="Orders">
                                  <items>
-                                     <CheckMenuItem fx:id="recentOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Recent Orders" />
                                      <CheckMenuItem fx:id="allOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="All Orders" />
                                      <CheckMenuItem fx:id="completedOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Completed Orders" />
                                      <CheckMenuItem fx:id="inProgressOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Orders In-Progress" />
