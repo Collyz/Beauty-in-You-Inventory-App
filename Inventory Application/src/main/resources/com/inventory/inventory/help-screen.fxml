@@ -27,7 +27,7 @@
                         <Font name="Verdana" size="12.0" />
                     </font>
                 </Button>
-                <Text fx:id="searchOrderHelp" layoutX="14.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When using the search bar, enter the date of which order to review. The results will show all orders, completed or in-progress, that have been placed on that specific date." wrappingWidth="441.20343017578125">
+                <Text fx:id="searchOrderHelp" layoutX="14.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When using the search bar, enter the order number of the desired order. The results will show the order, completed or in-progress, that has been placed with that order number." wrappingWidth="441.20343017578125">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
