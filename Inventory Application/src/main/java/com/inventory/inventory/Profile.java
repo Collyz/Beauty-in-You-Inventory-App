@@ -19,6 +19,7 @@ public class Profile {
     @FXML private Text passwordInfo = new Text();
     //For Product Tab
     @FXML private TextField productSearchBar = new TextField();
+    @FXML private TextField orderSearchBar = new TextField();
     @FXML private CheckMenuItem catBrushes = new CheckMenuItem();
     @FXML private CheckMenuItem catMakeUp = new CheckMenuItem();
     @FXML private CheckMenuItem catSkin = new CheckMenuItem();
@@ -34,7 +35,9 @@ public class Profile {
     @FXML private CheckMenuItem shelf18M = new CheckMenuItem();
     @FXML private CheckMenuItem shelf24M = new CheckMenuItem();
     @FXML private TextArea prodSearchRes= new TextArea();
+    @FXML private TextArea orderSearchRes = new TextArea();
     @FXML private Text productQueryResponse = new Text();
+    @FXML private Text orderQueryResponse = new Text();
 
     //For Customer Tab
     @FXML private TextField customerSearchBar = new TextField();
@@ -49,7 +52,6 @@ public class Profile {
     @FXML private TextField subject = new TextField();
     @FXML private TextArea message = new TextArea();
     @FXML private Text emailResponse = new Text();
-
 
     @FXML
     protected void initialize(){
@@ -96,7 +98,7 @@ public class Profile {
                     toReturn = toReturn + formattedString;
                 } while(results.next());
             }else{
-                productQueryResponse.setText("No such product exits, try again");
+                productQueryResponse.setText("No such product exists, try again.");
                 return "";
             }
         }catch(SQLException e){
@@ -369,7 +371,8 @@ public class Profile {
             throw new RuntimeException(e);
         }
     }
-    
+
+    //NEW
     @FXML
     protected void help(){
         try {
@@ -758,14 +761,60 @@ public class Profile {
         emailResponse.setText("");
     }
 
-    /**********************************************************************************************************************/
+
     @FXML
     protected void deleteOrder(){
+        if(!orderSearchBar.getText().isBlank()) {
+            Connection connection = setConnection();
+            String query = "SELECT Order_ID FROM `inventorydatabase`.`Order` WHERE Order_ID = '" + orderSearchBar.getText() + "'";
+            try {
+                String compare = "";
+                Statement statement = connection.createStatement();
+                ResultSet result = statement.executeQuery(query);
+                while (result.next()) {
+                    compare = result.getString(1);
+                }
+                if (compare.equals(orderSearchBar.getText())) {
+                    String query2 = "SELECT Order_ID, Customer_ID, Date from `inventorydatabase`.`Order` WHERE Order_ID = '" + compare + "'";
+                    ResultSet result2 = statement.executeQuery(query2);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-order.fxml"));
+                    Parent p = loader.load();
+                    Stage editWindow = new Stage();
+                    editWindow.setTitle("Delete");
+                    editWindow.setScene(new Scene(p));
+                    editWindow.initModality(Modality.APPLICATION_MODAL);
+                    DeleteOrder controller = loader.getController();
+                    while(result2.next()){
+                        controller.setID(result2.getInt(1));
+                        controller.setCustomerID(result2.getString(2));
+                        controller.setDate(result2.getString(3));
+                        controller.setProductID(result2.getString(5));
+                    }
+                    editWindow.show();
+                    orderQueryResponse.setText("SUCCESS!");
+                }
+                else{
+                    orderQueryResponse.setText("No matches found, try again");
+                }
+
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else{
+            productQueryResponse.setText("Input the name of the order you want to edit.");
+        }
+
+    }
+
+
+    @FXML
+    protected  void addOrder(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-order.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("add-order.fxml"));
             Parent p = loader.load();
             Stage editWindow = new Stage();
-            editWindow.setTitle("Add Customer");
+            editWindow.setTitle("Add Order");
             editWindow.setScene(new Scene(p));
             editWindow.initModality(Modality.APPLICATION_MODAL);
             editWindow.show();
@@ -774,20 +823,91 @@ public class Profile {
         }
     }
 
+
+
+    /**
+     * Formats the orders in the TextField below the search bar
+     * @param results - The result set to use to get information from the database
+     * @return String that is displayed as a search result
+     */
+    private String orderFormat(ResultSet results){
+        String returnOrder = String.format("%s %15s %12s", "Order_ID", "Customer_ID", "Date ");
+        String returnOrderLine = String.format("%15s %15s", "Product_ID", "Quantity") + "\n";
+        try{
+            if(results.next()) {
+                do{
+                    int order_ID = results.getInt(1);
+                    String date = results.getString(2);
+                    int customer_ID = results.getInt(3);
+
+                    int padding = 40 - date.length();
+                    //%2d means integer ID, %s is string category, %paddingS is the string format of name, %7.2f for price(float)
+                    String formatting = "%2s  %" + padding + "s  %2s";
+                    String formattedString = String.format(formatting, order_ID, date, customer_ID);
+                    returnOrder = returnOrder + formattedString;
+                } while(results.next());
+            }else{
+                orderQueryResponse.setText("No such order exists, try again.");
+                return "";
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(results.next()) {
+                do{
+                    int product_ID = results.getInt(1);
+                    int quantity = results.getInt(2);
+
+                    String formatting = "%2s  %2s";
+                    String formattedString = String.format(formatting, product_ID, quantity + "\n");
+                    returnOrderLine = returnOrderLine + formattedString;
+                } while(results.next());
+            }else{
+                productQueryResponse.setText("No such order exists, try again.");
+                return "";
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return returnOrder + returnOrderLine;
+    }
+
+
     @FXML
-    protected void addOrder(){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("add-order.fxml"));
-            Parent p = loader.load();
-            Stage editWindow = new Stage();
-            editWindow.setTitle("Add Customer");
-            editWindow.setScene(new Scene(p));
-            editWindow.initModality(Modality.APPLICATION_MODAL);
-            editWindow.show();
-        }catch(IOException e){
-            throw new RuntimeException(e);
+    public void displayAllOrders(){
+        if(orderSearchRes.getText().isBlank() && orderSearchBar.getText().isBlank()){
+            Connection connection = setConnection();
+            String searchOrder = "SELECT * FROM inventorydatabase.ORDER";
+            String searchOrderLine = "SELECT Product_ID, Quantity FROM inventorydatabase.ORDER_LINE";
+            try{
+                Statement stmt = connection.createStatement();
+                ResultSet results = stmt.executeQuery(searchOrder);
+                orderSearchRes.setText(orderFormat(results));
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+            try{
+                Statement stmt = connection.createStatement();
+                ResultSet results = stmt.executeQuery(searchOrderLine);
+                orderSearchRes.setText(orderFormat(results));
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
         }
     }
+
+
+    //refreshes all orders on the screen
+    public void refreshOrders(){
+        orderSearchBar.clear();
+        orderSearchRes.clear();
+        orderQueryResponse.setText("");
+        displayAllOrders();
+    }
+
 
 
     @FXML
@@ -806,15 +926,4 @@ public class Profile {
         DatabaseConnection connection = new DatabaseConnection();
         return connection.getConnection();
     }
-
-    @FXML
-    protected void test(){
-        //productSearchBar.setPrefWidth(productAnchor.getWidth() - 100);
-        //productSearchBar.setMinWidth(productAnchor.getWidth() - 100);
-        //prodSearchRes.setPrefWidth(productAnchor.getWidth() - 20);
-        //prodSearchRes.setMinWidth(productAnchor.getWidth() - 20);
-        //Font font = Font.font("Monospaced",20);
-        //prodSearchRes.setFont(font);
-    }
-
 }
