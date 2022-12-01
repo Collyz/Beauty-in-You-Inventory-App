@@ -758,6 +758,37 @@ public class Profile {
         emailResponse.setText("");
     }
 
+    /**********************************************************************************************************************/
+    @FXML
+    protected void deleteOrder(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-order.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Add Customer");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            editWindow.show();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    protected void addOrder(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("add-order.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Add Customer");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            editWindow.show();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @FXML
     protected void onOpen()throws SQLException {
