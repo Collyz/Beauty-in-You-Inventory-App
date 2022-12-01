@@ -42,13 +42,19 @@ public class AddOrder {
         try{
             Statement statement1 = connection.createStatement();
             Statement statement2 = connection.createStatement();
-            statement1.executeQuery("SELECT Customer_ID FROM Customer WHERE Customer_Name='" + customerName.getText() +"';");
+            statement1.executeQuery("SELECT Customer_ID FROM Customer WHERE Customer_Name= '" + customerName.getText()+"'");
+
             ResultSet result1 = statement1.getResultSet();
-            statement2.executeQuery("SELECT Product_ID FROM Product WHERE Product_Name='" + product.getText() +"';");
+            System.out.println(customerName.getText());
+            //int customerID;
+            //while(result1.next()) {
+                //customerID = result1.getInt(1);
+            //}
+            statement2.executeQuery("SELECT Product_ID FROM Product WHERE Product_Name= '" + product.getText()+"'");
             ResultSet result2 = statement2.getResultSet();
 
-            String insertQueryOrder = "INSERT INTO inventorydatabase.Order VALUES("+ id + ", '" + date.getText() + "', " + result1;
-            String insertQueryOrderLine = "INSERT INTO inventorydatabase.Order_Line VALUES("+ id + ", '" + result2 + ", " + quantity.getText();
+            String insertQueryOrder = "INSERT INTO projectprototype.Order VALUES("+ id + ", '" + date.getText() + "', " + result1;
+            String insertQueryOrderLine = "INSERT INTO projectprototype.Order_Line VALUES("+ id + ", '" + result2 + ", " + quantity.getText();
             Statement statement3 = connection.createStatement();
             statement3.executeUpdate(insertQueryOrder);
             statement3.executeUpdate(insertQueryOrderLine);
