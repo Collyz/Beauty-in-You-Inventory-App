@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.Profile">
+<VBox fx:id="vbox" onMouseEntered="#test" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.Profile">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -106,9 +106,8 @@
                 </Tab>
                 <Tab text="Product">
                     <content>
-                        <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="180.0" minWidth="200.0" onMouseMoved="#displayAllProducts" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane fx:id="prodPane" maxHeight="1080.0" maxWidth="1920.0" minHeight="180.0" minWidth="200.0" onMouseMoved="#displayAllProducts" prefHeight="1080.0" prefWidth="1920.0">
                             <children>
-                                <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
                                 <TextField fx:id="productSearchBar" layoutX="73.0" layoutY="31.0" onAction="#onProductSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: Liquid Foundation Brush" />
                                 <Text layoutX="14.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
                                     <font>
@@ -150,7 +149,7 @@
                                 </SplitMenuButton>
                                 <TextArea fx:id="prodSearchRes" editable="false" focusTraversable="false" layoutX="15.0" layoutY="118.0" maxHeight="1060.0" maxWidth="1900.0" minHeight="210.0" minWidth="605.0" prefHeight="210.0" prefWidth="605.0">
                            <font>
-                              <Font name="Monospaced Regular" size="12.0" />
+                              <Font name="Monospaced Regular" size="14.0" />
                            </font>
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
@@ -166,6 +165,7 @@
                               <Font name="Verdana" size="14.0" />
                            </font>
                         </Text>
+                        <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1536.0" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -207,7 +207,7 @@
                         </Text>
                         <TextArea id="customerOutputField" fx:id="custSearchRes" editable="false" layoutX="15.0" layoutY="118.0" prefHeight="210.0" prefWidth="605.0">
                            <font>
-                              <Font name="Monospaced Regular" size="12.0" />
+                              <Font name="Monospaced Regular" size="14.0" />
                            </font>
                         </TextArea>
                         <Button id="editCustomerButton" layoutX="100.0" layoutY="63.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />
@@ -258,7 +258,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" onMouseMoved="#displayAllCustomers" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="640.0" />
+                        <Rectangle fx:id="pRect" arcWidth="5.0" fill="#50004c" height="17.0" layoutX="-443.0" layoutY="6.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1527.0" />
                         <TextField id="orderSearchBar" fx:id="orderSearchBar" layoutX="73.0" layoutY="31.0" onAction="#onCustomerSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: 1" />
                         <Text id="searchOrderLabel" layoutX="14.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
                            <font>
@@ -286,7 +286,7 @@
                         </Text>
                         <TextArea id="orderOutputField" fx:id="orderSearchRes" editable="false" layoutX="15.0" layoutY="118.0" prefHeight="210.0" prefWidth="605.0">
                            <font>
-                              <Font name="Monospaced Regular" size="12.0" />
+                              <Font name="Monospaced Regular" size="14.0" />
                            </font>
                         </TextArea>
                         <Button id="editOrderButton" fx:id="editOrderButton" layoutX="100.0" layoutY="63.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />

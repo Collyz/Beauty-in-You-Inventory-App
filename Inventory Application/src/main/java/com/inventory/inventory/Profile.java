@@ -4,6 +4,10 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -52,12 +56,41 @@ public class Profile {
     @FXML private TextField subject = new TextField();
     @FXML private TextArea message = new TextArea();
     @FXML private Text emailResponse = new Text();
+    //Resizing
+    @FXML private VBox vbox = new VBox();
+    @FXML private AnchorPane prodPane = new AnchorPane();
+
 
     @FXML
-    protected void initialize(){
+    protected void test(){
+        /*Product tab*/
+        //Search bar
+        productSearchBar.setPrefWidth(vbox.getWidth() - 100);
+        productSearchBar.setMinWidth(vbox.getWidth() - 100);
+        //Search Results
+        prodSearchRes.setPrefWidth(vbox.getWidth() - 20);
+        prodSearchRes.setPrefHeight(vbox.getHeight() - 20);
+        prodSearchRes.setMinHeight(vbox.getHeight() - 150);
+        prodSearchRes.setMinWidth(vbox.getWidth() - 20);
+
+        prodPane.setPrefHeight(vbox.getHeight());
+        prodPane.setMinHeight(vbox.getHeight());
+        prodPane.setMaxHeight(vbox.getHeight());
+
+        if(vbox.getWidth() > 640 && vbox.getWidth() < 1000) {
+            Font font = Font.font("Monospaced", 16);
+            prodSearchRes.setFont(font);
+        }
+        else if(vbox.getWidth() >= 1000){
+            Font font = Font.font("Monospaced", 18);
+            prodSearchRes.setFont(font);
+        }
+        else{
+            Font font = Font.font("Monospaced", 14);
+            prodSearchRes.setFont(font);
+        }
 
     }
-
 
     /**
      * Opens the previous login/register page essentially logging out
