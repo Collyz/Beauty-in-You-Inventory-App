@@ -8,18 +8,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="259.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.AddOrder">
+<VBox prefHeight="276.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.AddOrder">
     <children>
-        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="265.0" prefWidth="295.0">
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="277.0" prefWidth="319.0">
             <children>
-                <Button layoutX="204.0" layoutY="215.0" mnemonicParsing="false" onAction="#onAdd" text="Add">
+                <Button layoutX="204.0" layoutY="207.0" mnemonicParsing="false" onAction="#onAdd" text="Add">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
                 </Button>
-                <TextField fx:id="name" layoutX="95.0" layoutY="68.0" promptText="Date" />
-                <TextField fx:id="category" layoutX="95.0" layoutY="98.0" promptText="Customer Name" />
-                <TextField fx:id="price" layoutX="95.0" layoutY="128.0" promptText="Product" />
+                <TextField fx:id="date" layoutX="95.0" layoutY="68.0" promptText="Date" />
+                <TextField fx:id="customerName" layoutX="95.0" layoutY="98.0" promptText="Customer Name" />
+                <TextField fx:id="product" layoutX="95.0" layoutY="128.0" promptText="Product" />
                 <TextField fx:id="quantity" layoutX="95.0" layoutY="158.0" promptText="Quantity" />
                 <Text layoutX="14.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Order">
                     <font>
@@ -47,12 +47,12 @@
                     </font>
                 </Text>
                 <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="300.0" />
-                <Button layoutX="95.0" layoutY="215.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel">
+                <Button layoutX="95.0" layoutY="207.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
                 </Button>
-                <Text fx:id="addProductResponse" layoutX="75.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="188.5367431640625">
+                <Text fx:id="addProductResponse" layoutX="75.0" layoutY="255.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="188.5367431640625">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
