@@ -15,10 +15,6 @@ public class DeleteOrder {
     @FXML private Text customer_ID = new Text();
     @FXML private Text date = new Text();
     @FXML private Text product_ID = new Text();
-    @FXML private Text completed = new Text();
-
-    @FXML
-    protected void initialize(){}
 
     @FXML
     protected void setID(int ID){
@@ -46,21 +42,14 @@ public class DeleteOrder {
     }
 
     @FXML
-    protected void setCompleted(String co){
-        completed.setText(co);
-    }
-
-    @FXML
     protected void onDelete(){
-        String execute1 = "DELETE FROM `inventorydatabase`.`Order` WHERE Order_ID = " + id;
-        String execute2 = "DELETE FROM `inventorydatabase`.`Order_Line` WHERE Order_ID = " + id;
-        String execute3 = "DELETE FROM `inventorydatabase`.`Order_Completed` WHERE Order_ID = " + id;
+        String execute1 = "DELETE FROM projectprototype.order WHERE Order_ID = " + id;
+        String execute2 = "DELETE FROM projectprototype.orderline WHERE Order_ID = " + id;
         DatabaseConnection connection = setConnection();
         try{
             Statement statement = connection.databaseLink.createStatement();
             statement.executeUpdate(execute1);
             statement.executeUpdate(execute2);
-            statement.executeUpdate(execute3);
             Stage stage = (Stage) order_ID.getScene().getWindow();
             stage.close();
         }catch(SQLException e){

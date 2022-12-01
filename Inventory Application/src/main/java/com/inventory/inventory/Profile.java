@@ -766,7 +766,7 @@ public class Profile {
     protected void deleteOrder(){
         if(!orderSearchBar.getText().isBlank()) {
             Connection connection = setConnection();
-            String query = "SELECT Order_ID FROM `inventorydatabase`.`Order` WHERE Order_ID = '" + orderSearchBar.getText() + "'";
+            String query = "SELECT Order_ID FROM `projectprototype`.`Order` WHERE Order_ID = " + orderSearchBar.getText();
             try {
                 String compare = "";
                 Statement statement = connection.createStatement();
@@ -775,7 +775,7 @@ public class Profile {
                     compare = result.getString(1);
                 }
                 if (compare.equals(orderSearchBar.getText())) {
-                    String query2 = "SELECT Order_ID, Customer_ID, Date from `inventorydatabase`.`Order` WHERE Order_ID = '" + compare + "'";
+                    String query2 = "SELECT Order_ID, Customer_ID, Order_Date from `projectprototype`.`Order` WHERE Order_ID = '" + compare + "'";
                     ResultSet result2 = statement.executeQuery(query2);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-order.fxml"));
                     Parent p = loader.load();
@@ -785,10 +785,9 @@ public class Profile {
                     editWindow.initModality(Modality.APPLICATION_MODAL);
                     DeleteOrder controller = loader.getController();
                     while(result2.next()){
-                        controller.setID(result2.getInt(1));
+                        controller.setOrderID(result2.getString(1));
                         controller.setCustomerID(result2.getString(2));
                         controller.setDate(result2.getString(3));
-                        controller.setProductID(result2.getString(5));
                     }
                     editWindow.show();
                     orderQueryResponse.setText("SUCCESS!");

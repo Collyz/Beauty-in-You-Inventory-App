@@ -16,42 +16,32 @@
                         <Font name="Verdana" size="32.0" />
                     </font>
                 </Text>
-                <Text layoutX="18.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
+                <Text layoutX="18.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order ID:">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
                 </Text>
-                <Text layoutX="18.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Num:">
+                <Text layoutX="18.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer ID:">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
                 </Text>
-                <Text layoutX="18.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:">
+                <Text layoutX="18.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date:">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
                 </Text>
-                <Text layoutX="18.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address:">
+                <Text fx:id="order_ID" layoutX="109.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="blank">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
                 </Text>
-                <Text fx:id="name" layoutX="101.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="blank">
+                <Text fx:id="customer_ID" layoutX="109.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="blank">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
                 </Text>
-                <Text fx:id="phone" layoutX="101.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="blank">
-                    <font>
-                        <Font name="Verdana" size="12.0" />
-                    </font>
-                </Text>
-                <Text fx:id="email" layoutX="101.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="blank">
-                    <font>
-                        <Font name="Verdana" size="12.0" />
-                    </font>
-                </Text>
-                <Text fx:id="address" layoutX="101.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="blank">
+                <Text fx:id="date" layoutX="109.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="blank">
                     <font>
                         <Font name="Verdana" size="12.0" />
                     </font>
