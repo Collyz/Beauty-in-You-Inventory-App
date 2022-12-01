@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.inventory.inventory.AddOrder"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox prefHeight="259.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.AddOrder">
+    <children>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="265.0" prefWidth="295.0">
+            <children>
+                <Button layoutX="204.0" layoutY="215.0" mnemonicParsing="false" onAction="#onAdd" text="Add">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Button>
+                <TextField fx:id="name" layoutX="95.0" layoutY="68.0" promptText="Date" />
+                <TextField fx:id="category" layoutX="95.0" layoutY="98.0" promptText="Customer Name" />
+                <TextField fx:id="price" layoutX="95.0" layoutY="128.0" promptText="Product" />
+                <TextField fx:id="quantity" layoutX="95.0" layoutY="158.0" promptText="Quantity" />
+                <Text layoutX="14.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Order">
+                    <font>
+                        <Font name="Verdana" size="32.0" />
+                    </font>
+                </Text>
+                <Text layoutX="14.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date:">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Text>
+                <Text layoutX="14.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cust. Name:">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Text>
+                <Text layoutX="14.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product:">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Text>
+                <Text layoutX="14.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity:">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Text>
+                <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="300.0" />
+                <Button layoutX="95.0" layoutY="215.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Button>
+                <Text fx:id="addProductResponse" layoutX="75.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="188.5367431640625">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Text>
+                <Text fx:id="asterisk1" fill="RED" layoutX="85.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                <Text fx:id="asterisk2" fill="RED" layoutX="85.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                <Text fx:id="asterisk3" fill="RED" layoutX="85.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+                <Text fx:id="asterisk4" fill="RED" layoutX="85.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="7.20001220703125" />
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
