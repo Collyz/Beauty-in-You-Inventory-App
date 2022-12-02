@@ -69,6 +69,7 @@ public class Profile implements Initializable{
     @FXML private Button oRefresh;
     @FXML private Button clearEmail;
     @FXML private Button sendEmail;
+    @FXML private Button helpButton;
 
     @FXML private TableView<LowStockModel> lowQuantTable;
     @FXML private TableColumn<LowStockModel, Integer> columnID;
@@ -136,6 +137,8 @@ public class Profile implements Initializable{
         orderSearchBar.setMinWidth(vbox.getWidth() - 100);
         //Moving refresh button with searchbar
         oRefresh.setLayoutX(customerSearchBar.getWidth() + 15);
+        //Moving help button with searchbar
+        helpButton.setLayoutX(oRefresh.getLayoutX() - (helpButton.getWidth() + 5));
         //Search Results resize
         orderSearchRes.setMinHeight(vbox.getHeight() - 200);
         orderSearchRes.setMinWidth(vbox.getWidth() - 40);
@@ -146,6 +149,8 @@ public class Profile implements Initializable{
             prodSearchRes.setFont(font);
             custSearchRes.setFont(font);
             orderSearchRes.setFont(font);
+            /*Profile tab*/
+            lowQuantTable.setMinWidth(409);
             /*Email tab*/
             email.setMinWidth(350);
             subject.setMinWidth(350);
@@ -153,13 +158,14 @@ public class Profile implements Initializable{
             message.setMinHeight(450);
             clearEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
             sendEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
-            lowQuantTable.setMinWidth(409);
         }
         else if(vbox.getWidth() >= 1000){
             Font font = Font.font("Monospaced", 18);
             prodSearchRes.setFont(font);
             custSearchRes.setFont(font);
             orderSearchRes.setFont(font);
+            /*Profile tab*/
+            lowQuantTable.setMinWidth(509);
             /*Email tab*/
             email.setMinWidth(450);
             subject.setMinWidth(450);
@@ -167,7 +173,7 @@ public class Profile implements Initializable{
             message.setMinHeight(550);
             clearEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
             sendEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
-            lowQuantTable.setMinWidth(509);
+
 
         }
         else{
