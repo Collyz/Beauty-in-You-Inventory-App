@@ -1032,6 +1032,52 @@ public class Profile implements Initializable{
         orderQueryResponse.setText("");
         displayAllOrders();
     }
+    
+    
+    @FXML
+    public void editOrder() {
+        if(!orderSearchBar.getText().isBlank()) {
+            Connection connection = setConnection();
+            String query = "SELECT Order_ID FROM Order WHERE Order_ID = '" + orderSearchBar.getText() + "'";
+            try {
+                String compare = "";
+                Statement statement = connection.createStatement();
+                ResultSet result = statement.executeQuery(query);
+                while (result.next()) {
+                    compare = result.getString(1);
+                }
+                if (compare.equals(orderSearchBar.getText())) {
+                    String query2 = "SELECT Order_ID, Order_Date, Customer_ID FROM Order WHERE Order_ID = '" + compare + "'";
+                    ResultSet result2 = statement.executeQuery(query2);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-order.fxml"));
+                    Parent p = loader.load();
+                    Stage editWindow = new Stage();
+                    editWindow.setTitle("Edit");
+                    editWindow.setScene(new Scene(p));
+                    editWindow.initModality(Modality.APPLICATION_MODAL);
+                    ModifyCustomer controller = loader.getController();
+                    while(result2.next()){
+                        controller.setID(result2.getInt(1));
+                        //controller.setDate(result2.getString(2));
+                        //controller.setProductID(result2.getString(3));
+                        //controller.setCustomerID(result2.getString(4));
+                        //controller.setQuantity(result2.getString(5));
+                    }
+                    editWindow.show();
+                    orderQueryResponse.setText("SUCCESS!");
+                }
+                else{
+                    orderQueryResponse.setText("No matches found, try again");
+                }
+
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else{
+            orderQueryResponse.setText("Input the ID of the order you want to edit.");
+        }
+    }
 
 
 
