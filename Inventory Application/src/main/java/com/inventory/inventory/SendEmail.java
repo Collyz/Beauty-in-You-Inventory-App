@@ -40,7 +40,7 @@ public class SendEmail {
             message.setText(subjectText);
             return message;
         } catch (Exception ex) {
-            System.out.println("Well I hope this doesn't break shit");
+            System.out.println("Error!");
         }
         return null;
     }

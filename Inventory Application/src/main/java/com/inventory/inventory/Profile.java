@@ -1,93 +1,186 @@
 package com.inventory.inventory;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Profile {
+public class Profile implements Initializable{
 
     //For Profile Tab
-    @FXML private Text usernameInfo = new Text();
-    @FXML private Text passwordInfo = new Text();
+    @FXML private Text usernameInfo;
+    @FXML private Text passwordInfo;
     //For Product Tab
-    @FXML private TextField productSearchBar = new TextField();
-    @FXML private TextField orderSearchBar = new TextField();
-    @FXML private CheckMenuItem catBrushes = new CheckMenuItem();
-    @FXML private CheckMenuItem catMakeUp = new CheckMenuItem();
-    @FXML private CheckMenuItem catSkin = new CheckMenuItem();
-    @FXML private CheckMenuItem catFace = new CheckMenuItem();
-    @FXML private CheckMenuItem catLips = new CheckMenuItem();
-    @FXML private CheckMenuItem catEyes = new CheckMenuItem();
-    @FXML private CheckMenuItem quantLeast = new CheckMenuItem();
-    @FXML private CheckMenuItem quantMiddle = new CheckMenuItem();
-    @FXML private CheckMenuItem quantGreatest = new CheckMenuItem();
-    @FXML private CheckMenuItem shelfNA = new CheckMenuItem();
-    @FXML private CheckMenuItem shelf6M = new CheckMenuItem();
-    @FXML private CheckMenuItem shelf12M = new CheckMenuItem();
-    @FXML private CheckMenuItem shelf18M = new CheckMenuItem();
-    @FXML private CheckMenuItem shelf24M = new CheckMenuItem();
-    @FXML private TextArea prodSearchRes= new TextArea();
-    @FXML private TextArea orderSearchRes = new TextArea();
-    @FXML private Text productQueryResponse = new Text();
-    @FXML private Text orderQueryResponse = new Text();
+    @FXML private TextField productSearchBar;
+    @FXML private TextField orderSearchBar;
+    @FXML private CheckMenuItem catBrushes;
+    @FXML private CheckMenuItem catMakeUp;
+    @FXML private CheckMenuItem catSkin;
+    @FXML private CheckMenuItem catFace;
+    @FXML private CheckMenuItem catLips;
+    @FXML private CheckMenuItem catEyes;
+    @FXML private CheckMenuItem quantLeast;
+    @FXML private CheckMenuItem quantMiddle;
+    @FXML private CheckMenuItem quantGreatest;
+    @FXML private CheckMenuItem shelfNA;
+    @FXML private CheckMenuItem shelf6M;
+    @FXML private CheckMenuItem shelf12M;
+    @FXML private CheckMenuItem shelf18M;
+    @FXML private CheckMenuItem shelf24M;
+    @FXML private TextArea prodSearchRes;
+    @FXML private TextArea orderSearchRes;
+    @FXML private Text productQueryResponse;
+    @FXML private Text orderQueryResponse;
 
     //For Customer Tab
-    @FXML private TextField customerSearchBar = new TextField();
-    @FXML private TextArea custSearchRes = new TextArea();
-    @FXML private Text customerQueryResponse = new Text();
-    @FXML private CheckMenuItem nameForward = new CheckMenuItem();
-    @FXML private CheckMenuItem nameBackward = new CheckMenuItem();
-    @FXML private CheckMenuItem addressForward = new CheckMenuItem();
-    @FXML private CheckMenuItem addressBackward = new CheckMenuItem();
+    @FXML private TextField customerSearchBar;
+    @FXML private TextArea custSearchRes;
+    @FXML private Text customerQueryResponse;
+    @FXML private CheckMenuItem nameForward;
+    @FXML private CheckMenuItem nameBackward;
+    @FXML private CheckMenuItem addressForward;
+    @FXML private CheckMenuItem addressBackward;
     //Email tab
-    @FXML private TextField email = new TextField();
-    @FXML private TextField subject = new TextField();
-    @FXML private TextArea message = new TextArea();
-    @FXML private Text emailResponse = new Text();
+    @FXML private TextField email;
+    @FXML private TextField subject;
+    @FXML private TextArea message;
+    @FXML private Text emailResponse;
     //Resizing
-    @FXML private VBox vbox = new VBox();
-    @FXML private AnchorPane prodPane = new AnchorPane();
+    @FXML private VBox vbox;
+    @FXML private TabPane tabPane;
+    @FXML private ToolBar toolBar;
+    @FXML private Button pRefresh;
+    @FXML private Button cRefresh;
+    @FXML private Button oRefresh;
+    @FXML private Button clearEmail;
+    @FXML private Button sendEmail;
 
+    @FXML private TableView<LowStockModel> lowQuantTable;
+    @FXML private TableColumn<LowStockModel, Integer> columnID;
+    @FXML private TableColumn<LowStockModel, String> columnProd;
+    @FXML private TableColumn<LowStockModel, Integer> columnQuant;
+    ObservableList<LowStockModel> lowStockModelList = FXCollections.observableArrayList();
 
+    @Override
+    public void initialize(URL url, ResourceBundle resource){
+        Connection connection = setConnection();
+        String lowQuantityQuery = "SELECT PRODUCT_ID, PRODUCT_NAME, QUANTITY FROM Product WHERE QUANTITY <= 3";
+        try{
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(lowQuantityQuery);
+
+            while(resultSet.next()){
+
+                Integer queryID = resultSet.getInt("PRODUCT_ID");
+                String queryName = resultSet.getString("PRODUCT_NAME");
+                Integer queryQuantity = resultSet.getInt("QUANTITY");
+
+                //Fills in the observable list
+                lowStockModelList.add(new LowStockModel(queryID, queryName, queryQuantity));
+            }
+
+            columnID.setCellValueFactory(new PropertyValueFactory<>("prodID"));
+            columnProd.setCellValueFactory(new PropertyValueFactory<>("prodName"));
+            columnQuant.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+            lowQuantTable.setItems(lowStockModelList);
+        }catch(SQLException e){
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, e);
+            e.printStackTrace();
+        }
+
+    }
     @FXML
-    protected void test(){
+    protected void resize(){
+        //Tab Pane for all tabs resize
+        tabPane.setMinHeight(vbox.getHeight());
+
+        /*Profile tab*/
+        toolBar.setLayoutY(vbox.getHeight() - (toolBar.getHeight()*2) - 14);
+        toolBar.setMinWidth(vbox.getWidth());
         /*Product tab*/
-        //Search bar
-        productSearchBar.setPrefWidth(vbox.getWidth() - 100);
+        //Product Searchbar resize
         productSearchBar.setMinWidth(vbox.getWidth() - 100);
-        //Search Results
-        prodSearchRes.setPrefWidth(vbox.getWidth() - 20);
-        prodSearchRes.setPrefHeight(vbox.getHeight() - 20);
-        prodSearchRes.setMinHeight(vbox.getHeight() - 150);
-        prodSearchRes.setMinWidth(vbox.getWidth() - 20);
+        //Moving refresh button with searchbar
+        pRefresh.setLayoutX(productSearchBar.getWidth() + 15);
+        //Search Results resize
+        prodSearchRes.setMinHeight(vbox.getHeight() - 200);
+        prodSearchRes.setMinWidth(vbox.getWidth() - 40);
 
-        prodPane.setPrefHeight(vbox.getHeight());
-        prodPane.setMinHeight(vbox.getHeight());
-        prodPane.setMaxHeight(vbox.getHeight());
+        /*Customer tab*/
+        //Product Searchbar resize
+        customerSearchBar.setMinWidth(vbox.getWidth() - 100);
+        //Moving refresh button with searchbar
+        cRefresh.setLayoutX(customerSearchBar.getWidth() + 15);
+        //Search Results resize
+        custSearchRes.setMinHeight(vbox.getHeight() - 200);
+        custSearchRes.setMinWidth(vbox.getWidth() - 40);
 
+        /*Order tab*/
+        //Product Searchbar resize
+        orderSearchBar.setMinWidth(vbox.getWidth() - 100);
+        //Moving refresh button with searchbar
+        oRefresh.setLayoutX(customerSearchBar.getWidth() + 15);
+        //Search Results resize
+        orderSearchRes.setMinHeight(vbox.getHeight() - 200);
+        orderSearchRes.setMinWidth(vbox.getWidth() - 40);
+
+        //Changes the fonts of all search results based on the size of the vbox
         if(vbox.getWidth() > 640 && vbox.getWidth() < 1000) {
             Font font = Font.font("Monospaced", 16);
             prodSearchRes.setFont(font);
+            custSearchRes.setFont(font);
+            orderSearchRes.setFont(font);
+            /*Email tab*/
+            email.setMinWidth(350);
+            subject.setMinWidth(350);
+            message.setMinWidth(350);
+            message.setMinHeight(450);
+            clearEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
+            sendEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
+            lowQuantTable.setMinWidth(409);
         }
         else if(vbox.getWidth() >= 1000){
             Font font = Font.font("Monospaced", 18);
             prodSearchRes.setFont(font);
+            custSearchRes.setFont(font);
+            orderSearchRes.setFont(font);
+            /*Email tab*/
+            email.setMinWidth(450);
+            subject.setMinWidth(450);
+            message.setMinWidth(450);
+            message.setMinHeight(550);
+            clearEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
+            sendEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
+            lowQuantTable.setMinWidth(509);
+
         }
         else{
             Font font = Font.font("Monospaced", 14);
             prodSearchRes.setFont(font);
+            custSearchRes.setFont(font);
+            orderSearchRes.setFont(font);
+            email.setMinWidth(258);
+            subject.setMinWidth(258);
+            message.setMinWidth(258);
+            message.setMinHeight(162);
+            clearEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
+            sendEmail.setLayoutX(email.getLayoutX() + email.getWidth() + 36);
         }
 
     }

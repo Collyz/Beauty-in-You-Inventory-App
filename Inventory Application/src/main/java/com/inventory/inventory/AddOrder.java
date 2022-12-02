@@ -58,7 +58,6 @@ public class AddOrder {
             ResultSet result2 = statement2.getResultSet();
             while(result2.next()){
                 prodID = result2.getInt(1);
-                System.out.println(prodID);
             }
         }catch(SQLException e){
             e.printStackTrace();
