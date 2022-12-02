@@ -513,6 +513,23 @@ public class Profile implements Initializable{
             throw new RuntimeException(e);
         }
     }
+    
+    
+    @FXML
+    protected void appHelpScreen(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("app-help-screen.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Help - About BIY Inventory App");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            editWindow.show();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+    
 
     @FXML
     protected void editProduct(){
