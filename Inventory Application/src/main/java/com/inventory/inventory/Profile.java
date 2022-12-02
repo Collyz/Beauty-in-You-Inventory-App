@@ -1089,7 +1089,6 @@ public class Profile implements Initializable{
         if (!orderSearchBar.getText().equals("") || !orderSearchBar.getText().isBlank() || !orderSearchBar.getText().isEmpty()) {
             Connection connection = setConnection();
             String queryOrder = "SELECT Order_ID FROM projectprototype.order WHERE Order_ID = '" + orderSearchBar.getText() + "'";
-
             try {
                 String compare = "";
                 Statement statement = connection.createStatement();
