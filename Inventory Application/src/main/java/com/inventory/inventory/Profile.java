@@ -1053,8 +1053,8 @@ public class Profile implements Initializable{
     protected void editOrder() {
         if (!orderSearchBar.getText().equals("")) {
             Connection connection = setConnection();
-            String queryOrder = "SELECT Order_ID FROM inventorydatabase.order WHERE Order_ID = '" + orderSearchBar.getText() + "'";
-            String queryOrderline = "SELECT Order_ID FROM inventorydatabase.orderline WHERE Order_ID = '" + orderSearchBar.getText() + "'";
+            String queryOrder = "SELECT Order_ID FROM projectprototype.order WHERE Order_ID = '" + orderSearchBar.getText() + "'";
+            String queryOrderline = "SELECT Order_ID FROM projectprototype.orderline WHERE Order_ID = '" + orderSearchBar.getText() + "'";
             try {
                 String compare = "";
                 Statement statement = connection.createStatement();
@@ -1063,7 +1063,7 @@ public class Profile implements Initializable{
                     compare = result.getString(1);
                 }
                 if (compare.equals(orderSearchBar.getText())) {
-                    String query2 = "SELECT Order_ID, Order_Date, Customer_ID from inventorydatabase.order WHERE Order_ID = '" + compare + "'";
+                    String query2 = "SELECT Order_ID, Order_Date, Customer_ID from projectprototype.order WHERE Order_ID = '" + compare + "'";
                     ResultSet result2 = statement.executeQuery(query2);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-order.fxml"));
                     Parent p = loader.load();
@@ -1095,7 +1095,7 @@ public class Profile implements Initializable{
                     compare = result.getString(1);
                 }
                 if (compare.equals(orderSearchBar.getText())) {
-                    String query2 = "SELECT Order_ID, Product_ID, Quantity from inventorydatabase.orderline WHERE Order_ID = '" + compare + "'";
+                    String query2 = "SELECT Order_ID, Product_ID, Quantity from projectprototype.orderline WHERE Order_ID = '" + compare + "'";
                     ResultSet result2 = statement.executeQuery(query2);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-order.fxml"));
                     Parent p = loader.load();
