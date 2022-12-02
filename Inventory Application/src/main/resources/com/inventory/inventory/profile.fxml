@@ -28,7 +28,7 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About BIY Inventory App" />
+                        <MenuItem mnemonicParsing="false" onAction="#appHelpScreen" text="About BIY Inventory App" />
                     </items>
                 </Menu>
             </menus>
