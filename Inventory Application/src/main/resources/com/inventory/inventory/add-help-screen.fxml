@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="534.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.OrderHelp">
+    <children>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="536.0" prefWidth="635.0">
+            <children>
+                <Text id="helpLabel" fx:id="helpLabel" layoutX="14.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Help - About BIY Inventory App">
+                    <font>
+                        <Font name="Verdana" size="26.0" />
+                    </font>
+                </Text>
+                <Text layoutX="13.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to The Beauty In You Inventory Application!">
+                    <font>
+                        <Font name="Verdana Bold" size="15.0" />
+                    </font>
+                </Text>
+                <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="634.0" />
+                <Button id="exitButton" fx:id="exitButton" layoutX="297.0" layoutY="498.0" mnemonicParsing="false" onAction="#onExit" text="Exit">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Button>
+                <Text fx:id="searchOrderHelp" layoutX="13.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This app assists with adding, modifying, and deleting products, customers, and orders within a stored database/inventory. Other features, such as an emailing and notification system, are included for business maintenance." wrappingWidth="613.8700866699219">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Text>
+                <Rectangle arcWidth="5.0" fill="#50004c" height="3.0" layoutY="53.0" stroke="TRANSPARENT" strokeType="INSIDE" width="634.0" />
+                <Text layoutX="52.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Using Add">
+                    <font>
+                        <Font name="Verdana Bold" size="15.0" />
+                    </font>
+                </Text>
+                <Text fx:id="addOrderHelp" layoutX="13.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The 'Add' functionality allows for the creation of new product, customer, and order entries into the database. To add a specific entry, navigate to the desired tab ('Products,' 'Customers,' or 'Bulk Orders'). From there, select the 'Add' Button (underneath the search bar in each tab). Follow the prompts provided after selection to add a new entry into the database." wrappingWidth="188.15305328369146">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Text>
+                <Text layoutX="256.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Using Modify">
+                    <font>
+                        <Font name="Verdana Bold" size="15.0" />
+                    </font>
+                </Text>
+                <Text fx:id="editOrderHelp" layoutX="223.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The 'Modify/Edit' functionality allows for the modification of a specific database entry. To modify a specific entry, search for the desired entry using the search bars provided within each tab, click the 'Edit' button, then follow the prompts to modify the desired entry." wrappingWidth="188.15305328369146">
+                    <font>
+                        <Font name="Verdana" size="12.0" />
+                    </font>
+                </Text>
+            <Text layoutX="468.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Using Delete">
+               <font>
+                  <Font name="Verdana Bold" size="15.0" />
+               </font>
+            </Text>
+            <Text fx:id="searchOrderHelp1" layoutX="13.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Created by: Mohammed Mowla, Mia Watts, Brendan Lee, Julie Au, Ashton Okoorian" wrappingWidth="536.5367736816406">
+               <font>
+                  <Font name="Verdana Italic" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="editOrderHelp1" layoutX="442.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The 'Delete' functionality allows for the deletion of a specific entry in the database. Navigate to the desired tab, search for an entry to delete, then select the 'Delete' button. Follow the prompts thereafter to delete the entry displayed in the window." wrappingWidth="188.1530532836914">
+               <font>
+                  <Font name="Verdana" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="213.0" layoutY="402.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emails and Notifications">
+               <font>
+                  <Font name="Verdana Bold" size="15.0" />
+               </font>
+            </Text>
+            <Text fx:id="addOrderHelp1" layoutX="11.0" layoutY="471.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notifications: After logging in, a profile page will appear. On the right side of the screen, a list of all products that are low in stock will be displayed." wrappingWidth="613.8700866699219">
+               <font>
+                  <Font name="Verdana" size="12.0" />
+               </font>
+            </Text>
+            <Rectangle arcWidth="5.0" fill="#50004c" height="3.0" layoutY="148.0" stroke="TRANSPARENT" strokeType="INSIDE" width="634.0" />
+            <Rectangle arcWidth="5.0" fill="#50004c" height="3.0" layoutY="378.0" stroke="TRANSPARENT" strokeType="INSIDE" width="634.0" />
+            <Text fx:id="addOrderHelp11" layoutX="11.0" layoutY="421.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emails: Navigate to the 'Emails' tab, then fill in the receiver's email address, the subject of the email, and the message that will be sent. Click the 'Send' button once finished, and an email will be sent to the recipient from the provided business email." wrappingWidth="613.8700866699219">
+               <font>
+                  <Font name="Verdana" size="12.0" />
+               </font>
+            </Text>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
