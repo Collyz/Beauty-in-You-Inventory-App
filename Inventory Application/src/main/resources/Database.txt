@@ -1,0 +1,135 @@
+V2 of the Database is as follows:
+
+CREATE TABLE `biyinventorydatabase`.`admin_accounts` (
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(60) NULL);
+
+CREATE TABLE `biyinventorydatabase`.`customer` (
+  `Customer_ID` INT NOT NULL,
+  `Customer_Name` VARCHAR(45) NOT NULL,
+  `Address` VARCHAR(60) NULL,
+  `City` VARCHAR(45) NULL,
+  `State` VARCHAR(45) NULL,
+  `Postal_Code` INT NULL,
+  `Phone_Number` VARCHAR(45) NULL,
+  PRIMARY KEY (`Customer_ID`));
+
+CREATE TABLE `biyinventorydatabase`.`products` (
+  `Product_ID` INT NOT NULL,
+  `Price` INT NULL,
+  `Quantity` INT NULL,
+  `Shelf_Life_Months` INT NULL,
+  `Description` VARCHAR(60) NULL,
+  PRIMARY KEY (`Product_ID`));
+
+CREATE TABLE `biyinventorydatabase`.`categories` (
+  `Category_Name` VARCHAR(45) NOT NULL,
+  `Product_ID` INT NULL,
+  PRIMARY KEY (`Category_Name`),
+  INDEX `Product_ID_idx` (`Product_ID` ASC) VISIBLE,
+  CONSTRAINT `Product_ID`
+    FOREIGN KEY (`Product_ID`)
+    REFERENCES `biyinventorydatabase`.`products` (`Product_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE);
+
+CREATE TABLE `biyinventorydatabase`.`order` (
+  `Order_ID` INT NOT NULL,
+  `Customer_ID` INT NOT NULL,
+  `Date` VARCHAR(45) NULL,
+  PRIMARY KEY (`Order_ID`),
+  INDEX `Customer_ID_idx` (`Customer_ID` ASC) VISIBLE,
+  CONSTRAINT `Customer_ID`
+    FOREIGN KEY (`Customer_ID`)
+    REFERENCES `biyinventorydatabase`.`customer` (`Customer_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE);
+
+CREATE TABLE `biyinventorydatabase`.`orderline` (
+  `Order_ID` INT NOT NULL,
+  `Product_ID` INT NOT NULL,
+  `Quantity` INT NOT NULL,
+  INDEX `Order_ID_idx` (`Order_ID` ASC) VISIBLE,
+  INDEX `Product_ID_idx` (`Product_ID` ASC) VISIBLE,
+  CONSTRAINT `Order_ID_FK`
+    FOREIGN KEY (`Order_ID`)
+    REFERENCES `biyinventorydatabase`.`order` (`Order_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+  CONSTRAINT `Product_ID_FK`
+    FOREIGN KEY (`Product_ID`)
+    REFERENCES `biyinventorydatabase`.`products` (`Product_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE);
+
+CREATE TABLE `biyinventorydatabase`.`ordercompleted` (
+  `Order_ID` INT NOT NULL,
+  `Completed` TINYINT NULL,
+  INDEX `Order_ID_FK2_idx` (`Order_ID` ASC) VISIBLE,
+  CONSTRAINT `Order_ID_FK2`
+    FOREIGN KEY (`Order_ID`)
+    REFERENCES `biyinventorydatabase`.`order` (`Order_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE);
+
+V1 of the database is as follows:
+
+CREATE TABLE projectprototype.admin_accounts (
+  Username VARCHAR(45) NOT NULL,
+  Password VARCHAR(45) NOT NULL,
+  Email VARCHAR(45) NULL,
+  PRIMARY KEY (Username),
+  UNIQUE INDEX Username_UNIQUE (Username ASC) VISIBLE);
+
+CREATE TABLE projectprototype.customer (
+  Customer_ID INT NOT NULL,
+  Customer_Name VARCHAR(45) NOT NULL,
+  Customer_Address VARCHAR(45) NULL,
+  City VARCHAR(45) NULL,
+  State VARCHAR(45) NULL,
+  Postal_Code INT NULL,
+  Phone_Number VARCHAR(45) NULL,
+  PRIMARY KEY (Customer_ID),
+  UNIQUE INDEX Customer_ID_UNIQUE (Customer_ID ASC) VISIBLE);
+
+CREATE TABLE projectprototype.order (
+  Order_ID INT NOT NULL,
+  Order_Date VARCHAR(30) NOT NULL,
+  Customer_ID INT NOT NULL,
+  Bulk TINYINT NULL,
+  PRIMARY KEY (Order_ID),
+  UNIQUE INDEX Order_ID_UNIQUE (Order_ID ASC) VISIBLE,
+  INDEX Customer_ID_idx (Customer_ID ASC) VISIBLE,
+  CONSTRAINT Customer_ID
+    FOREIGN KEY (Customer_ID)
+    REFERENCES projectprototype.customer (Customer_ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+CREATE TABLE projectprototype.product (
+  Product_ID INT NOT NULL,
+  Product_Description VARCHAR(50) NOT NULL,
+  Category VARCHAR(45) NOT NULL,
+  Price FLOAT NOT NULL,
+  Quantity INT NOT NULL,
+  Shelf_Life_Months INT NULL,
+  PRIMARY KEY (Product_ID),
+  UNIQUE INDEX Product_ID_UNIQUE (Product_ID ASC) VISIBLE);
+
+CREATE TABLE projectprototype.orderline (
+  Order_ID INT NOT NULL,
+  Product_ID INT NOT NULL,
+  Quantity INT NOT NULL,
+  INDEX Order_ID_idx (Order_ID ASC) VISIBLE,
+  INDEX Product_ID_idx (Product_ID ASC) VISIBLE,
+  CONSTRAINT Order_ID
+    FOREIGN KEY (Order_ID)
+    REFERENCES projectprototype.order (Order_ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT Product_ID
+    FOREIGN KEY (Product_ID)
+    REFERENCES projectprototype.product (Product_ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
