@@ -27,7 +27,7 @@ public class AddOrder {
         Connection connection = setConnection();
         //Query to get the ID of the last item to increment the ID number when adding a new number
         String getIDS = "SELECT Order_ID FROM projectprototype.Order ORDER BY Order_ID DESC LIMIT 1";
-        int id = 0;
+        int id = 1;
         //Getting the id
         try{
             Statement statement = connection.createStatement();

@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -249,7 +248,7 @@
             </Tab>
             <Tab fx:id="bulkOrdersTab" text="Bulk Orders">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" onMouseMoved="#displayAllCustomers" prefHeight="180.0" prefWidth="200.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" onMouseMoved="#displayAllOrders" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <TextField id="orderSearchBar" fx:id="orderSearchBar" layoutX="73.0" layoutY="31.0" onAction="#onCustomerSearch" prefHeight="25.0" prefWidth="547.0" promptText="Ex: 1" />
                         <Text id="searchOrderLabel" layoutX="14.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
@@ -257,20 +256,6 @@
                               <Font name="Verdana" size="14.0" />
                            </font>
                         </Text>
-                        <SplitMenuButton id="orderFilter" fx:id="orderFilter" layoutX="15.0" layoutY="63.0" mnemonicParsing="false" text="Filters">
-                           <font>
-                              <Font name="Verdana" size="12.0" />
-                           </font>
-                           <items>
-                              <Menu mnemonicParsing="false" text="Orders">
-                                 <items>
-                                     <CheckMenuItem fx:id="allOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="All Orders" />
-                                     <CheckMenuItem fx:id="completedOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Completed Orders" />
-                                     <CheckMenuItem fx:id="inProgressOrders" mnemonicParsing="false" onAction="#customerAddressFilter" text="Orders In-Progress" />
-                                 </items>
-                              </Menu>
-                           </items>
-                        </SplitMenuButton>
                         <Text id="orderLabel" layoutX="15.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Information">
                            <font>
                               <Font name="Verdana" size="14.0" />
@@ -281,12 +266,12 @@
                               <Font name="Monospaced Regular" size="14.0" />
                            </font>
                         </TextArea>
-                        <Button id="editOrderButton" fx:id="editOrderButton" layoutX="100.0" layoutY="63.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />
+                        <Button id="editOrderButton" fx:id="editOrderButton" layoutX="15.0" layoutY="63.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />
 
-                         <Button id="deleteOrderButton" fx:id="deleteOrderButton" layoutX="145.0" layoutY="63.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete" />
+                         <Button id="deleteOrderButton" fx:id="deleteOrderButton" layoutX="60.0" layoutY="63.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete" />
 
-                         <Button id="addOrderButton" fx:id="addOrderButton" layoutX="205.0" layoutY="63.0" mnemonicParsing="false" onAction="#addOrder" onMouseClicked="#addOrder" text="Add an Order" />
-                        <Button id="refreshOrders" fx:id="oRefresh" layoutX="561.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#refreshCustomers" text="Refresh " />
+                         <Button id="addOrderButton" fx:id="addOrderButton" layoutX="120.0" layoutY="63.0" mnemonicParsing="false" onAction="#addOrder" onMouseClicked="#addOrder" text="Add an Order" />
+                        <Button id="refreshOrders" fx:id="oRefresh" layoutX="561.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#refreshOrders" text="Refresh " />
                         <Text fx:id="orderQueryResponse" fill="RED" layoutX="318.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="289.0" />
                         <Button id="helpButton" fx:id="helpButton" layoutX="511.0" layoutY="63.0" mnemonicParsing="false" onMouseClicked="#help" text="Help" />
                         <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1920.0" />

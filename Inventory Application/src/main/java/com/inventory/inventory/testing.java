@@ -1,5 +1,6 @@
 package com.inventory.inventory;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,48 +8,53 @@ import java.sql.Statement;
 
 public class testing {
     public static void main(String[] args) {
-        /*SendEmail test = new SendEmail();
-        try{
-            test.sendMail("m.mowla03151@gmail.com", "Hello", "Testing the email system\nAin't it lovely");
-            System.out.println("It sent");
-        } catch(Exception e){
-            e.printStackTrace();
-        }*/
 
         DatabaseConnection connection = new DatabaseConnection();
         Connection connectDB = connection.getConnection();
-        String search = "SELECT * FROM CUSTOMER";
-        String toReturn = String.format("%s  %s %20s  %18s  %22s", "ID", "Name", "Phone #", "Email", "Address") + "\n";
+        String orderQuery = "SELECT * FROM projectprototype.ORDER";
+        String orderQueryLine = "SELECT Product_ID, Quantity FROM projectprototype.ORDERLINE";
+        String returnOrder = String.format("%s %12s %5s %19s %12s", "Order_ID", "Customer_ID", "Date", "Product_ID", "Quantity") + "\n";
         try{
-            Statement stmt = connectDB.createStatement();
-            ResultSet results = stmt.executeQuery(search);
-            if(results.next()){
+            Statement statement = connectDB.createStatement();
+            ResultSet results = statement.executeQuery(orderQuery);
+            if(results.next()) {
                 do{
-                    int ID = results.getInt(1);
-                    String name = results.getString(2);
-                    String phone = results.getString(3);
-                    String address = results.getString(4);
-                    String email = results.getString(5);
-                    if(phone == null){
-                        phone = "N/A";
-                    }
-                    if(email == null){
-                        email = "N/A";
-                    }
-                    int phonePad = 32 - name.length();
-                    int emailPad = 37 - phone.length();
-                    int addressPad = 39 - phone.length();
-                    String formatting = "%s   %s%" + phonePad + "s%"+ emailPad +"s%"+ addressPad +"s";
-                    String formattedString = String.format(formatting, ID, name, phone , email, address + "\n");
-                    toReturn = toReturn + formattedString;
+                    int order_ID = results.getInt(1);
+                    String date = results.getString(2);
+                    int customer_ID = results.getInt(3);
+
+                    //%2d means integer ID, %s is string category, %padding is the string format of name, %7.2f for price(float)
+                    String formatting = "%s %9s %20s ";
+                    String formattedString = String.format(formatting, order_ID, customer_ID, date);
+                    returnOrder = returnOrder + formattedString;
                 } while(results.next());
             }else{
-
+                System.out.println("Empty");
             }
-            System.out.println(toReturn);
         }catch(SQLException e){
             e.printStackTrace();
         }
+        try{
+            Statement statement = connectDB.createStatement();
+            ResultSet results = statement.executeQuery(orderQueryLine);
+            if(results.next()) {
+                do{
+                    int product_ID = results.getInt(1);
+                    System.out.println(product_ID);
+                    int quantity = results.getInt(2);
+                    System.out.println(quantity);
+
+                    String formatting = "%5s %15s";
+                    String formattedString = String.format(formatting, product_ID, quantity + "\n");
+                    returnOrder = returnOrder + formattedString;
+                } while(results.next());
+            }else{
+                System.out.println("None");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        System.out.println(returnOrder);
         /*String search2 = "eheh";
         String searchQuery = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME = '" + search2 + "'";
         String search = "SELECT * FROM PRODUCT";

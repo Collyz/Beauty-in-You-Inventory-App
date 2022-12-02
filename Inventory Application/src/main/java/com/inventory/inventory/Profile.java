@@ -944,7 +944,7 @@ public class Profile implements Initializable{
             }
         }
         else{
-            productQueryResponse.setText("Input the name of the order you want to edit.");
+            orderQueryResponse.setText("Input the name of the order you want to edit.");
         }
 
     }
@@ -972,9 +972,10 @@ public class Profile implements Initializable{
      * @param results - The result set to use to get information from the database
      * @return String that is displayed as a search result
      */
-    private String orderFormat(ResultSet results){
-        String returnOrder = String.format("%s %15s %12s", "Order_ID", "Customer_ID", "Date ");
-        String returnOrderLine = String.format("%15s %15s", "Product_ID", "Quantity") + "\n";
+    private String orderFormat(ResultSet results, ResultSet results2){
+        String returnOrder = String.format("%s %12s %5s %19s %12s", "Order_ID", "Customer_ID", "Date", "Product_ID", "Quantity") + "\n";
+        ArrayList<String> orderList = new ArrayList<>();
+        ArrayList<String> orderLineList = new ArrayList<>();
         try{
             if(results.next()) {
                 do{
@@ -982,39 +983,33 @@ public class Profile implements Initializable{
                     String date = results.getString(2);
                     int customer_ID = results.getInt(3);
 
-                    int padding = 40 - date.length();
-                    //%2d means integer ID, %s is string category, %paddingS is the string format of name, %7.2f for price(float)
-                    String formatting = "%2s  %" + padding + "s  %2s";
-                    String formattedString = String.format(formatting, order_ID, date, customer_ID);
-                    returnOrder = returnOrder + formattedString;
+                    //%2d means integer ID, %s is string category, %padding is the string format of name, %7.2f for price(float)
+                    String formatting = "%s %9s %20s ";
+                    String formattedString = String.format(formatting, order_ID, customer_ID, date);
+                    orderList.add(formattedString);
                 } while(results.next());
-            }else{
-                orderQueryResponse.setText("No such order exists, try again.");
-                return "";
             }
         }catch(SQLException e){
             e.printStackTrace();
         }
-
         try{
-            if(results.next()) {
+            if(results2.next()) {
                 do{
-                    int product_ID = results.getInt(1);
-                    int quantity = results.getInt(2);
+                    int product_ID = results2.getInt(1);
+                    int quantity = results2.getInt(2);
 
-                    String formatting = "%2s  %2s";
+                    String formatting = "%5s %15s";
                     String formattedString = String.format(formatting, product_ID, quantity + "\n");
-                    returnOrderLine = returnOrderLine + formattedString;
+                    orderLineList.add(formattedString);
                 } while(results.next());
-            }else{
-                productQueryResponse.setText("No such order exists, try again.");
-                return "";
             }
         }catch(SQLException e){
             e.printStackTrace();
         }
-
-        return returnOrder + returnOrderLine;
+        for(int i = 0; i < orderList.size(); i++){
+            returnOrder = returnOrder + orderList.get(i) + orderLineList.get(i);
+        }
+        return returnOrder;
     }
 
 
@@ -1022,22 +1017,24 @@ public class Profile implements Initializable{
     public void displayAllOrders(){
         if(orderSearchRes.getText().isBlank() && orderSearchBar.getText().isBlank()){
             Connection connection = setConnection();
-            String searchOrder = "SELECT * FROM inventorydatabase.ORDER";
-            String searchOrderLine = "SELECT Product_ID, Quantity FROM inventorydatabase.ORDER_LINE";
+            String searchOrder = "SELECT * FROM projectprototype.ORDER";
+            String searchOrderLine = "SELECT Product_ID, Quantity FROM projectprototype.ORDERLINE";
+            ResultSet[] results = new ResultSet[2];
             try{
                 Statement stmt = connection.createStatement();
-                ResultSet results = stmt.executeQuery(searchOrder);
-                orderSearchRes.setText(orderFormat(results));
+                ResultSet resultSet1 = stmt.executeQuery(searchOrder);
+                results[0] = resultSet1;
             }catch(SQLException e){
                 e.printStackTrace();
             }
             try{
                 Statement stmt = connection.createStatement();
-                ResultSet results = stmt.executeQuery(searchOrderLine);
-                orderSearchRes.setText(orderFormat(results));
+                ResultSet resultSet2 = stmt.executeQuery(searchOrderLine);
+                results[1] = resultSet2;
             }catch(SQLException e){
                 e.printStackTrace();
             }
+            orderSearchRes.setText(orderFormat(results[0], results[1]));
         }
     }
 
