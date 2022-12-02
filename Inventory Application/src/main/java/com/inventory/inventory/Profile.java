@@ -1080,6 +1080,35 @@ public class Profile implements Initializable{
     
     
     @FXML
+    protected void onOrderSearch() {
+        orderSearchBar.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                orderSearchRes.clear();
+                Connection connection = setConnection();
+                String search = orderSearchBar.getText();
+                String searchQuery1 = "SELECT * FROM projectprototype.ORDER WHERE ORDER_ID = " + search;
+                String searchQuery2 = "SELECT * FROM projectprototype.ORDERLINE WHERE ORDER_ID = " + search;
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet result = statement.executeQuery(searchQuery1);
+                    orderSearchRes.setText(orderFormat(result));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet result = statement.executeQuery(searchQuery2);
+                    orderSearchRes.setText(orderFormat(result));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+    
+    
+    
+    @FXML
     protected void editOrder() {
         String orderID = "";
         String date = "";
