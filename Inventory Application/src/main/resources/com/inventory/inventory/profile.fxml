@@ -266,7 +266,7 @@
                               <Font name="Monospaced Regular" size="14.0" />
                            </font>
                         </TextArea>
-                        <Button id="editOrderButton" fx:id="editOrderButton" layoutX="15.0" layoutY="63.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />
+                        <Button id="editOrderButton" fx:id="editOrderButton" layoutX="15.0" layoutY="63.0" mnemonicParsing="false" onAction="#editOrder" text="Edit" />
 
                          <Button id="deleteOrderButton" fx:id="deleteOrderButton" layoutX="60.0" layoutY="63.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete" />
 

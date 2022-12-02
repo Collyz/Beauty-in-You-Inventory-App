@@ -9,18 +9,17 @@ import java.sql.Statement;
 
 public class ModifyOrder {
 
-    private int id;
+    @FXML private TextField orderID = new TextField();
     @FXML private TextField quantity = new TextField();
     @FXML private TextField product_ID = new TextField();
     @FXML private TextField date = new TextField();
     @FXML private TextField customer_ID = new TextField();
 
-    public void initialize(){}
 
-    public void setID(int id){
-        this.id = id;
+    @FXML
+    protected void setOrderID(String o){
+        orderID.setText(o);
     }
-
     @FXML
     protected void setDate(String d){
         date.setText(d);
@@ -46,11 +45,11 @@ public class ModifyOrder {
         String execute1 = "UPDATE projectprototype.Order " +
                 "SET Customer_ID = '"  + customer_ID.getText() + "' ," +
                 "Order_Date = '"  + date.getText() + "' ," +
-                " WHERE Order_ID = " + id;
+                " WHERE Order_ID = " + orderID.getText();
         String execute2 = "UPDATE projectprototype.Orderline " +
                 "SET Product_ID = '"  + product_ID.getText() + "' ," +
                 "Quantity = '"  + quantity.getText() + "' ," +
-                " WHERE Order_ID = " + id;
+                " WHERE Order_ID = " + orderID.getText();
         Connection connection = setConnection();
         try{
             Statement statement = connection.createStatement();

@@ -623,7 +623,7 @@ public class Profile implements Initializable{
         }
 
     }
-/**********************************************************************************************************************/
+
     private String customerFormat(ResultSet results){
         String toReturn = String.format("%s  %s %20s  %18s  %22s", "ID", "Name", "Phone #", "Email", "Address") + "\n";
         try{
@@ -883,7 +883,6 @@ public class Profile implements Initializable{
         }
     }
 
-    /**********************************************************************************************************************/
     @FXML
     protected void sendEmail(){
         SendEmail emailer = new SendEmail();
@@ -973,9 +972,15 @@ public class Profile implements Initializable{
      * @return String that is displayed as a search result
      */
     private String orderFormat(ResultSet results, ResultSet results2){
-        String returnOrder = String.format("%s %12s %5s %19s %12s", "Order_ID", "Customer_ID", "Date", "Product_ID", "Quantity") + "\n";
+        String returnOrder = String.format("%s %12s %5s %19s %12s %10s %10s %10s" , "Order_ID", "Customer_ID", "Date", "Product_ID", "Quantity", "Cost" , "Tax", "Total") + "\n";
         ArrayList<String> orderList = new ArrayList<>();
         ArrayList<String> orderLineList = new ArrayList<>();
+        ArrayList<String> productCost = new ArrayList<>();
+        int productID = 0;
+        ArrayList<Integer> productIDs = new ArrayList<>();
+        ArrayList<Integer> productQuantity = new ArrayList<>();
+        String searchProductPrice = "SELECT PRICE FROM PRODUCT where PRODUCT_ID = ";
+        //Order
         try{
             if(results.next()) {
                 do{
@@ -992,22 +997,47 @@ public class Profile implements Initializable{
         }catch(SQLException e){
             e.printStackTrace();
         }
+        //Order Line
         try{
             if(results2.next()) {
                 do{
                     int product_ID = results2.getInt(1);
                     int quantity = results2.getInt(2);
+                    productIDs.add(product_ID);
+                    productQuantity.add((quantity));
 
                     String formatting = "%5s %15s";
-                    String formattedString = String.format(formatting, product_ID, quantity + "\n");
+                    String formattedString = String.format(formatting, product_ID, quantity);
                     orderLineList.add(formattedString);
-                } while(results.next());
+                } while(results2.next());
             }
         }catch(SQLException e){
             e.printStackTrace();
         }
+        //Product cost evaluation
+        try{
+            Connection connection = setConnection();
+            Statement statement = connection.createStatement();
+            for(int i = 0; i < productIDs.size(); i++) {
+                ResultSet results3 = statement.executeQuery(searchProductPrice + productIDs.get(i));
+                if (results3.next()) {
+                    do {
+                        double productPrice = results3.getInt(1) * productQuantity.get(i);
+                        double tax = productPrice * .0625;
+                        double cost = productPrice + tax;
+                        String formatting = "%17s %10s %10s";
+                        String formattedString = String.format(formatting, productPrice, tax, cost + "\n");
+                        productCost.add(formattedString);
+                    } while (results3.next());
+                }
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+
         for(int i = 0; i < orderList.size(); i++){
-            returnOrder = returnOrder + orderList.get(i) + orderLineList.get(i);
+            returnOrder = returnOrder + orderList.get(i) + orderLineList.get(i) + productCost.get(i);
         }
         return returnOrder;
     }
@@ -1019,7 +1049,7 @@ public class Profile implements Initializable{
             Connection connection = setConnection();
             String searchOrder = "SELECT * FROM projectprototype.ORDER";
             String searchOrderLine = "SELECT Product_ID, Quantity FROM projectprototype.ORDERLINE";
-            ResultSet[] results = new ResultSet[2];
+            ResultSet[] results = new ResultSet[3];
             try{
                 Statement stmt = connection.createStatement();
                 ResultSet resultSet1 = stmt.executeQuery(searchOrder);
@@ -1051,10 +1081,15 @@ public class Profile implements Initializable{
     
     @FXML
     protected void editOrder() {
-        if (!orderSearchBar.getText().equals("")) {
+        String orderID = "";
+        String date = "";
+        String customerID = "";
+        String productID = "";
+        String quantity = "";
+        if (!orderSearchBar.getText().equals("") || !orderSearchBar.getText().isBlank() || !orderSearchBar.getText().isEmpty()) {
             Connection connection = setConnection();
-            String queryOrder = "SELECT Order_ID FROM inventorydatabase.order WHERE Order_ID = '" + orderSearchBar.getText() + "'";
-            String queryOrderline = "SELECT Order_ID FROM inventorydatabase.orderline WHERE Order_ID = '" + orderSearchBar.getText() + "'";
+            String queryOrder = "SELECT Order_ID FROM projectprototype.order WHERE Order_ID = '" + orderSearchBar.getText() + "'";
+
             try {
                 String compare = "";
                 Statement statement = connection.createStatement();
@@ -1063,57 +1098,46 @@ public class Profile implements Initializable{
                     compare = result.getString(1);
                 }
                 if (compare.equals(orderSearchBar.getText())) {
-                    String query2 = "SELECT Order_ID, Order_Date, Customer_ID from inventorydatabase.order WHERE Order_ID = '" + compare + "'";
+                    String query2 = "SELECT Order_ID, Order_Date, Customer_ID from projectprototype.order WHERE Order_ID = '" + compare + "'";
                     ResultSet result2 = statement.executeQuery(query2);
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-order.fxml"));
-                    Parent p = loader.load();
-                    Stage editWindow = new Stage();
-                    editWindow.setTitle("Edit");
-                    editWindow.setScene(new Scene(p));
-                    editWindow.initModality(Modality.APPLICATION_MODAL);
-                    ModifyOrder controller = loader.getController();
+
                     while (result2.next()) {
-                        controller.setID(result2.getInt(1));
-                        controller.setDate(result2.getString(2));
-                        controller.setCustomerID(result2.getString(3));
+                        orderID = result2.getString(1);
+                        date = result2.getString(2);
+                        customerID = result2.getString(3);
                     }
-                    editWindow.show();
-                    orderQueryResponse.setText("SUCCESS!");
                 } else {
                     orderQueryResponse.setText("No matches found, try again");
                 }
 
-            } catch (SQLException | IOException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
 
             try {
-                String compare = "";
                 Statement statement = connection.createStatement();
-                ResultSet result = statement.executeQuery(queryOrderline);
-                while (result.next()) {
-                    compare = result.getString(1);
+                String query2 = "SELECT Order_ID, Product_ID, Quantity from projectprototype.orderline WHERE Order_ID = '" + orderSearchBar.getText() + "'";
+                ResultSet result2 = statement.executeQuery(query2);
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-order.fxml"));
+                Parent p = loader.load();
+                Stage editWindow = new Stage();
+                editWindow.setTitle("Edit");
+                editWindow.setScene(new Scene(p));
+                editWindow.initModality(Modality.APPLICATION_MODAL);
+                ModifyOrder controller = loader.getController();
+                while (result2.next()) {
+                    productID = result2.getString(2);
+                    quantity = result2.getString(3);
                 }
-                if (compare.equals(orderSearchBar.getText())) {
-                    String query2 = "SELECT Order_ID, Product_ID, Quantity from inventorydatabase.orderline WHERE Order_ID = '" + compare + "'";
-                    ResultSet result2 = statement.executeQuery(query2);
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-order.fxml"));
-                    Parent p = loader.load();
-                    Stage editWindow = new Stage();
-                    editWindow.setTitle("Edit");
-                    editWindow.setScene(new Scene(p));
-                    editWindow.initModality(Modality.APPLICATION_MODAL);
-                    ModifyOrder controller = loader.getController();
-                    while (result2.next()) {
-                        controller.setID(result2.getInt(1));
-                        controller.setProductID(result2.getString(2));
-                        controller.setQuantity(result2.getString(3));
-                    }
-                    editWindow.show();
-                    orderQueryResponse.setText("SUCCESS!");
-                } else {
-                    orderQueryResponse.setText("No matches found, try again.");
-                }
+                controller.setOrderID(orderID);
+                controller.setDate(date);
+                controller.setCustomerID(customerID);
+                controller.setProductID(productID);
+                controller.setQuantity(quantity);
+
+                editWindow.show();
+                orderQueryResponse.setText("SUCCESS!");
 
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
