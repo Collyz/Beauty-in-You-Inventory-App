@@ -80,6 +80,7 @@ public class AddOrder {
         //Query to get the ID of the last item to increment the ID number when adding a new number
         String getIDS = "SELECT Order_ID FROM inventorydatabase.Order ORDER BY Order_ID DESC LIMIT 1";
         int id = 0;
+        int id = 1;
         //Getting the id
         try{
             Statement statement = connection.createStatement();
@@ -118,8 +119,8 @@ public class AddOrder {
             e.printStackTrace();
         }
         try{
-            String insertQueryOrder = "INSERT INTO Order VALUES("+ id + ", '" + date.getText() + "', " + customerID + ", " + 1 + ")";
-            String insertQueryOrderLine = "INSERT INTO Order_Line VALUES(" + id + ", " + prodID+ ", " + quantity.getText() +")";
+            String insertQueryOrder = "INSERT INTO projectprototype.Order VALUES("+ id + ", '" + date.getText() + "', " + customerID + ", " + 1 + ")";
+            String insertQueryOrderLine = "INSERT INTO projectprototype.orderline VALUES(" + id + ", " + prodID+ ", " + quantity.getText() +")";
             Statement statement3 = connection.createStatement();
             statement3.executeUpdate(insertQueryOrder);
             statement3.executeUpdate(insertQueryOrderLine);
