@@ -43,8 +43,10 @@ public class DeleteOrder {
 
     @FXML
     protected void onDelete(){
-        String execute1 = "DELETE FROM projectprototype.order WHERE Order_ID = " + id;
-        String execute2 = "DELETE FROM projectprototype.orderline WHERE Order_ID = " + id;
+        String execute1 = "DELETE FROM projectprototype.order WHERE Order_ID = " + order_ID.getText();
+        System.out.println(execute1);
+        String execute2 = "DELETE FROM projectprototype.orderline WHERE Order_ID = " + order_ID.getText();
+        System.out.println(execute2);
         DatabaseConnection connection = setConnection();
         try{
             Statement statement = connection.databaseLink.createStatement();

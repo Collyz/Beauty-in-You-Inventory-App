@@ -1094,20 +1094,22 @@ public class Profile implements Initializable{
                 String search = orderSearchBar.getText();
                 String searchQuery1 = "SELECT * FROM projectprototype.ORDER WHERE ORDER_ID = " + search;
                 String searchQuery2 = "SELECT * FROM projectprototype.ORDERLINE WHERE ORDER_ID = " + search;
+                ResultSet[] results = new ResultSet[2];
                 try {
                     Statement statement = connection.createStatement();
                     ResultSet result = statement.executeQuery(searchQuery1);
-                    orderSearchRes.setText(orderFormat(result));
+                    results[0] = result;
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
                 try {
                     Statement statement = connection.createStatement();
                     ResultSet result = statement.executeQuery(searchQuery2);
-                    orderSearchRes.setText(orderFormat(result));
+                    results[1] = result;
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+                orderSearchRes.setText(orderFormat(results[0], results[1]));
             }
         });
     }
