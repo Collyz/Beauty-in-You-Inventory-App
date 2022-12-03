@@ -74,7 +74,6 @@ public class AddOrder {
             e.printStackTrace();
         }
         String updateProduct = "UPDATE product SET QUANTITY = QUANTITY - "+ quantity.getText() +" WHERE PRODUCT_ID = " + prodID;
-        System.out.println(updateProduct);
         try{
             Statement statement = connection.createStatement();
             statement.executeUpdate(updateProduct);

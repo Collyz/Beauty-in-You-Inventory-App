@@ -132,6 +132,8 @@ public class Profile implements Initializable{
         custSearchRes.setMinHeight(vbox.getHeight() - 200);
         custSearchRes.setMinWidth(vbox.getWidth() - 40);
 
+        /*Email tab*/
+        emailResponse.setLayoutY(message.getLayoutY() + message.getHeight() + 20);
         /*Order tab*/
         //Product Searchbar resize
         orderSearchBar.setMinWidth(vbox.getWidth() - 100);

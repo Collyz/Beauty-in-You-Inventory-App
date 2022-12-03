@@ -44,11 +44,11 @@ public class ModifyOrder {
     public void onEdit() {
         String execute1 = "UPDATE projectprototype.Order " +
                 "SET Customer_ID = '"  + customer_ID.getText() + "' ," +
-                "Order_Date = '"  + date.getText() + "' ," +
+                "Order_Date = '"  + date.getText() + "' " +
                 " WHERE Order_ID = " + orderID.getText();
         String execute2 = "UPDATE projectprototype.Orderline " +
                 "SET Product_ID = '"  + product_ID.getText() + "' ," +
-                "Quantity = '"  + quantity.getText() + "' ," +
+                "Quantity = '"  + quantity.getText() + "' " +
                 " WHERE Order_ID = " + orderID.getText();
         Connection connection = setConnection();
         try{
