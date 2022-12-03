@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Main-Class: com.inventory.inventory.Launcher
+Class-Path: apiguardian-api-1.1.2.jar javafx-controls-18.0.1.jar mysql-c
+ onnector-java-8.0.30.jar javafx-fxml-18.0.1.jar formsfx-core-11.5.0.jar
+  javafx-controls-18.0.1-win.jar javafx-swt.jar javafx.base.jar javafx.c
+ ontrols.jar javafx.fxml.jar javafx.graphics.jar javafx.media.jar javafx
+ .swing.jar javafx.web.jar javafx-graphics-18.0.1-win.jar junit-jupiter-
+ engine-5.8.2.jar javafx-fxml-18.0.1-win.jar javax.mail.jar javafx-graph
+ ics-18.0.1.jar javafx-base-18.0.1-win.jar controlsfx-11.1.1.jar javafx-
+ base-18.0.1.jar junit-platform-engine-1.8.2.jar mysql-connector-java-8.
+ 0.30.jar javax.activation-1.2.0.jar
+
