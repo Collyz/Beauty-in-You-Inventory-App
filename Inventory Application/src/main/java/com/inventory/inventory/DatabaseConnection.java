@@ -12,7 +12,7 @@ public class DatabaseConnection {
         String databasePassword = "Dolphin1!";
         String url = "jdbc:mysql://localhost:3306/" + databaseName;
         try{
-            Class.forName("com.inventory.inventory.LoginRegister");
+            Class.forName("com.inventory.inventory.LoginController");
             databaseLink = DriverManager.getConnection(url, databaseUser, databasePassword);
         }catch(Exception e){
             e.printStackTrace();
