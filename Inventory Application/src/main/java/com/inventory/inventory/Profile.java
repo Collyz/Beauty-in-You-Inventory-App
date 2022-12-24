@@ -1,7 +1,9 @@
 package com.inventory.inventory;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -75,14 +77,15 @@ public class Profile implements Initializable{
     @FXML private TableColumn<LowStockModel, Integer> columnID;
     @FXML private TableColumn<LowStockModel, String> columnProd;
     @FXML private TableColumn<LowStockModel, Integer> columnQuant;
-    ObservableList<LowStockModel> lowStockModelList = FXCollections.observableArrayList();
+    private ObservableList<LowStockModel> lowStockModelList = FXCollections.observableArrayList();
+    private final DatabaseConnection databaseConnection = new DatabaseConnection();
 
     @Override
     public void initialize(URL url, ResourceBundle resource){
-        Connection connection = setConnection();
+        databaseConnection.getConnection();
         String lowQuantityQuery = "SELECT PRODUCT_ID, PRODUCT_NAME, QUANTITY FROM Product WHERE QUANTITY <= 3";
         try{
-            Statement statement = connection.createStatement();
+            Statement statement = databaseConnection.databaseLink.createStatement();
             ResultSet resultSet = statement.executeQuery(lowQuantityQuery);
 
             while(resultSet.next()){
@@ -95,15 +98,23 @@ public class Profile implements Initializable{
                 lowStockModelList.add(new LowStockModel(queryID, queryName, queryQuantity));
             }
 
-            columnID.setCellValueFactory(new PropertyValueFactory<>("prodID"));
-            columnProd.setCellValueFactory(new PropertyValueFactory<>("prodName"));
+            columnID.setCellValueFactory(new PropertyValueFactory<>("productID"));
+            columnProd.setCellValueFactory(new PropertyValueFactory<>("productName"));
             columnQuant.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
             lowQuantTable.setItems(lowStockModelList);
+
+            FilteredList<LowStockModel> filteredData = new FilteredList<>(lowStockModelList);
         }catch(SQLException e){
             Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
+
+        databaseConnection.getConnection();
+        ListChangeListener<LowStockModel> listChangeListener = change -> {
+            lowQuantTable.setItems(lowStockModelList);
+        };
+        lowStockModelList.addListener(listChangeListener);
 
     }
     @FXML
@@ -1189,19 +1200,22 @@ public class Profile implements Initializable{
 
 
     @FXML
-    protected void onOpen()throws SQLException {
-        Connection connection = setConnection();
-
-        String usernameQuery = "SELECT Username, Password FROM Admin_Accounts";
-        Statement userStatement = connection.createStatement();
-        ResultSet userResultSet = userStatement.executeQuery(usernameQuery);
-        if(userResultSet.next()) {
-            usernameInfo.setText(userResultSet.getString(1));
-            passwordInfo.setText(userResultSet.getString(2));}
+    protected void onOpen(){
+        try {
+            String usernameQuery = "SELECT Username, Password FROM Admin_Accounts";
+            Statement userStatement = databaseConnection.databaseLink.createStatement();
+            ResultSet userResultSet = userStatement.executeQuery(usernameQuery);
+            if (userResultSet.next()) {
+                usernameInfo.setText(userResultSet.getString(1));
+                passwordInfo.setText(userResultSet.getString(2));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
-    
+
     protected Connection setConnection(){
-        DatabaseConnection connection = new DatabaseConnection();
-        return connection.getConnection();
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        return databaseConnection.getConnection();
     }
 }

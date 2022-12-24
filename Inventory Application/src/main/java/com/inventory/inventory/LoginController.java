@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class LoginController {
 
@@ -23,11 +24,10 @@ public class LoginController {
     @FXML private Text loginWrong;
     @FXML private Text registerWrong;
 
-    private final LoginModel model;
+    protected static LoginModel loginModel;
 
     public LoginController() {
-
-        this.model = new LoginModel();
+        this.loginModel = new LoginModel();
     }
 
     public void setRegisterWrong(String error){
@@ -36,8 +36,10 @@ public class LoginController {
     @FXML
     protected void loginButtonClick(javafx.event.ActionEvent event){
         try {
-            if (model.verifyLogin(loginUsername.getText(), loginPassword.getText())) {
-                Parent p = FXMLLoader.load((getClass().getResource("profile.fxml")));
+            if (loginModel.verifyLogin(loginUsername.getText(), loginPassword.getText())) {
+                loginModel.setUsername(loginUsername.getText());
+                loginModel.setPassword(loginPassword.getText());
+                Parent p = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("profile.fxml"))));
                 Scene s = new Scene(p);
                 Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 appStage.setScene(s);
@@ -52,7 +54,7 @@ public class LoginController {
 
     @FXML
     protected void registerButtonClick(){
-        model.insertAccount(registerUsername.getText(), registerPassword.getText(), registerPasswordRedo.getText(),registerEmail.getText(), this);
+        loginModel.insertAccount(registerUsername.getText(), registerPassword.getText(), registerPasswordRedo.getText(),registerEmail.getText(), this);
     }
 
 }

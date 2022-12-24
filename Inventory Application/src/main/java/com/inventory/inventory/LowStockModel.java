@@ -1,34 +1,34 @@
 package com.inventory.inventory;
 
 public class LowStockModel {
-    private Integer prodID;
-    private String prodName;
+    private Integer productID;
+    private String productName;
     private Integer quantity;
 
-    public LowStockModel(Integer prodID, String prodName, Integer quantity) {
-        this.prodID = prodID;
-        this.prodName = prodName;
+    public LowStockModel(Integer prodID, String productName, Integer quantity) {
+        this.productID = prodID;
+        this.productName = productName;
         this.quantity = quantity;
     }
 
-    public Integer getProdID() {
-        return prodID;
+    public Integer getProductID() {
+        return productID;
     }
 
-    public String getProdName() {
-        return prodName;
+    public String getProductName() {
+        return productName;
     }
 
     public Integer getQuantity() {
         return quantity;
     }
 
-    public void setProdID(Integer prodID) {
-        this.prodID = prodID;
+    public void setProductID(Integer productID) {
+        this.productID = productID;
     }
 
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public void setQuantity(Integer quantity) {
