@@ -72,9 +72,9 @@
                         <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1920.0" />
                         <TableView fx:id="lowStockTable" layoutX="323.0" layoutY="45.0" prefHeight="253.0" prefWidth="309.0">
                           <columns>
-                            <TableColumn fx:id="columnID" prefWidth="37.0" text="ID" />
-                            <TableColumn fx:id="columnProd" prefWidth="207.0" text="Product" />
-                              <TableColumn fx:id="columnQuantity" prefWidth="64.0" text="Quantity" />
+                            <TableColumn fx:id="lowID" prefWidth="37.0" text="ID" />
+                            <TableColumn fx:id="lowName" prefWidth="207.0" text="Product" />
+                              <TableColumn fx:id="lowQuantity" prefWidth="64.0" text="Quantity" />
                           </columns>
                         </TableView>
                         <Text layoutX="398.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Low Quantity Products">
@@ -101,15 +101,15 @@
                         <Button layoutX="129.0" layoutY="63.0" mnemonicParsing="false" text="Add a Product" />
                         <Button layoutX="558.0" layoutY="63.0" mnemonicParsing="false" text="Refresh " />
                         <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1920.0" />
-                        <TableView fx:id="productTableView" layoutX="17.0" layoutY="95.0" prefHeight="236.0" prefWidth="600.0">
-                          <columns>
-                            <TableColumn fx:id="columnProductID" prefWidth="25.0" text="ID" />
-                            <TableColumn fx:id="columnProductCategory" prefWidth="121.0" text="Category" />
-                              <TableColumn fx:id="columnProductName" prefWidth="257.0" text="Name" />
-                              <TableColumn fx:id="columnProductQuantity" prefWidth="55.0" text="Quantity" />
-                              <TableColumn fx:id="columnProductPrice" prefWidth="72.0" text="Price" />
-                              <TableColumn fx:id="columnProductShelfLife" prefWidth="69.0" text="Shelf Life" />
-                          </columns>
+                        <TableView fx:id="productTableView" layoutX="17.0" layoutY="94.0" prefHeight="235.0" prefWidth="600.0">
+                           <columns>
+                              <TableColumn fx:id="idProductColumn" prefWidth="29.0" text="ID" />
+                              <TableColumn fx:id="categoryProductColumn" prefWidth="129.0" text="Category" />
+                              <TableColumn fx:id="nameProductColumn" prefWidth="239.0" text="Name" />
+                              <TableColumn fx:id="quantityProductColumn" prefWidth="65.0" text="Quantity" />
+                              <TableColumn fx:id="priceProductColumn" prefWidth="64.0" text="Price" />
+                              <TableColumn fx:id="shelfLifeProductColumn" prefWidth="73.0" text="Shelf Life" />
+                           </columns>
                         </TableView>
                             </children>
                         </AnchorPane>

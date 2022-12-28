@@ -37,9 +37,9 @@ public class ProfileModel {
                 controller.getObservableLowQuantityList().add(new LowStockModel(queryID, queryName, queryQuantity));
             }
 
-            controller.getColumnID().setCellValueFactory(new PropertyValueFactory<>("productID"));
-            controller.getColumnProd().setCellValueFactory(new PropertyValueFactory<>("productName"));
-            controller.getColumnQuantity().setCellValueFactory(new PropertyValueFactory<>("quantity"));
+            controller.getLowID().setCellValueFactory(new PropertyValueFactory<>("productID"));
+            controller.getLowName().setCellValueFactory(new PropertyValueFactory<>("productName"));
+            controller.getLowQuantity().setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
             controller.getLowStockTableView().setItems(controller.getObservableLowQuantityList());
 
@@ -73,33 +73,30 @@ public class ProfileModel {
     }
 
     public void updateProductTable(ProfileController controller){
-        String productQuery = "SELECT * FROM Product";
+        String getProducts = "SELECT * FROM PRODUCT";
         try{
             Statement statement = databaseConnection.databaseLink.createStatement();
-            ResultSet resultSet = statement.executeQuery(productQuery);
-            while(resultSet.next()){
-                Integer queryID = resultSet.getInt(1);
-                String queryCategory = resultSet.getString(2);
-                String queryName = resultSet.getString(3);
-                Integer queryQuantity = resultSet.getInt(4);
-                Double queryPrice = resultSet.getDouble(5);
-                Integer queryShelfLife = resultSet.getInt(6);
-
-                //Fills in the observable list
-                controller.getObservableProductList().add(new ProductTableModel(queryID, queryCategory, queryName, queryQuantity, queryPrice, queryShelfLife));
+            ResultSet resultSet = statement.executeQuery(getProducts);
+            while(resultSet.next()) {
+                Integer queryID = resultSet.getInt("PRODUCT_ID");
+                String queryCategory = resultSet.getString("CATEGORY");
+                String queryName = resultSet.getString("PRODUCT_NAME");
+                Integer queryQuantity = resultSet.getInt("QUANTITY");
+                Double queryPrice = resultSet.getDouble("PRICE");
+                Integer queryShelfLife = resultSet.getInt("SHELF_LIFE");
+                controller.getProductObservableList().add(new ProductTableModel(queryID, queryCategory, queryName,
+                        queryQuantity, queryPrice, queryShelfLife));
             }
+            controller.getIdProductColumn().setCellValueFactory(new PropertyValueFactory<>("id"));
+            controller.getCategoryProductColumn().setCellValueFactory(new PropertyValueFactory<>("category"));
+            controller.getNameProductColumn().setCellValueFactory(new PropertyValueFactory<>("name"));
+            controller.getQuantityProductColumn().setCellValueFactory(new PropertyValueFactory<>("quantity"));
+            controller.getPriceProductColumn().setCellValueFactory(new PropertyValueFactory<>("price"));
+            controller.getShelfLifeProductColumn().setCellValueFactory(new PropertyValueFactory<>("shelfLife"));
 
-            controller.getColumnProductID().setCellValueFactory(new PropertyValueFactory<>("ID"));
-            controller.getColumnProductCategory().setCellValueFactory(new PropertyValueFactory<>("category"));
-            controller.getColumnProductName().setCellValueFactory(new PropertyValueFactory<>("name"));
-            controller.getColumnProductQuantity().setCellValueFactory(new PropertyValueFactory<>("quantity"));
-            controller.getColumnProductPrice().setCellValueFactory(new PropertyValueFactory<>("price"));
-            controller.getColumnProductShelfLife().setCellValueFactory(new PropertyValueFactory<>("life"));
-
-            controller.getProductTableView().setItems(controller.getObservableProductList());
+            controller.getProductTableView().setItems(controller.getProductObservableList());
 
         }catch(SQLException e){
-            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         }
     }
