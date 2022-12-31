@@ -7,7 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -16,9 +16,6 @@ import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -33,27 +30,39 @@ public class ProfileController implements Initializable {
     @FXML private TableColumn<LowStockModel, Integer> lowQuantity;
     private final ObservableList<LowStockModel> lowStockObservableList;
     //For Product Tab
+    @FXML private AnchorPane prodPane;
     @FXML private TextField productSearchBar;
     @FXML private TableView<ProductTableModel> productTableView;
-    @FXML private TableColumn<ProductTableModel, Integer> idProductColumn;
-    @FXML private TableColumn<ProductTableModel, String> categoryProductColumn;
-    @FXML private TableColumn<ProductTableModel, String> nameProductColumn;
-    @FXML private TableColumn<ProductTableModel, Integer> quantityProductColumn;
-    @FXML private TableColumn<ProductTableModel, Double> priceProductColumn;
-    @FXML private TableColumn<ProductTableModel, Integer> shelfLifeProductColumn;
+    @FXML private TableColumn<ProductTableModel, Integer> productColumnID;
+    @FXML private TableColumn<ProductTableModel, String> productColumnCategory;
+    @FXML private TableColumn<ProductTableModel, String> productColumnName;
+    @FXML private TableColumn<ProductTableModel, Integer> productColumnQuantity;
+    @FXML private TableColumn<ProductTableModel, Double> productColumnPrice;
+    @FXML private TableColumn<ProductTableModel, Integer> productColumnShelfLife;
     private final ObservableList<ProductTableModel> productObservableList;
-
-    @FXML private TextArea orderSearchRes;
-    @FXML private Text orderQueryResponse;
-
     //For Customer Tab
     @FXML private TextField customerSearchBar;
-    @FXML private TextArea custSearchRes;
-    @FXML private Text customerQueryResponse;
-    @FXML private CheckMenuItem nameForward;
-    @FXML private CheckMenuItem nameBackward;
-    @FXML private CheckMenuItem addressForward;
-    @FXML private CheckMenuItem addressBackward;
+    @FXML private TableView<CustomerTableModel> customerTableView;
+    @FXML private TableColumn<CustomerTableModel, Integer> customerColumnID;
+    @FXML private TableColumn<CustomerTableModel, String> customerColumnName;
+    @FXML private TableColumn<CustomerTableModel, String> customerColumnPhone;
+    @FXML private TableColumn<CustomerTableModel, String> customerColumnEmail;
+    @FXML private TableColumn<CustomerTableModel, String> customerColumnAddress;
+    @FXML private ObservableList<CustomerTableModel> customerObservableList;
+    //For Bulk Order Tab
+    @FXML private TextField orderSearchBar;
+    @FXML private TableView<BulkOrderModel> orderTableView;
+    @FXML private TableColumn<BulkOrderModel, Integer> orderColumnOrderID;
+    @FXML private TableColumn<BulkOrderModel, String> orderColumnCustomerName;
+    @FXML private TableColumn<BulkOrderModel, String> orderColumnDate;
+    @FXML private TableColumn<BulkOrderModel, String> orderColumnProductName;
+    @FXML private TableColumn<BulkOrderModel, Integer> orderColumnQuantity;
+    @FXML private TableColumn<BulkOrderModel, Double> orderColumnCost;
+    @FXML private TableColumn<BulkOrderModel, Double> orderColumnTax;
+    @FXML private TableColumn<BulkOrderModel, Double> orderColumnTotal;
+    private ObservableList<BulkOrderModel> orderObservableList;
+
+
     //Email tab
     @FXML private TextField email;
     @FXML private TextField subject;
@@ -81,9 +90,12 @@ public class ProfileController implements Initializable {
         //Initializing low stock list
         this.lowStockObservableList = FXCollections.observableArrayList();
         //Initializing product list
-        productObservableList = FXCollections.observableArrayList();
-        //Initializing low stock table
-        this.lowStockTable = new TableView<>();
+        this.productObservableList = FXCollections.observableArrayList();
+        //Initializing customer list
+        this.customerObservableList = FXCollections.observableArrayList();
+        //Initializing order list
+        this.orderObservableList = FXCollections.observableArrayList();
+
         //Initializing the profile model
         this.profileModel = new ProfileModel();
         //Shared login model to get username and password if successfully logged in
@@ -96,10 +108,25 @@ public class ProfileController implements Initializable {
         //Grabbing username and password data
         usernameInfo.setText(loginModel.getUsername());
         passwordInfo.setText(loginModel.getPassword());
+        //Settings column font size to 12
+        /*Low stock tableview columns*/
+        /*lowID.setStyle("-fx-font-size: 12pt");
+        lowName.setStyle("-fx-font-size: 12pt");
+        lowQuantity.setStyle("-fx-font-size: 12pt");*/
+        /*Product tableview columns*/
+        /*productColumnID.setStyle("-fx-font-size: 12pt");
+        productColumnCategory.setStyle("-fx-font-size: 12pt");
+        productColumnName.setStyle("-fx-font-size: 12pt");
+        productColumnQuantity.setStyle("-fx-font-size: 12pt");
+        productColumnPrice.setStyle("-fx-font-size: 12pt");
+        productColumnShelfLife.setStyle("-fx-font-size: 12pt");*/
+        /*Customer tableview columns*/
+        /*Bulk Order tableview columns*/
         //Calling model methods to populate tableviews
         profileModel.updateLowQuantityTable(this);
         profileModel.updateProductTable(this);
-
+        profileModel.updateCustomerTable(this);
+        profileModel.updateOrderTable(this);
     }
 
     /**
@@ -120,7 +147,7 @@ public class ProfileController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    //For low stock table
     public TableView<LowStockModel> getLowStockTableView(){
         return this.lowStockTable;
     }
@@ -136,31 +163,82 @@ public class ProfileController implements Initializable {
     public ObservableList<LowStockModel> getObservableLowQuantityList(){
         return this.lowStockObservableList;
     }
-
+    //For product tab table
     public TableView<ProductTableModel> getProductTableView() {
         return productTableView;
     }
-    public TableColumn<ProductTableModel, Integer> getIdProductColumn() {
-        return idProductColumn;
+    public TableColumn<ProductTableModel, Integer> getProductColumnID() {
+        return productColumnID;
     }
-    public TableColumn<ProductTableModel, String> getCategoryProductColumn() {
-        return categoryProductColumn;
+    public TableColumn<ProductTableModel, String> getProductColumnCategory() {
+        return productColumnCategory;
     }
-    public TableColumn<ProductTableModel, String> getNameProductColumn() {
-        return nameProductColumn;
+    public TableColumn<ProductTableModel, String> getProductColumnName() {
+        return productColumnName;
     }
-    public TableColumn<ProductTableModel, Integer> getQuantityProductColumn() {
-        return quantityProductColumn;
+    public TableColumn<ProductTableModel, Integer> getProductColumnQuantity() {
+        return productColumnQuantity;
     }
-    public TableColumn<ProductTableModel, Double> getPriceProductColumn() {
-        return priceProductColumn;
+    public TableColumn<ProductTableModel, Double> getProductColumnPrice() {
+        return productColumnPrice;
     }
-    public TableColumn<ProductTableModel, Integer> getShelfLifeProductColumn() {
-        return shelfLifeProductColumn;
+    public TableColumn<ProductTableModel, Integer> getProductColumnShelfLife() {
+        return productColumnShelfLife;
     }
     public ObservableList<ProductTableModel> getProductObservableList() {
         return productObservableList;
     }
-
-
+    //For customer tab table
+    public TableView<CustomerTableModel> getCustomerTableView(){
+        return customerTableView;
+    }
+    public TableColumn<CustomerTableModel, Integer> getCustomerColumnID(){
+        return customerColumnID;
+    }
+    public TableColumn<CustomerTableModel, String> getCustomerColumnName(){
+        return customerColumnName;
+    }
+    public TableColumn<CustomerTableModel, String> getCustomerColumnPhone(){
+        return customerColumnPhone;
+    }
+    public TableColumn<CustomerTableModel, String> getCustomerColumnEmail(){
+        return customerColumnEmail;
+    }
+    public TableColumn<CustomerTableModel, String> getCustomerColumnAddress(){
+        return customerColumnAddress;
+    }
+    public ObservableList<CustomerTableModel> getCustomerObservableList(){
+        return customerObservableList;
+    }
+    //For order tab table
+    public TableView<BulkOrderModel> getOrderTableView(){
+        return orderTableView;
+    }
+    public TableColumn<BulkOrderModel, Integer> getOrderColumnOrderID() {
+        return orderColumnOrderID;
+    }
+    public TableColumn<BulkOrderModel, String> getOrderColumnCustomerName(){
+        return orderColumnCustomerName;
+    }
+    public TableColumn<BulkOrderModel,String> getOrderColumnDate(){
+        return orderColumnDate;
+    }
+    public TableColumn<BulkOrderModel, String> getOrderColumnProductName(){
+        return orderColumnProductName;
+    }
+    public TableColumn<BulkOrderModel, Integer> getOrderColumnQuantity(){
+        return orderColumnQuantity;
+    }
+    public TableColumn<BulkOrderModel, Double> getOrderColumnCost() {
+        return orderColumnCost;
+    }
+    public TableColumn<BulkOrderModel, Double> getOrderColumnTax() {
+        return orderColumnTax;
+    }
+    public TableColumn<BulkOrderModel, Double> getOrderColumnTotal() {
+        return orderColumnTotal;
+    }
+    public ObservableList<BulkOrderModel> getOrderObservableList(){
+        return orderObservableList;
+    }
 }
