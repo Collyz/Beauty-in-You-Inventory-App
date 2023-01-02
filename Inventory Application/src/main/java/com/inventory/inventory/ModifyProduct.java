@@ -16,6 +16,8 @@ public class ModifyProduct {
     @FXML private TextField price = new TextField();
     @FXML private TextField quantity = new TextField();
     @FXML private TextField shelfLife = new TextField();
+    private ProfileController controller;
+    private ProfileModel profileModel;
 
     public void initialize(){}
 
@@ -48,6 +50,22 @@ public class ModifyProduct {
         shelfLife.setText(s);
     }
 
+    public void setProfileController(ProfileController controller){
+        this.controller = controller;
+    }
+
+    public ProfileController getProfileController(){
+        return this.controller;
+    }
+
+    public void setProfileModel(ProfileModel profileModel){
+        this.profileModel = profileModel;
+    }
+
+    public ProfileModel getProfileModel(){
+        return profileModel;
+    }
+
     @FXML
     protected void onEdit(){
         String execute = "UPDATE PRODUCT " +
@@ -62,12 +80,13 @@ public class ModifyProduct {
             Statement statement = connection.createStatement();
             statement.executeUpdate(execute);
             Stage stage = (Stage) name.getScene().getWindow();
+            getProfileModel().updateProductTable(getProfileController());
+            getProfileController().getProductTextResponse().setText("Deleted");
             stage.close();
         }catch(SQLException e){
             e.printStackTrace();
         }
     }
-
     @FXML
     protected void onCancel(){
         Stage stage = (Stage) name.getScene().getWindow();

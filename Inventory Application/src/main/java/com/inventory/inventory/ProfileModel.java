@@ -1,8 +1,17 @@
 package com.inventory.inventory;
 
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -74,6 +83,7 @@ public class ProfileModel {
     }
 
     public void updateProductTable(ProfileController controller){
+        controller.getProductObservableList().clear();
         String getProducts = "SELECT * FROM PRODUCT";
         try{
             Statement statement = databaseConnection.databaseLink.createStatement();
@@ -100,9 +110,41 @@ public class ProfileModel {
         }catch(SQLException e){
             e.printStackTrace();
         }
+
+        FilteredList<ProductTableModel> filteredItems = new FilteredList<>(controller.getProductObservableList(), p -> true);
+        controller.getProductSearchBar().textProperty().addListener((observableValue, oldValue, newValue) -> {
+            filteredItems.setPredicate(productTableModel -> {
+                // If the filter field is empty, show all items
+                if (newValue.isBlank() || newValue.isEmpty() || newValue == null){
+                    return true;
+                }
+                String searchKeyword = newValue.toLowerCase();
+                if(productTableModel.getId().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                }else if (productTableModel.getCategory().toLowerCase().indexOf(searchKeyword) > -1.){
+                    return true;
+                }else if(productTableModel.getName().toLowerCase().indexOf(searchKeyword) > -1){
+                    return true;
+                } else if(productTableModel.getQuantity().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                } else if(productTableModel.getPrice().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                } else if(productTableModel.getShelfLife().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                }else{
+                    return false;
+                }
+            });
+        });
+
+        SortedList<ProductTableModel> sortedData = new SortedList<>(filteredItems);
+        sortedData.comparatorProperty().bind(controller.getProductTableView().comparatorProperty());
+        controller.getProductTableView().setItems(sortedData);
+
     }
 
     public void updateCustomerTable(ProfileController controller){
+        controller.getCustomerObservableList().clear();
         String getCustomers = "SELECT * FROM Customer ORDER BY Customer_Name";
         try{
             Statement statement = databaseConnection.databaseLink.createStatement();
@@ -128,9 +170,38 @@ public class ProfileModel {
         catch(SQLException e){
             e.printStackTrace();
         }
+
+        FilteredList<CustomerTableModel> filteredItems = new FilteredList<>(controller.getCustomerObservableList(), p -> true);
+        controller.getCustomerSearchBar().textProperty().addListener((observableValue, oldValue, newValue) -> {
+            filteredItems.setPredicate(customerTableModel -> {
+                // If the filter field is empty, show all items
+                if (newValue.isBlank() || newValue.isEmpty() || newValue == null){
+                    return true;
+                }
+                String searchKeyword = newValue.toLowerCase();
+                if(customerTableModel.getId().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                }else if (customerTableModel.getName().toLowerCase().indexOf(searchKeyword) > -1.){
+                    return true;
+                }else if(customerTableModel.getPhoneNumber().toLowerCase().indexOf(searchKeyword) > -1){
+                    return true;
+                } else if(customerTableModel.getEmail().toLowerCase().indexOf(searchKeyword) > -1){
+                    return true;
+                } else if(customerTableModel.getAddress().toLowerCase().indexOf(searchKeyword) > -1){
+                    return true;
+                }else{
+                    return false;
+                }
+            });
+        });
+
+        SortedList<CustomerTableModel> sortedData = new SortedList<>(filteredItems);
+        sortedData.comparatorProperty().bind(controller.getCustomerTableView().comparatorProperty());
+        controller.getCustomerTableView().setItems(sortedData);
     }
 
     public void updateOrderTable(ProfileController controller){
+        controller.getOrderObservableList().clear();
         String order = "SELECT * FROM projectprototype.ORDER";
         String orderLine = "SELECT Product_ID, Quantity FROM projectprototype.ORDERLINE";
         String customerSearch = "SELECT CUSTOMER_NAME FROM Customer WHERE CUSTOMER_ID = ";
@@ -223,7 +294,189 @@ public class ProfileModel {
         controller.getOrderColumnTotal().setCellValueFactory(new PropertyValueFactory<>("total"));
 
         controller.getOrderTableView().setItems(controller.getOrderObservableList());
+
+
+        FilteredList<BulkOrderModel> filteredItems = new FilteredList<>(controller.getOrderObservableList(), p -> true);
+        controller.getOrderSearchBar().textProperty().addListener((observableValue, oldValue, newValue) -> {
+            filteredItems.setPredicate(bulkOrderModel -> {
+                // If the filter field is empty, show all items
+                if (newValue.isBlank() || newValue.isEmpty() || newValue == null){
+                    return true;
+                }
+                String searchKeyword = newValue.toLowerCase();
+                if(bulkOrderModel.getOrderID().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                }else if (bulkOrderModel.getCustomerName().toLowerCase().indexOf(searchKeyword) > -1.){
+                    return true;
+                }else if(bulkOrderModel.getDate().toLowerCase().indexOf(searchKeyword) > -1){
+                    return true;
+                } else if(bulkOrderModel.getProductName().toLowerCase().indexOf(searchKeyword) > -1){
+                    return true;
+                } else if(bulkOrderModel.getQuantity().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                } else if(bulkOrderModel.getCost().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                }else if(bulkOrderModel.getTax().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                }else if(bulkOrderModel.getTotal().toString().indexOf(searchKeyword) > -1){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+        });
+
+        SortedList<BulkOrderModel> sortedData = new SortedList<>(filteredItems);
+        sortedData.comparatorProperty().bind(controller.getOrderTableView().comparatorProperty());
+        controller.getOrderTableView().setItems(sortedData);
     }
 
+    public void editProduct(ProductTableModel tableData, ProfileController controller){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-product.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Edit");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            ModifyProduct modifyProduct = loader.getController();
+            modifyProduct.setID(tableData.getId());
+            modifyProduct.setName(tableData.getName());
+            modifyProduct.setCategory(tableData.getCategory());
+            modifyProduct.setPrice(tableData.getPrice().toString());
+            modifyProduct.setQuantity(tableData.getQuantity().toString());
+            modifyProduct.setShelfLife(tableData.getShelfLife().toString());
+
+            modifyProduct.setProfileController(controller);
+            modifyProduct.setProfileModel(this);
+
+
+            editWindow.show();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteProduct(ProductTableModel tableData, ProfileController controller){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-product.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Delete");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            DeleteProduct deleteProduct = loader.getController();
+            deleteProduct.setID(tableData.getId());
+            deleteProduct.setName(tableData.getName());
+            deleteProduct.setCategory(tableData.getCategory());
+            deleteProduct.setQuantity(tableData.getQuantity().toString());
+            deleteProduct.setPrice(tableData.getPrice().toString());
+            deleteProduct.setShelfLife(tableData.getShelfLife().toString());
+
+            deleteProduct.setProfileController(controller);
+            deleteProduct.setProfileModel(this);
+
+            editWindow.show();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void editCustomer(CustomerTableModel tableData, ProfileController controller){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-customer.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Edit");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            ModifyCustomer modifyCustomer = loader.getController();
+            modifyCustomer.setID(tableData.getId());
+            modifyCustomer.setName(tableData.getName());
+            modifyCustomer.setPhone(tableData.getPhoneNumber());
+            modifyCustomer.setEmail(tableData.getEmail());
+            modifyCustomer.setAddress(tableData.getAddress());
+
+            modifyCustomer.setProfileController(controller);
+            modifyCustomer.setProfileModel(this);
+
+            editWindow.show();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteCustomer(CustomerTableModel tableData, ProfileController controller){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-customer.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Delete");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            DeleteCustomer deleteCustomer = loader.getController();
+            deleteCustomer.setID(tableData.getId());
+            deleteCustomer.setName(tableData.getName());
+            deleteCustomer.setPhone(tableData.getPhoneNumber());
+            deleteCustomer.setEmail(tableData.getEmail());
+            deleteCustomer.setAddress(tableData.getAddress());
+
+            deleteCustomer.setProfileController(controller);
+            deleteCustomer.setProfileModel(this);
+            editWindow.show();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void editOrder(BulkOrderModel tableData, ProfileController controller){
+
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("modify-order.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Edit");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            ModifyOrder modifyOrder = loader.getController();
+
+            modifyOrder.setOrderID(tableData.getOrderID().toString());
+            modifyOrder.setDate(tableData.getDate());
+            modifyOrder.setCustomerID(tableData.getCustomerName());
+            modifyOrder.setProductID(tableData.getProductName());
+            modifyOrder.setQuantity(tableData.getQuantity().toString());
+
+            modifyOrder.setProfileController(controller);
+            modifyOrder.setProfileModel(this);
+
+            editWindow.show();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteOrder(BulkOrderModel tableData, ProfileController controller){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("delete-order.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Delete");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            DeleteOrder deleteOrder = loader.getController();
+
+            deleteOrder.setOrderID(tableData.getOrderID().toString());
+            deleteOrder.setCustomerID(tableData.getCustomerName());
+            deleteOrder.setDate(tableData.getDate());
+
+            deleteOrder.setProfileController(controller);
+            deleteOrder.setProfileModel(this);
+
+            editWindow.show();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 
 }

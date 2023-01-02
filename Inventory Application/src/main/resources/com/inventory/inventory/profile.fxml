@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="vbox" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.ProfileController">
+<VBox xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.ProfileController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -29,7 +29,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
+        <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
             <tabs>
                 <Tab fx:id="profileTab" text="Profile">
                     <content>
@@ -62,18 +62,21 @@
                                     </font>
                                 </Text>
                                 <Line endX="78.1201171875" endY="0.37451171875" layoutX="233.0" layoutY="147.0" startX="-100.0" stroke="#9a0098" strokeWidth="3.0" />
-                        <ToolBar fx:id="toolBar" blendMode="EXCLUSION" layoutY="308.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="642.0">
+                        <ToolBar blendMode="EXCLUSION" layoutY="308.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="641.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                           <items>
                             <Button mnemonicParsing="false" onAction="#onLogoutClick" text="Log Out" />
                           </items>
                         </ToolBar>
                         <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1920.0" />
-                        <TableView fx:id="lowStockTable" layoutX="323.0" layoutY="45.0" prefHeight="253.0" prefWidth="309.0">
+                        <TableView fx:id="lowStockTable" layoutX="323.0" layoutY="45.0" prefHeight="253.0" prefWidth="309.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="323.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="45.0">
                           <columns>
                             <TableColumn fx:id="lowID" prefWidth="37.0" text="ID" />
                             <TableColumn fx:id="lowName" prefWidth="207.0" text="Product" />
                               <TableColumn fx:id="lowQuantity" prefWidth="64.0" text="Quantity" />
                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
                         <Text layoutX="398.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Low Quantity Products">
                            <font>
@@ -86,9 +89,9 @@
                 </Tab>
                 <Tab fx:id="productTab" text="Product">
                     <content>
-                        <AnchorPane fx:id="prodPane">
+                        <AnchorPane>
                             <children>
-                        <TableView fx:id="productTableView" layoutX="15.0" layoutY="100.0" prefHeight="235.0" prefWidth="601.0">
+                        <TableView fx:id="productTableView" layoutX="15.0" layoutY="100.0" prefHeight="235.0" prefWidth="601.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="100.0">
                            <columns>
                               <TableColumn fx:id="productColumnID" prefWidth="29.0" text="ID" />
                               <TableColumn fx:id="productColumnCategory" prefWidth="142.0" text="Category" />
@@ -97,17 +100,21 @@
                               <TableColumn fx:id="productColumnPrice" prefWidth="68.0" text="Price" />
                               <TableColumn fx:id="productColumnShelfLife" prefWidth="58.0" text="Shelf Life" />
                            </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
-                                <TextField fx:id="productSearchBar" layoutX="73.0" layoutY="31.0" prefHeight="25.0" prefWidth="545.0" promptText="Ex: Liquid Foundation Brush" snapToPixel="false" />
+                                <TextField fx:id="productSearchBar" layoutX="73.0" layoutY="31.0" prefHeight="25.0" prefWidth="545.0" promptText="Ex: Liquid Foundation Brush" snapToPixel="false" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="23.0" />
                                 <Text layoutX="15.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
                                     <font>
                                         <Font name="Verdana" size="14.0" />
                                     </font>
                                 </Text>
-                        <Button layoutX="15.0" layoutY="64.0" mnemonicParsing="false" text="Edit" />
-                        <Button layoutX="60.0" layoutY="64.0" mnemonicParsing="false" text="Delete" />
-                        <Button layoutX="120.0" layoutY="64.0" mnemonicParsing="false" text="Add a Product" />
-                        <Rectangle fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="641.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <Button layoutX="15.0" layoutY="64.0" mnemonicParsing="false" onAction="#editProduct" text="Edit" />
+                        <Button layoutX="60.0" layoutY="64.0" mnemonicParsing="false" onAction="#deleteProduct" text="Delete" />
+                        <Button layoutX="120.0" layoutY="64.0" mnemonicParsing="false" onAction="#addProduct" text="Add a Product" />
+                        <Rectangle fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1920.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1279.0" />
+                        <Text fx:id="productTextResponse" layoutX="246.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="337.13671875" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -116,17 +123,17 @@
                <content>
                   <AnchorPane minWidth="0.0" prefWidth="200.0">
                      <children>
-                        <TextField fx:id="customerSearchBar" layoutX="73.0" layoutY="31.0" prefHeight="25.0" prefWidth="545.0" promptText="Ex: John Smith" />
+                        <TextField fx:id="customerSearchBar" layoutX="73.0" layoutY="31.0" prefHeight="25.0" prefWidth="545.0" promptText="Ex: John Smith" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="23.0" />
                         <Text id="searchCustomerLabel" layoutX="15.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
                            <font>
                               <Font name="Verdana" size="14.0" />
                            </font>
                         </Text>
-                        <Button id="editCustomerButton" layoutX="15.0" layoutY="64.0" mnemonicParsing="false" text="Edit" />
-                        <Button id="deleteCustomerButton" fx:id="deleteCustomer" layoutX="60.0" layoutY="64.0" mnemonicParsing="false" text="Delete" />
-                        <Button layoutX="120.0" layoutY="64.0" mnemonicParsing="false" text="Add a Customer" />
+                        <Button id="editCustomerButton" layoutX="15.0" layoutY="64.0" mnemonicParsing="false" onAction="#editCustomer" text="Edit" />
+                        <Button id="deleteCustomerButton" fx:id="deleteCustomer" layoutX="60.0" layoutY="64.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
+                        <Button layoutX="120.0" layoutY="64.0" mnemonicParsing="false" onAction="#addCustomer" text="Add a Customer" />
                         <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1920.0" />
-                        <TableView fx:id="customerTableView" layoutX="15.0" layoutY="100.0" prefHeight="235.0" prefWidth="601.0">
+                        <TableView fx:id="customerTableView" layoutX="15.0" layoutY="100.0" prefHeight="235.0" prefWidth="601.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="100.0">
                           <columns>
                             <TableColumn fx:id="customerColumnID" prefWidth="22.0" text="ID" />
                             <TableColumn fx:id="customerColumnName" prefWidth="128.0" text="Name" />
@@ -134,14 +141,18 @@
                               <TableColumn fx:id="customerColumnEmail" prefWidth="147.0" text="Email" />
                               <TableColumn fx:id="customerColumnAddress" prefWidth="224.0" text="Address" />
                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
+                        <Text fx:id="customerTextResponse" layoutX="246.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="337.13671875" />
                      </children>
                   </AnchorPane>
                </content>
             </Tab>
             <Tab fx:id="emailTab" text="Email">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane minWidth="0.0" prefWidth="200.0">
                      <children>
                         <Text layoutX="265.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
                            <font>
@@ -153,11 +164,11 @@
                               <Font name="Verdana" size="14.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="email" layoutX="180.0" layoutY="95.0" prefHeight="26.0" prefWidth="258.0">
+                        <TextField fx:id="email" layoutX="180.0" layoutY="95.0" prefHeight="26.0" prefWidth="258.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="203.0">
                            <font>
                               <Font name="Verdana" size="12.0" />
                            </font></TextField>
-                        <TextField fx:id="subject" layoutX="180.0" layoutY="125.0" prefHeight="26.0" prefWidth="258.0">
+                        <TextField fx:id="subject" layoutX="180.0" layoutY="125.0" prefHeight="26.0" prefWidth="258.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="203.0">
                            <font>
                               <Font name="Verdana" size="12.0" />
                            </font></TextField>
@@ -171,12 +182,12 @@
                               <Font name="Verdana" size="14.0" />
                            </font>
                         </Text>
-                        <TextArea fx:id="message" layoutX="180.0" layoutY="155.0" prefHeight="162.0" prefWidth="258.0">
+                        <TextArea fx:id="message" layoutX="180.0" layoutY="155.0" prefHeight="162.0" prefWidth="258.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="203.0" AnchorPane.topAnchor="155.0">
                            <font>
                               <Font name="Verdana" size="14.0" />
                            </font></TextArea>
-                        <Button fx:id="sendEmail" layoutX="474.0" layoutY="292.0" mnemonicParsing="false" text="Send Email" />
-                        <Button fx:id="clearEmail" layoutX="474.0" layoutY="254.0" mnemonicParsing="false" text="Clear" />
+                        <Button fx:id="sendEmail" layoutX="474.0" layoutY="292.0" mnemonicParsing="false" onAction="#sendEmail" text="Send Email" AnchorPane.bottomAnchor="31.0" AnchorPane.rightAnchor="92.0" />
+                        <Button fx:id="clearEmail" layoutX="474.0" layoutY="254.0" mnemonicParsing="false" onAction="#clearEmail" text="Clear" AnchorPane.bottomAnchor="69.0" AnchorPane.rightAnchor="124.0" />
                         <Text fx:id="emailResponse" layoutX="180.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="258.13671875" />
                         <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1920.0" />
                      </children>
@@ -187,20 +198,20 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextField id="orderSearchBar" fx:id="orderSearchBar" layoutX="73.0" layoutY="31.0" prefHeight="25.0" prefWidth="545.0" promptText="Ex: 1" />
+                        <TextField id="orderSearchBar" fx:id="orderSearchBar" layoutX="73.0" layoutY="31.0" prefHeight="25.0" prefWidth="545.0" promptText="Ex: 1" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="23.0" />
                         <Text id="searchOrderLabel" layoutX="15.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
                            <font>
                               <Font name="Verdana" size="14.0" />
                            </font>
                         </Text>
-                        <Button id="editOrderButton" fx:id="editOrderButton" layoutX="15.0" layoutY="64.0" mnemonicParsing="false" text="Edit" />
+                        <Button id="editOrderButton" fx:id="editOrderButton" layoutX="15.0" layoutY="64.0" mnemonicParsing="false" onAction="#editOrder" text="Edit" />
 
-                         <Button id="deleteOrderButton" fx:id="deleteOrderButton" layoutX="60.0" layoutY="64.0" mnemonicParsing="false" text="Delete" />
+                         <Button id="deleteOrderButton" fx:id="deleteOrderButton" layoutX="60.0" layoutY="64.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete" />
 
-                         <Button id="addOrderButton" fx:id="addOrderButton" layoutX="120.0" layoutY="64.0" mnemonicParsing="false" text="Add an Order" />
-                        <Button id="helpButton" fx:id="helpButton" layoutX="575.0" layoutY="64.0" mnemonicParsing="false" text="Help" />
+                         <Button id="addOrderButton" fx:id="addOrderButton" layoutX="120.0" layoutY="64.0" mnemonicParsing="false" onAction="#addOrder" text="Add an Order" />
+                        <Button id="helpButton" fx:id="helpButton" layoutX="575.0" layoutY="64.0" mnemonicParsing="false" text="Help" AnchorPane.rightAnchor="25.0" />
                         <Rectangle arcWidth="5.0" fill="#50004c" height="17.0" stroke="TRANSPARENT" strokeType="INSIDE" width="1920.0" />
-                        <TableView fx:id="orderTableView" layoutX="15.0" layoutY="100.0" prefHeight="235.0" prefWidth="601.0">
+                        <TableView fx:id="orderTableView" layoutX="15.0" layoutY="100.0" prefHeight="235.0" prefWidth="601.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="100.0">
                            <columns>
                               <TableColumn fx:id="orderColumnOrderID" prefWidth="54.0" text="Order ID" />
                               <TableColumn fx:id="orderColumnCustomerName" prefWidth="106.0" text="Customer Name" />
@@ -211,7 +222,11 @@
                               <TableColumn fx:id="orderColumnTax" prefWidth="49.0" text="Tax" />
                               <TableColumn fx:id="orderColumnTotal" prefWidth="53.0" text="Total" />
                            </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
+                        <Text fx:id="orderTextResponse" layoutX="221.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="337.13671875" />
                      </children>
                   </AnchorPane>
                </content>

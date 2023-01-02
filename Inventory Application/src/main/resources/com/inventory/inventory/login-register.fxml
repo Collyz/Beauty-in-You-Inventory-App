@@ -16,110 +16,115 @@
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.inventory.inventory.LoginController">
     <children>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-            <children>
-                <TabPane prefHeight="374.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
-                    <tabs>
-                        <Tab text="Login">
-                            <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                    <children>
-                                        <Text fontSmoothingType="LCD" layoutX="24.0" layoutY="88.0" strokeWidth="0.0" text="Login">
-                                            <font>
-                                                <Font name="Consolas" size="32.0" />
-                                            </font>
-                                            <cursor>
-                                                <Cursor fx:constant="TEXT" />
-                                            </cursor>
-                                        </Text>
-                                        <Text layoutX="24.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
-                                            <font>
-                                                <Font name="Consolas" size="17.0" />
-                                            </font>
-                                        </Text>
-                                        <TextField fx:id="loginUsername" layoutX="24.0" layoutY="132.0" />
-                                        <Text layoutX="24.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
-                                            <font>
-                                                <Font name="Consolas" size="17.0" />
-                                            </font>
-                                        </Text>
-                              <PasswordField fx:id="loginPassword" layoutX="24.0" layoutY="180.0" />
-                                        <Button defaultButton="true" layoutX="24.0" layoutY="232.0" mnemonicParsing="false" onAction="#loginButtonClick" text="Login">
-                                            <font>
-                                                <Font name="Consolas" size="12.0" />
-                                            </font>
-                                        </Button>
-                                        <Text fx:id="loginWrong" fill="RED" layoutX="24.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="200.0">
-                                            <font>
-                                                <Font name="Consolas" size="15.0" />
-                                            </font>
-                                        </Text>
-                                    </children>
-                                </AnchorPane>
-                            </content>
-                        </Tab>
-                        <Tab text="Register">
-                            <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                    <children>
-                                        <Text fontSmoothingType="LCD" layoutX="23.0" layoutY="62.0" strokeWidth="0.0" text="Register">
-                                            <font>
-                                                <Font name="Consolas" size="32.0" />
-                                            </font>
-                                            <cursor>
-                                                <Cursor fx:constant="TEXT" />
-                                            </cursor>
-                                        </Text>
-                                        <Text layoutX="25.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
-                                            <font>
-                                                <Font name="Consolas" size="17.0" />
-                                            </font>
-                                        </Text>
-                                        <TextField fx:id="registerUsername" layoutX="25.0" layoutY="89.0" />
-                                        <Text layoutX="25.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
-                                            <font>
-                                                <Font name="Consolas" size="17.0" />
-                                            </font>
-                                        </Text>
-                                        <TextField fx:id="registerPassword" layoutX="25.0" layoutY="136.0" />
-                                        <Text layoutX="25.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Re-Type Password">
-                                            <font>
-                                                <Font name="Consolas" size="17.0" />
-                                            </font>
-                                        </Text>
-                                        <TextField fx:id="registerPasswordRedo" layoutX="25.0" layoutY="180.0" />
-                                        <Text layoutX="23.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
-                                            <font>
-                                                <Font name="Consolas" size="17.0" />
-                                            </font>
-                                        </Text>
-                                        <TextField fx:id="registerEmail" layoutX="25.0" layoutY="230.0" />
-                                        <Text fx:id="registerWrong" fill="RED" layoutX="25.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="166.4000244140625">
-                                            <font>
-                                                <Font name="Consolas" size="15.0" />
-                                            </font>
-                                        </Text>
-                                        <Button layoutX="28.0" layoutY="292.0" mnemonicParsing="false" onAction="#registerButtonClick" text="Register">
-                                            <font>
-                                                <Font name="Consolas" size="12.0" />
-                                            </font>
-                                        </Button>
-                                    </children>
-                                </AnchorPane>
-                            </content>
-                        </Tab>
-                    </tabs>
-                </TabPane>
-                <ImageView fitHeight="327.0" fitWidth="351.0" layoutX="259.0" layoutY="37.0">
-                    <image>
-                        <Image url="@BIY%20Logo.jpg" />
-                    </image>
-                    <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                    </cursor>
-                </ImageView>
-                <Rectangle arcHeight="5.0" arcWidth="5.0" height="5.0" layoutX="259.0" layoutY="358.0" stroke="BLACK" strokeType="INSIDE" width="351.0" />
-            </children>
-        </AnchorPane>
+          <TabPane prefHeight="374.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+              <tabs>
+                  <Tab text="Login">
+                      <content>
+                          <AnchorPane prefHeight="544.0" prefWidth="640.0">
+                              <children>
+                            <ImageView fitHeight="327.0" fitWidth="351.0" layoutX="259.0" layoutY="17.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="259.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="17.0">
+                                <image>
+                                    <Image url="@BIY%20Logo.jpg" />
+                                </image>
+                                <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                </cursor>
+                            </ImageView>
+                                  <Text fontSmoothingType="LCD" layoutX="24.0" layoutY="88.0" strokeWidth="0.0" text="Login">
+                                      <font>
+                                          <Font name="Consolas" size="32.0" />
+                                      </font>
+                                      <cursor>
+                                          <Cursor fx:constant="TEXT" />
+                                      </cursor>
+                                  </Text>
+                                  <Text layoutX="24.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                                      <font>
+                                          <Font name="Consolas" size="17.0" />
+                                      </font>
+                                  </Text>
+                                  <TextField fx:id="loginUsername" layoutX="24.0" layoutY="132.0" />
+                                  <Text layoutX="24.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+                                      <font>
+                                          <Font name="Consolas" size="17.0" />
+                                      </font>
+                                  </Text>
+                        <PasswordField fx:id="loginPassword" layoutX="24.0" layoutY="180.0" />
+                                  <Button defaultButton="true" layoutX="24.0" layoutY="232.0" mnemonicParsing="false" onAction="#loginButtonClick" text="Login">
+                                      <font>
+                                          <Font name="Consolas" size="12.0" />
+                                      </font>
+                                  </Button>
+                                  <Text fx:id="loginWrong" fill="RED" layoutX="24.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="200.0">
+                                      <font>
+                                          <Font name="Consolas" size="15.0" />
+                                      </font>
+                                  </Text>
+                            <Rectangle arcHeight="5.0" arcWidth="5.0" height="5.0" layoutX="259.0" layoutY="344.0" stroke="BLACK" strokeType="INSIDE" width="351.0" />
+                              </children>
+                          </AnchorPane>
+                      </content>
+                  </Tab>
+                  <Tab text="Register">
+                      <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <children>
+                                  <Text fontSmoothingType="LCD" layoutX="23.0" layoutY="62.0" strokeWidth="0.0" text="Register">
+                                      <font>
+                                          <Font name="Consolas" size="32.0" />
+                                      </font>
+                                      <cursor>
+                                          <Cursor fx:constant="TEXT" />
+                                      </cursor>
+                                  </Text>
+                                  <Text layoutX="25.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                                      <font>
+                                          <Font name="Consolas" size="17.0" />
+                                      </font>
+                                  </Text>
+                                  <TextField fx:id="registerUsername" layoutX="25.0" layoutY="89.0" />
+                                  <Text layoutX="25.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+                                      <font>
+                                          <Font name="Consolas" size="17.0" />
+                                      </font>
+                                  </Text>
+                                  <TextField fx:id="registerPassword" layoutX="25.0" layoutY="136.0" />
+                                  <Text layoutX="25.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Re-Type Password">
+                                      <font>
+                                          <Font name="Consolas" size="17.0" />
+                                      </font>
+                                  </Text>
+                                  <TextField fx:id="registerPasswordRedo" layoutX="25.0" layoutY="180.0" />
+                                  <Text layoutX="23.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+                                      <font>
+                                          <Font name="Consolas" size="17.0" />
+                                      </font>
+                                  </Text>
+                                  <TextField fx:id="registerEmail" layoutX="25.0" layoutY="230.0" />
+                                  <Text fx:id="registerWrong" fill="RED" layoutX="25.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="166.4000244140625">
+                                      <font>
+                                          <Font name="Consolas" size="15.0" />
+                                      </font>
+                                  </Text>
+                                  <Button layoutX="28.0" layoutY="292.0" mnemonicParsing="false" onAction="#registerButtonClick" text="Register">
+                                      <font>
+                                          <Font name="Consolas" size="12.0" />
+                                      </font>
+                                  </Button>
+                        <ImageView fitHeight="327.0" fitWidth="351.0" layoutX="259.0" layoutY="17.0" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="259.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="17.0">
+                           <image>
+                              <Image url="@BIY%20Logo.jpg" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                        </ImageView>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" height="5.0" layoutX="259.0" layoutY="344.0" stroke="BLACK" strokeType="INSIDE" width="351.0" />
+                              </children>
+                          </AnchorPane>
+                      </content>
+                  </Tab>
+              </tabs>
+          </TabPane>
     </children>
 </VBox>

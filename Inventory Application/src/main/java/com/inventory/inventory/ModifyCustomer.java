@@ -14,8 +14,8 @@ public class ModifyCustomer {
     @FXML private TextField phone = new TextField();
     @FXML private TextField address = new TextField();
     @FXML private TextField email = new TextField();
-
-    public void initialize(){}
+    private ProfileController controller;
+    private ProfileModel profileModel;
 
     public void setID(int id){
         this.id = id;
@@ -41,6 +41,22 @@ public class ModifyCustomer {
         address.setText(a);
     }
 
+    public void setProfileController(ProfileController controller){
+        this.controller = controller;
+    }
+
+    public ProfileController getProfileController(){
+        return this.controller;
+    }
+
+    public void setProfileModel(ProfileModel profileModel){
+        this.profileModel = profileModel;
+    }
+
+    public ProfileModel getProfileModel(){
+        return profileModel;
+    }
+
     @FXML
     public void onEdit() {
         String execute = "UPDATE Customer " +
@@ -54,6 +70,8 @@ public class ModifyCustomer {
             Statement statement = connection.createStatement();
             statement.executeUpdate(execute);
             Stage stage = (Stage) name.getScene().getWindow();
+            getProfileModel().updateCustomerTable(getProfileController());
+            getProfileController().getCustomerTextResponse().setText("Updated");
             stage.close();
         }catch(SQLException e){
             e.printStackTrace();

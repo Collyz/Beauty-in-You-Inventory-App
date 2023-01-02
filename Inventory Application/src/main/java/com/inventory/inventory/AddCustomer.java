@@ -17,9 +17,25 @@ public class AddCustomer {
     @FXML private TextField address = new TextField();
     @FXML private TextField email = new TextField();
     @FXML private Text response = new Text();
+    private ProfileController controller;
+    private ProfileModel profileModel;
 
-    @FXML
-    protected void initialize(){}
+
+    public void setProfileController(ProfileController controller){
+        this.controller = controller;
+    }
+
+    public ProfileController getProfileController(){
+        return this.controller;
+    }
+
+    public void setProfileModel(ProfileModel profileModel){
+        this.profileModel = profileModel;
+    }
+
+    public ProfileModel getProfileModel(){
+        return profileModel;
+    }
 
     @FXML
     public void onAdd() {
@@ -51,6 +67,7 @@ public class AddCustomer {
         try{
             Statement statement = connection.createStatement();
             statement.executeUpdate(insertQuery);
+            getProfileModel().updateCustomerTable(getProfileController());
             response.setText("Success!");
         }catch(SQLException e){
             e.printStackTrace();

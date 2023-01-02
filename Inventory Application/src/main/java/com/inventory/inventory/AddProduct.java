@@ -22,7 +22,25 @@ public class AddProduct {
     @FXML private Text asterisk2 = new Text();
     @FXML private Text asterisk3 = new Text();
     @FXML private Text asterisk4 = new Text();
+    private ProfileController controller;
+    private ProfileModel profileModel;
 
+
+    public void setProfileController(ProfileController controller){
+        this.controller = controller;
+    }
+
+    public ProfileController getProfileController(){
+        return this.controller;
+    }
+
+    public void setProfileModel(ProfileModel profileModel){
+        this.profileModel = profileModel;
+    }
+
+    public ProfileModel getProfileModel(){
+        return profileModel;
+    }
 
     @FXML
     public void onAdd(){
@@ -89,6 +107,7 @@ public class AddProduct {
             try {
                 Statement statement = connection.createStatement();
                 statement.executeUpdate(insertQuery);
+                getProfileModel().updateProductTable(getProfileController());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

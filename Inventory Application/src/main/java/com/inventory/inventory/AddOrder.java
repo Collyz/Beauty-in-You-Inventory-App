@@ -18,9 +18,24 @@ public class AddOrder {
     @FXML private TextField product = new TextField();
     @FXML private TextField quantity = new TextField();
     @FXML private Text addProductResponse = new Text();
+    private ProfileController controller;
+    private ProfileModel profileModel;
 
-    @FXML
-    protected void initialize(){}
+    public void setProfileController(ProfileController controller){
+        this.controller = controller;
+    }
+
+    public ProfileController getProfileController(){
+        return this.controller;
+    }
+
+    public void setProfileModel(ProfileModel profileModel){
+        this.profileModel = profileModel;
+    }
+
+    public ProfileModel getProfileModel(){
+        return profileModel;
+    }
 
     @FXML
     public void onAdd() {
@@ -77,6 +92,7 @@ public class AddOrder {
         try{
             Statement statement = connection.createStatement();
             statement.executeUpdate(updateProduct);
+            getProfileModel().updateOrderTable(getProfileController());
             date.setText("");
             customerName.setText("");
             product.setText("");

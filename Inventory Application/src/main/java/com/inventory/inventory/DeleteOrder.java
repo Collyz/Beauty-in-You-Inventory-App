@@ -15,6 +15,8 @@ public class DeleteOrder {
     @FXML private Text customer_ID = new Text();
     @FXML private Text date = new Text();
     @FXML private Text product_ID = new Text();
+    private ProfileController controller;
+    private ProfileModel profileModel;
 
     @FXML
     protected void setID(int ID){
@@ -41,6 +43,22 @@ public class DeleteOrder {
         product_ID.setText(p);
     }
 
+    public void setProfileController(ProfileController controller){
+        this.controller = controller;
+    }
+
+    public ProfileController getProfileController(){
+        return this.controller;
+    }
+
+    public void setProfileModel(ProfileModel profileModel){
+        this.profileModel = profileModel;
+    }
+
+    public ProfileModel getProfileModel(){
+        return profileModel;
+    }
+
     @FXML
     protected void onDelete(){
         String execute1 = "DELETE FROM projectprototype.order WHERE Order_ID = " + order_ID.getText();
@@ -53,6 +71,8 @@ public class DeleteOrder {
             statement.executeUpdate(execute1);
             statement.executeUpdate(execute2);
             Stage stage = (Stage) order_ID.getScene().getWindow();
+            getProfileModel().updateOrderTable(getProfileController());
+            getProfileController().getOrderTextResponse().setText("Deleted");
             stage.close();
         }catch(SQLException e){
             e.printStackTrace();

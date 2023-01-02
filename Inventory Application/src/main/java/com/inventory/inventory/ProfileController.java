@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +31,6 @@ public class ProfileController implements Initializable {
     @FXML private TableColumn<LowStockModel, Integer> lowQuantity;
     private final ObservableList<LowStockModel> lowStockObservableList;
     //For Product Tab
-    @FXML private AnchorPane prodPane;
     @FXML private TextField productSearchBar;
     @FXML private TableView<ProductTableModel> productTableView;
     @FXML private TableColumn<ProductTableModel, Integer> productColumnID;
@@ -40,6 +40,7 @@ public class ProfileController implements Initializable {
     @FXML private TableColumn<ProductTableModel, Double> productColumnPrice;
     @FXML private TableColumn<ProductTableModel, Integer> productColumnShelfLife;
     private final ObservableList<ProductTableModel> productObservableList;
+    @FXML private Text productTextResponse;
     //For Customer Tab
     @FXML private TextField customerSearchBar;
     @FXML private TableView<CustomerTableModel> customerTableView;
@@ -48,7 +49,8 @@ public class ProfileController implements Initializable {
     @FXML private TableColumn<CustomerTableModel, String> customerColumnPhone;
     @FXML private TableColumn<CustomerTableModel, String> customerColumnEmail;
     @FXML private TableColumn<CustomerTableModel, String> customerColumnAddress;
-    @FXML private ObservableList<CustomerTableModel> customerObservableList;
+    private ObservableList<CustomerTableModel> customerObservableList;
+    @FXML private Text customerTextResponse;
     //For Bulk Order Tab
     @FXML private TextField orderSearchBar;
     @FXML private TableView<BulkOrderModel> orderTableView;
@@ -61,20 +63,13 @@ public class ProfileController implements Initializable {
     @FXML private TableColumn<BulkOrderModel, Double> orderColumnTax;
     @FXML private TableColumn<BulkOrderModel, Double> orderColumnTotal;
     private ObservableList<BulkOrderModel> orderObservableList;
-
-
+    @FXML private Text orderTextResponse;
     //Email tab
     @FXML private TextField email;
     @FXML private TextField subject;
     @FXML private TextArea message;
     @FXML private Text emailResponse;
     //Resizing
-    @FXML private VBox vbox;
-    @FXML private TabPane tabPane;
-    @FXML private ToolBar toolBar;
-    @FXML private Button pRefresh;
-    @FXML private Button cRefresh;
-    @FXML private Button oRefresh;
     @FXML private Button clearEmail;
     @FXML private Button sendEmail;
     @FXML private Button helpButton;
@@ -82,7 +77,7 @@ public class ProfileController implements Initializable {
     private DatabaseConnection databaseConnection;
     private ProfileModel profileModel;
     private final LoginModel loginModel;
-
+    /*private SendEmail emailer;*/
 
     public ProfileController(){
         databaseConnection = new DatabaseConnection();
@@ -100,6 +95,8 @@ public class ProfileController implements Initializable {
         this.profileModel = new ProfileModel();
         //Shared login model to get username and password if successfully logged in
         this.loginModel = LoginController.loginModel;
+        /*//Initializing the email model
+        this.emailer = new SendEmail();*/
     }
 
     @Override
@@ -152,13 +149,13 @@ public class ProfileController implements Initializable {
         return this.lowStockTable;
     }
     public TableColumn<LowStockModel, Integer> getLowID(){
-        return lowID;
+        return this.lowID;
     }
     public TableColumn<LowStockModel, String> getLowName(){
-        return lowName;
+        return this.lowName;
     }
     public TableColumn<LowStockModel, Integer> getLowQuantity(){
-        return lowQuantity;
+        return this.lowQuantity;
     }
     public ObservableList<LowStockModel> getObservableLowQuantityList(){
         return this.lowStockObservableList;
@@ -168,77 +165,250 @@ public class ProfileController implements Initializable {
         return productTableView;
     }
     public TableColumn<ProductTableModel, Integer> getProductColumnID() {
-        return productColumnID;
+        return this.productColumnID;
     }
     public TableColumn<ProductTableModel, String> getProductColumnCategory() {
-        return productColumnCategory;
+        return this.productColumnCategory;
     }
     public TableColumn<ProductTableModel, String> getProductColumnName() {
-        return productColumnName;
+        return this.productColumnName;
     }
     public TableColumn<ProductTableModel, Integer> getProductColumnQuantity() {
-        return productColumnQuantity;
+        return this.productColumnQuantity;
     }
     public TableColumn<ProductTableModel, Double> getProductColumnPrice() {
-        return productColumnPrice;
+        return this.productColumnPrice;
     }
     public TableColumn<ProductTableModel, Integer> getProductColumnShelfLife() {
-        return productColumnShelfLife;
+        return this.productColumnShelfLife;
     }
     public ObservableList<ProductTableModel> getProductObservableList() {
-        return productObservableList;
+        return this.productObservableList;
     }
+    public TextField getProductSearchBar(){
+        return this.productSearchBar;
+    }
+    public Text getProductTextResponse(){
+        return this.productTextResponse;
+    }
+
+    @FXML
+    protected void editProduct(){
+        ProductTableModel modifyProduct = productTableView.getSelectionModel().getSelectedItem();
+        if(modifyProduct != null){
+            profileModel.editProduct(modifyProduct, this);
+        }
+        else{
+            productTextResponse.setText("No row is selected");
+        }
+    }
+
+    @FXML
+    protected void deleteProduct(){
+        ProductTableModel deleteProduct = productTableView.getSelectionModel().getSelectedItem();
+        if(deleteProduct != null){
+            profileModel.deleteProduct(deleteProduct, this);
+        }
+        else{
+            productTextResponse.setText("No row is selected");
+        }
+    }
+
+    /**
+     * Opens a separate window that handles adding a product to the inventory
+     */
+    @FXML
+    protected  void addProduct(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("add-product.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Add Product");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            AddProduct addProduct = loader.getController();
+            addProduct.setProfileController(this);
+            addProduct.setProfileModel(profileModel);
+            editWindow.show();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
     //For customer tab table
     public TableView<CustomerTableModel> getCustomerTableView(){
-        return customerTableView;
+        return this.customerTableView;
     }
     public TableColumn<CustomerTableModel, Integer> getCustomerColumnID(){
-        return customerColumnID;
+        return this.customerColumnID;
     }
     public TableColumn<CustomerTableModel, String> getCustomerColumnName(){
-        return customerColumnName;
+        return this.customerColumnName;
     }
     public TableColumn<CustomerTableModel, String> getCustomerColumnPhone(){
-        return customerColumnPhone;
+        return this.customerColumnPhone;
     }
     public TableColumn<CustomerTableModel, String> getCustomerColumnEmail(){
-        return customerColumnEmail;
+        return this.customerColumnEmail;
     }
     public TableColumn<CustomerTableModel, String> getCustomerColumnAddress(){
-        return customerColumnAddress;
+        return this.customerColumnAddress;
     }
     public ObservableList<CustomerTableModel> getCustomerObservableList(){
-        return customerObservableList;
+        return this.customerObservableList;
     }
+    public TextField getCustomerSearchBar(){
+        return this.customerSearchBar;
+    }
+    public Text getCustomerTextResponse(){
+        return this.customerTextResponse;
+    }
+
+    @FXML
+    protected void editCustomer(){
+        CustomerTableModel modifyCustomer = customerTableView.getSelectionModel().getSelectedItem();
+        if (modifyCustomer != null) {
+            profileModel.editCustomer(modifyCustomer, this);
+        }
+        else{
+            customerTextResponse.setText("No row is selected");
+        }
+
+    }
+
+    @FXML
+    protected void deleteCustomer(){
+        CustomerTableModel deleteCustomer = customerTableView.getSelectionModel().getSelectedItem();
+        if(deleteCustomer != null){
+            profileModel.deleteCustomer(deleteCustomer, this);
+        }
+        else{
+            customerTextResponse.setText("No row is selected");
+        }
+    }
+
+    /**
+     * Opens a separate window that handles adding a customer to the inventory
+     */
+    @FXML
+    public void addCustomer() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("add-customer.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Add Customer");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            AddCustomer addCustomer = loader.getController();
+            addCustomer.setProfileController(this);
+            addCustomer.setProfileModel(profileModel);
+            editWindow.show();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
     //For order tab table
     public TableView<BulkOrderModel> getOrderTableView(){
-        return orderTableView;
+        return this.orderTableView;
     }
     public TableColumn<BulkOrderModel, Integer> getOrderColumnOrderID() {
-        return orderColumnOrderID;
+        return this.orderColumnOrderID;
     }
     public TableColumn<BulkOrderModel, String> getOrderColumnCustomerName(){
-        return orderColumnCustomerName;
+        return this.orderColumnCustomerName;
     }
     public TableColumn<BulkOrderModel,String> getOrderColumnDate(){
-        return orderColumnDate;
+        return this.orderColumnDate;
     }
     public TableColumn<BulkOrderModel, String> getOrderColumnProductName(){
-        return orderColumnProductName;
+        return this.orderColumnProductName;
     }
     public TableColumn<BulkOrderModel, Integer> getOrderColumnQuantity(){
-        return orderColumnQuantity;
+        return this.orderColumnQuantity;
     }
     public TableColumn<BulkOrderModel, Double> getOrderColumnCost() {
-        return orderColumnCost;
+        return this.orderColumnCost;
     }
     public TableColumn<BulkOrderModel, Double> getOrderColumnTax() {
-        return orderColumnTax;
+        return this.orderColumnTax;
     }
     public TableColumn<BulkOrderModel, Double> getOrderColumnTotal() {
-        return orderColumnTotal;
+        return this.orderColumnTotal;
     }
     public ObservableList<BulkOrderModel> getOrderObservableList(){
-        return orderObservableList;
+        return this.orderObservableList;
+    }
+    public TextField getOrderSearchBar(){
+        return this.orderSearchBar;
+    }
+    public Text getOrderTextResponse(){
+        return this.orderTextResponse;
+    }
+
+    @FXML
+    protected void editOrder(){
+        BulkOrderModel bulkOrderModel = orderTableView.getSelectionModel().getSelectedItem();
+        if(bulkOrderModel != null) {
+            profileModel.editOrder(bulkOrderModel, this);
+        }
+        else{
+            orderTextResponse.setText("No row is selected");
+        }
+    }
+
+    @FXML
+    protected void deleteOrder(){
+        BulkOrderModel bulkOrderModel = orderTableView.getSelectionModel().getSelectedItem();
+        if(bulkOrderModel != null) {
+            profileModel.deleteOrder(bulkOrderModel, this);
+        }
+        else{
+            orderTextResponse.setText("No row is selected");
+        }
+    }
+
+    /**
+     * Opens a separate window that handles adding an order to the inventory
+     */
+    @FXML
+    protected  void addOrder(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("add-order.fxml"));
+            Parent p = loader.load();
+            Stage editWindow = new Stage();
+            editWindow.setTitle("Add Order");
+            editWindow.setScene(new Scene(p));
+            editWindow.initModality(Modality.APPLICATION_MODAL);
+            AddOrder addOrder = loader.getController();
+            addOrder.setProfileController(this);
+            addOrder.setProfileModel(profileModel);
+            editWindow.show();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     *
+     */
+    @FXML
+    public void sendEmail(){
+        SendEmail emailer = new SendEmail();
+        try{
+            emailer.sendMail(email.getText(), subject.getText(), message.getText());
+            emailResponse.setText("Sent Successfully");
+        } catch(Exception e){
+            emailResponse.setText("Error!");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void clearEmail(){
+        email.clear();
+        subject.clear();
+        message.clear();
+        emailResponse.setText("");
     }
 }

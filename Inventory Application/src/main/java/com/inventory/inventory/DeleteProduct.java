@@ -17,6 +17,8 @@ public class DeleteProduct {
     @FXML private Text price = new Text();
     @FXML private Text quantity = new Text();
     @FXML private Text shelfLife = new Text();
+    private ProfileController controller;
+    private ProfileModel profileModel;
 
     @FXML
     protected void initialize(){}
@@ -51,6 +53,23 @@ public class DeleteProduct {
         shelfLife.setText(s);
     }
 
+
+    public void setProfileController(ProfileController controller){
+        this.controller = controller;
+    }
+
+    public ProfileController getProfileController(){
+        return this.controller;
+    }
+
+    public void setProfileModel(ProfileModel profileModel){
+        this.profileModel = profileModel;
+    }
+
+    public ProfileModel getProfileModel(){
+        return profileModel;
+    }
+
     @FXML
     protected void onDelete(){
         String execute = "DELETE FROM PRODUCT WHERE PRODUCT_ID = " + id;
@@ -59,6 +78,8 @@ public class DeleteProduct {
             Statement statement = connection.databaseLink.createStatement();
             statement.executeUpdate(execute);
             Stage stage = (Stage) name.getScene().getWindow();
+            getProfileModel().updateProductTable(getProfileController());
+            getProfileController().getProductTextResponse().setText("Updated");
             stage.close();
         }catch(SQLException e){
             e.printStackTrace();

@@ -15,6 +15,8 @@ public class DeleteCustomer {
     @FXML private Text phone = new Text();
     @FXML private Text email = new Text();
     @FXML private Text address = new Text();
+    private ProfileController controller;
+    private ProfileModel profileModel;
 
     public void setID(int id){
         this.id = id;
@@ -40,6 +42,22 @@ public class DeleteCustomer {
         address.setText(a);
     }
 
+    public void setProfileController(ProfileController controller){
+        this.controller = controller;
+    }
+
+    public ProfileController getProfileController(){
+        return this.controller;
+    }
+
+    public void setProfileModel(ProfileModel profileModel){
+        this.profileModel = profileModel;
+    }
+
+    public ProfileModel getProfileModel(){
+        return profileModel;
+    }
+
     @FXML
     public void onDelete() {
         String execute = "DELETE FROM Customer WHERE Customer_ID = " + id;
@@ -48,6 +66,8 @@ public class DeleteCustomer {
             Statement statement = connection.databaseLink.createStatement();
             statement.executeUpdate(execute);
             Stage stage = (Stage) name.getScene().getWindow();
+            getProfileModel().updateCustomerTable(getProfileController());
+            getProfileController().getCustomerTextResponse().setText("Deleted");
             stage.close();
         }catch(SQLException e){
             e.printStackTrace();

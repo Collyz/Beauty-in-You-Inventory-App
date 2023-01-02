@@ -14,7 +14,8 @@ public class ModifyOrder {
     @FXML private TextField product_ID = new TextField();
     @FXML private TextField date = new TextField();
     @FXML private TextField customer_ID = new TextField();
-
+    private ProfileController controller;
+    private ProfileModel profileModel;
 
     @FXML
     protected void setOrderID(String o){
@@ -40,6 +41,22 @@ public class ModifyOrder {
         product_ID.setText(p);
     }
 
+    public void setProfileController(ProfileController controller){
+        this.controller = controller;
+    }
+
+    public ProfileController getProfileController(){
+        return this.controller;
+    }
+
+    public void setProfileModel(ProfileModel profileModel){
+        this.profileModel = profileModel;
+    }
+
+    public ProfileModel getProfileModel(){
+        return profileModel;
+    }
+
     @FXML
     public void onEdit() {
         String execute1 = "UPDATE projectprototype.Order " +
@@ -56,6 +73,8 @@ public class ModifyOrder {
             statement.executeUpdate(execute1);
             statement.executeUpdate(execute2);
             Stage stage = (Stage) date.getScene().getWindow();
+            getProfileModel().updateOrderTable(getProfileController());
+            getProfileController().getOrderTextResponse().setText("Updated");
             stage.close();
         }catch(SQLException e){
             e.printStackTrace();
