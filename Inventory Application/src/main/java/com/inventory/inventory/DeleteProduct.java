@@ -79,7 +79,8 @@ public class DeleteProduct {
             statement.executeUpdate(execute);
             Stage stage = (Stage) name.getScene().getWindow();
             getProfileModel().updateProductTable(getProfileController());
-            getProfileController().getProductTextResponse().setText("Updated");
+            getProfileModel().updateLowQuantityTable(getProfileController());
+            getProfileController().getProductTextResponse().setText("Deleted");
             stage.close();
         }catch(SQLException e){
             e.printStackTrace();

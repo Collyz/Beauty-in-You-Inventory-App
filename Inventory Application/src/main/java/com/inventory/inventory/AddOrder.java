@@ -92,7 +92,6 @@ public class AddOrder {
         try{
             Statement statement = connection.createStatement();
             statement.executeUpdate(updateProduct);
-            getProfileModel().updateOrderTable(getProfileController());
             date.setText("");
             customerName.setText("");
             product.setText("");
@@ -100,6 +99,8 @@ public class AddOrder {
         }catch(SQLException e){
             e.printStackTrace();
         }
+        getProfileModel().updateOrderTable(getProfileController());
+        getProfileModel().updateLowQuantityTable(getProfileController());
     }
 
     @FXML

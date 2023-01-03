@@ -67,7 +67,7 @@ public class AddProduct {
                 !quantity.getText().isBlank();
 
         //If the required fields are filled
-        if (sendQueryOrNot) {
+        if(sendQueryOrNot) {
             try {
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(getIDS);
@@ -77,20 +77,20 @@ public class AddProduct {
                         //Gets the last item in product table id
                         int prodID = result.getInt(1) + 1;
                         insertQuery = insertQuery + (prodID)
-                                + ", '" + category.getText().toUpperCase() + "'," +
-                                "'" + name.getText() + "',"
-                                + price.getText() + ","
+                                + ", '" + category.getText().toUpperCase() + "' ,"
+                                + "'" + name.getText() + "',"
                                 + quantity.getText() + ","
+                                + price.getText() + ","
                                 + shelfLife.getText() + ")";
                         addProductResponse.setText("Added Successfully ID: " + prodID);
                     } else {
                         //Creates a query that DOES NOT INCLUDE the shelf life of a product
                         int prodID = result.getInt(1) + 1;
                         insertQuery = insertQuery + prodID
-                                + ", '" + name.getText() + "' ," +
-                                " '" + category.getText().toUpperCase() + "' ,"
-                                + price.getText() + ","
-                                + quantity.getText() + ")";
+                                + ", '" + name.getText() + "' ,"
+                                + " '" + category.getText().toUpperCase() + "' ,"
+                                + quantity.getText() + ","
+                                + price.getText() + ")";
                         addProductResponse.setText("Added Successfully ID: " + prodID);
                     }
                 }
@@ -100,6 +100,10 @@ public class AddProduct {
                 price.clear();
                 quantity.clear();
                 shelfLife.clear();
+                asterisk1.setText("");
+                asterisk2.setText("");
+                asterisk3.setText("");
+                asterisk4.setText("");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -109,6 +113,7 @@ public class AddProduct {
                 statement.executeUpdate(insertQuery);
                 getProfileModel().updateProductTable(getProfileController());
             } catch (SQLException e) {
+                addProductResponse.setText("An error has occurred");
                 throw new RuntimeException(e);
             }
         }
@@ -120,6 +125,7 @@ public class AddProduct {
             asterisk3.setText("*");
             asterisk4.setText("*");
         }
+        getProfileModel().updateLowQuantityTable(getProfileController());
     }
 
     @FXML

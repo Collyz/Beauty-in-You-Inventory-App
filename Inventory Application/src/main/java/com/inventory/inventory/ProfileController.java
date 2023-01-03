@@ -7,8 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -77,7 +75,6 @@ public class ProfileController implements Initializable {
     private DatabaseConnection databaseConnection;
     private ProfileModel profileModel;
     private final LoginModel loginModel;
-    /*private SendEmail emailer;*/
 
     public ProfileController(){
         databaseConnection = new DatabaseConnection();
@@ -95,8 +92,6 @@ public class ProfileController implements Initializable {
         this.profileModel = new ProfileModel();
         //Shared login model to get username and password if successfully logged in
         this.loginModel = LoginController.loginModel;
-        /*//Initializing the email model
-        this.emailer = new SendEmail();*/
     }
 
     @Override
@@ -105,20 +100,6 @@ public class ProfileController implements Initializable {
         //Grabbing username and password data
         usernameInfo.setText(loginModel.getUsername());
         passwordInfo.setText(loginModel.getPassword());
-        //Settings column font size to 12
-        /*Low stock tableview columns*/
-        /*lowID.setStyle("-fx-font-size: 12pt");
-        lowName.setStyle("-fx-font-size: 12pt");
-        lowQuantity.setStyle("-fx-font-size: 12pt");*/
-        /*Product tableview columns*/
-        /*productColumnID.setStyle("-fx-font-size: 12pt");
-        productColumnCategory.setStyle("-fx-font-size: 12pt");
-        productColumnName.setStyle("-fx-font-size: 12pt");
-        productColumnQuantity.setStyle("-fx-font-size: 12pt");
-        productColumnPrice.setStyle("-fx-font-size: 12pt");
-        productColumnShelfLife.setStyle("-fx-font-size: 12pt");*/
-        /*Customer tableview columns*/
-        /*Bulk Order tableview columns*/
         //Calling model methods to populate tableviews
         profileModel.updateLowQuantityTable(this);
         profileModel.updateProductTable(this);
@@ -383,12 +364,14 @@ public class ProfileController implements Initializable {
             AddOrder addOrder = loader.getController();
             addOrder.setProfileController(this);
             addOrder.setProfileModel(profileModel);
+
             editWindow.show();
         }catch(IOException e){
             throw new RuntimeException(e);
         }
     }
 
+    //Email Tab
     /**
      *
      */
@@ -399,8 +382,8 @@ public class ProfileController implements Initializable {
             emailer.sendMail(email.getText(), subject.getText(), message.getText());
             emailResponse.setText("Sent Successfully");
         } catch(Exception e){
-            emailResponse.setText("Error!");
             e.printStackTrace();
+            emailResponse.setText("Error!");
         }
     }
 
